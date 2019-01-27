@@ -1,0 +1,8 @@
+name: VerifPlayer
+main: fr.tristiisch.verifplayer.Main
+author: Tristiisch
+version: 1.0
+commands:
+    verifplayer:
+    alertcps:
+    verif:
