@@ -65,6 +65,9 @@ public class PlayerInfo {
 
 	public int getCurrentClicks() {
 		final int i = this.clicksAir.size();
+		if(i == 0) {
+			return 0;
+		}
 		return this.clicksAir.get(i - 1) + this.clicksEntity.get(i - 1);
 	}
 

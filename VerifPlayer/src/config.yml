@@ -41,4 +41,3 @@ messages:
 
     verifgui_tpsitemname: "&6TPS"
     verifgui_tpsformat: "&7%time%min: %color%%tps%"
-    

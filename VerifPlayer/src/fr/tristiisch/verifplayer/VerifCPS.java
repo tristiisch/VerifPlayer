@@ -71,6 +71,9 @@ public class VerifCPS {
 
 	public static void removePlayer(final Player player) {
 		final Entry<PlayerInfo, Set<UUID>> entry = get(player.getUniqueId());
+		if(entry == null) {
+			return;
+		}
 		for(final UUID viewerUuid : entry.getValue()) {
 			final Player viewer = Bukkit.getPlayer(viewerUuid);
 			viewer.closeInventory();

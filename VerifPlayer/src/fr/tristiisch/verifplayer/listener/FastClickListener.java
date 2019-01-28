@@ -42,6 +42,9 @@ public class FastClickListener implements Listener {
 		if(blockTarget.getType() == Material.AIR) {
 			pc.removeClickAir();
 		}
+		if(pc.getClickEntity() >= 18) {
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler
