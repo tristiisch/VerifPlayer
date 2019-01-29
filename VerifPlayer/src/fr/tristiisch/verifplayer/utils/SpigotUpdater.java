@@ -58,7 +58,9 @@ public class SpigotUpdater {
 	public boolean needUpdate() throws Exception {
 		final URLConnection con = this.checkURL.openConnection();
 		this.latestVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-		return !this.plugin.getDescription().getVersion().equals(this.latestVersion);
+		final float pluginVersion = Float.parseFloat(this.plugin.getDescription().getVersion());
+		final float lastVersion = Float.parseFloat(this.latestVersion);
+		return pluginVersion < lastVersion;
 	}
 
 }

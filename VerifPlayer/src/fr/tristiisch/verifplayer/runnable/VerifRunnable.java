@@ -39,7 +39,7 @@ public class VerifRunnable extends BukkitRunnable {
 		final double[] tps = TPS.getTPSArray();
 		//for(final PlayerInfo target : VerifCPS.verifier.values()) {
 		for(final Entry<UUID, Set<UUID>> entry : VerifPlayer.viewers.entrySet()) {
-			UUID uuid = entry.getKey();
+			final UUID uuid = entry.getKey();
 			final PlayerInfo playerInfo = VerifPlayer.get(uuid);
 			final Player player = Bukkit.getPlayer(playerInfo.getUniqueId());
 			if(player == null) {
@@ -254,6 +254,7 @@ public class VerifRunnable extends BukkitRunnable {
 			slot = VerifPlayer.slotArmor;
 			final ItemStack[] armors = targetInventory.getArmorContents();
 			ArrayUtils.reverse(armors);
+
 			for(final ItemStack armorItem : armors) {
 				items.put(slot++, armorItem);
 			}
@@ -262,7 +263,6 @@ public class VerifRunnable extends BukkitRunnable {
 			int slotInv = VerifPlayer.slotInv;
 			int slotHotbar = VerifPlayer.slotHotBar;
 
-			
 			for(final ItemStack itemStack : targetInventory.getContents()) {
 				if(slotHotbar < VerifPlayer.slotHotBar + 9) {
 					items.put(slotHotbar++, itemStack);
