@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.tristiisch.verifplayer.VerifCPS;
+import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.Reflector;
@@ -19,7 +19,7 @@ public class FastClickRunnable extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for(final PlayerInfo playerInfo : VerifCPS.playersData.keySet()) {
+		for(final PlayerInfo playerInfo : VerifPlayer.playersData) {
 			final Player player = Bukkit.getPlayer(playerInfo.getUniqueId());
 			final int ping = Reflector.getPing(player);
 

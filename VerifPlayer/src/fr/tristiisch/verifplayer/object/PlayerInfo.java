@@ -1,14 +1,11 @@
 package fr.tristiisch.verifplayer.object;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import fr.tristiisch.verifplayer.VerifCPS;
 
 public class PlayerInfo {
 
@@ -29,7 +26,6 @@ public class PlayerInfo {
 
 	public PlayerInfo(final Player player) {
 		this.uuid = player.getUniqueId();
-		VerifCPS.playersData.put(this, new HashSet<>());
 	}
 
 	public void addClickAir() {

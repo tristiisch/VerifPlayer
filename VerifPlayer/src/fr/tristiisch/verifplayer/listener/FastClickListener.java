@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.VerifCPS;
+import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 
@@ -36,7 +36,7 @@ public class FastClickListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getDamager();
-		final PlayerInfo pc = VerifCPS.getByPlayer(player);
+		final PlayerInfo pc = VerifPlayer.get(player);
 		pc.addClickEntity();
 		final Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
 		if(blockTarget.getType() == Material.AIR) {
@@ -51,7 +51,7 @@ public class FastClickListener implements Listener {
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if(event.getAction() == Action.LEFT_CLICK_AIR) {
 			final Player player = event.getPlayer();
-			final PlayerInfo pc = VerifCPS.getByPlayer(player);
+			final PlayerInfo pc = VerifPlayer.get(player);
 			/*			if(player.getTargetBlock((Set<Material>) null, 100).getLocation().distance(player.getLocation()) < 6.0 && pc.lastBlockInteraction > System.currentTimeMillis() && pc.click >= 10) {
 							event.setCancelled(true);
 						}*/
@@ -69,7 +69,7 @@ public class FastClickListener implements Listener {
 
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent e) {
-		VerifCPS.removePlayer(e.getPlayer());
+		VerifPlayer.removePlayer(e.getPlayer());
 	}
 
 }

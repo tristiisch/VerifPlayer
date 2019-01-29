@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.tristiisch.verifplayer.VerifCPS;
+import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.ItemTools;
@@ -34,24 +34,25 @@ import fr.tristiisch.verifplayer.utils.Utils;
 
 public class VerifRunnable extends BukkitRunnable {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
 		final double[] tps = TPS.getTPSArray();
 		//for(final PlayerInfo target : VerifCPS.verifier.values()) {
-		for(final Entry<PlayerInfo, Set<UUID>> entry : VerifCPS.playersData.entrySet()) {
-			final PlayerInfo playerInfo = entry.getKey();
+		for(final Entry<UUID, Set<UUID>> entry : VerifPlayer.viewers.entrySet()) {
+			UUID uuid = entry.getKey();
+			final PlayerInfo playerInfo = VerifPlayer.get(uuid);
 			final Player player = Bukkit.getPlayer(playerInfo.getUniqueId());
 			if(player == null) {
 				return;
 			}
 			if(!player.isOnline()) {
-				VerifCPS.removePlayer(player);
+				VerifPlayer.removePlayer(player);
 				return;
 			}
 			final HashMap<Integer, ItemStack> items = new HashMap<>();
 			ItemStack item;
 			final List<String> lore = new ArrayList<>();
+			int slot = VerifPlayer.slotTools;
 
 			// Tête de target
 			item = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
@@ -97,7 +98,7 @@ public class VerifRunnable extends BukkitRunnable {
 			skullmeta.setLore(infos);
 			item.setItemMeta(skullmeta);
 
-			items.put(0, item);
+			items.put(slot++, item);
 
 			// Effects
 			final Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
@@ -134,11 +135,11 @@ public class VerifRunnable extends BukkitRunnable {
 			item = ItemTools.create(material, effectSize, name, lore);
 			lore.clear();
 
-			items.put(1, item);
+			items.put(slot++, item);
 
 			// CPS
 			Integer currentClick = playerInfo.getCurrentClicks();
-			int glassPaneColor = VerifCPS.getIntervalGlassPaneColor(currentClick, 10, 18);
+			int glassPaneColor = VerifPlayer.getIntervalGlassPaneColor(currentClick, 10, 18);
 			lore.add("");
 
 			String nbAlert = ConfigUtils.VERIFGUI_NBALERT.getString();
@@ -157,7 +158,7 @@ public class VerifRunnable extends BukkitRunnable {
 				final int clickEntity = playerInfo.getClicksEntity().get(i);
 				final int clickGlobal = clickAir + clickEntity;
 
-				final ChatColor chatColor = VerifCPS.getIntervalChatColor(clickGlobal, 10, 18);
+				final ChatColor chatColor = VerifPlayer.getIntervalChatColor(clickGlobal, 10, 18);
 				String string = ConfigUtils.VERIFGUI_CPSFORMAT.getString();
 				string = string.replace("%color%", chatColor.toString());
 				string = string.replace("%cpsAir%", String.valueOf(clickAir));
@@ -177,13 +178,13 @@ public class VerifRunnable extends BukkitRunnable {
 			item = ItemTools.create(Material.STAINED_GLASS_PANE, currentClick, (byte) glassPaneColor, ConfigUtils.VERIFGUI_CPSITEMNAME.getString(), lore);
 			lore.clear();
 
-			items.put(2, item);
+			items.put(slot++, item);
 
 			// PING
 			int ping = Reflector.getPing(player);
 
-			glassPaneColor = VerifCPS.getIntervalGlassPaneColor(ping, 100, 200);
-			ChatColor chatColor = VerifCPS.getIntervalChatColor(ping, 100, 200);
+			glassPaneColor = VerifPlayer.getIntervalGlassPaneColor(ping, 100, 200);
+			ChatColor chatColor = VerifPlayer.getIntervalChatColor(ping, 100, 200);
 
 			lore.add("");
 			lore.add(ConfigUtils.VERIFGUI_PINGFORMAT.getString().replaceAll("%color%", chatColor.toString()).replaceAll("%ping%", String.valueOf(ping)));
@@ -194,7 +195,7 @@ public class VerifRunnable extends BukkitRunnable {
 			item = ItemTools.create(Material.STAINED_GLASS_PANE, ping, (byte) glassPaneColor, ConfigUtils.VERIFGUI_PINGITEMNAME.getString(), lore);
 			lore.clear();
 
-			items.put(3, item);
+			items.put(slot++, item);
 
 			// TPS
 
@@ -245,35 +246,36 @@ public class VerifRunnable extends BukkitRunnable {
 			item = ItemTools.create(Material.STAINED_GLASS_PANE, tpsIntNow, (byte) glassPaneColor, ConfigUtils.VERIFGUI_TPSITEMNAME.getString(), lore);
 
 			lore.clear();
-			items.put(4, item);
+			items.put(slot++, item);
 
 			final PlayerInventory targetInventory = player.getInventory();
 
 			// Armor
-			int i = VerifCPS.slotArmor;
+			slot = VerifPlayer.slotArmor;
 			final ItemStack[] armors = targetInventory.getArmorContents();
 			ArrayUtils.reverse(armors);
 			for(final ItemStack armorItem : armors) {
-				items.put(i++, armorItem);
+				items.put(slot++, armorItem);
 			}
 
 			// Inventaire
-			int slot = VerifCPS.slotInv;
-			int slot2 = VerifCPS.slotHotBar;
+			int slotInv = VerifPlayer.slotInv;
+			int slotHotbar = VerifPlayer.slotHotBar;
 
+			
 			for(final ItemStack itemStack : targetInventory.getContents()) {
-				if(slot2 < VerifCPS.slotHotBar + 9) {
-					items.put(slot2++, itemStack);
+				if(slotHotbar < VerifPlayer.slotHotBar + 9) {
+					items.put(slotHotbar++, itemStack);
 				} else {
-					items.put(slot++, itemStack);
+					items.put(slotInv++, itemStack);
 				}
 
 			}
 
 			// Holding
-			final int slotHolding = VerifCPS.slotHotBar + 9;
-			final int heldSlot = targetInventory.getHeldItemSlot() + slotHolding;
-			for(int i1 = slotHolding; slotHolding + 9 > i1; i1++) {
+			slot = VerifPlayer.slotHolding;
+			final int heldSlot = targetInventory.getHeldItemSlot() + slot;
+			for(int i1 = slot; slot + 9 > i1; i1++) {
 				items.put(i1, ItemTools.create(Material.AIR));
 			}
 			items.put(heldSlot, ItemTools.create(Material.GHAST_TEAR, 1, "&ePlayer Holding"));
@@ -290,7 +292,7 @@ public class VerifRunnable extends BukkitRunnable {
 						}
 					}
 				} else {
-					VerifCPS.removeViewer(viewersUuid);
+					VerifPlayer.removeViewer(viewersUuid);
 					return;
 				}
 			}

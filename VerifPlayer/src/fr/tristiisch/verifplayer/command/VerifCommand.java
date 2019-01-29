@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.VerifCPS;
+import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 
 public class VerifCommand implements CommandExecutor {
@@ -33,7 +33,7 @@ public class VerifCommand implements CommandExecutor {
 			player.sendMessage(ConfigUtils.VERIF_ISNOTCONNECTED.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
-		VerifCPS.openVerifGUi(player, target);
+		VerifPlayer.openVerifGUi(player, target);
 		return true;
 	}
 }
