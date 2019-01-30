@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.VersionUtils.VersionsUtils;
 
 public class VerifPlayer {
 
@@ -22,18 +23,23 @@ public class VerifPlayer {
 	public static Map<UUID, Set<UUID>> viewers = new HashMap<>();
 	final public static int line = 9;
 	public static int guiSize = 7 * line;
-	public static int slotTools = 0;
-	public static int slotArmor = 5;
+	public static int slotArmor = 4;
 	public static int slotInv = 9;
 	public static int slotHotBar = slotInv + 3 * line;
 	public static int slotHolding = slotHotBar + line;
+	public static int slotTools = 0;
+	public static boolean is1_9 = VersionsUtils.V1_9.isEqualOrOlder();
 
-	public static PlayerInfo get(final UUID uuid) {
-		return playersData.stream().filter(pc -> pc.getUniqueId().equals(uuid)).findFirst().orElse(null);
+	public static void addNewPlayer(final Player player) {
+		playersData.add(new PlayerInfo(player));
 	}
 
 	public static PlayerInfo get(final Player player) {
 		return get(player.getUniqueId());
+	}
+
+	public static PlayerInfo get(final UUID uuid) {
+		return playersData.stream().filter(pc -> pc.getUniqueId().equals(uuid)).findFirst().orElse(null);
 	}
 
 	public static Entry<UUID, Set<UUID>> getFromViewer(final UUID uuidViewer) {
@@ -54,7 +60,7 @@ public class VerifPlayer {
 
 	public static int getIntervalGlassPaneColor(final int i, final int min, final int max) {
 		if(i == 0) {
-			return 8;
+			return 0;
 		} else if(i < min) {
 			return 5;
 		} else if(i < max) {
@@ -64,39 +70,35 @@ public class VerifPlayer {
 		}
 	}
 
-	public static void openVerifGUi(final Player viewer, final Player target) {
-		final Inventory inventory  = Bukkit.createInventory(null, VerifPlayer.guiSize, ConfigUtils.VERIFGUI_NAME.getString() + target.getName());
-		UUID targetUuid = target.getUniqueId();
-		if(viewers.containsKey(targetUuid)) {
-			viewers.get(targetUuid).add(viewer.getUniqueId());
-		} else {
-			Set<UUID> viewersUuid = new HashSet<UUID>();
-			viewersUuid.add(viewer.getUniqueId());
-			viewers.put(targetUuid, viewersUuid);
-		}
-		
-		viewer.openInventory(inventory);
-	}
-	
-	public static Set<UUID> getViewers(UUID uuid){
-		return viewers.get(uuid);
-	}
-	
-	public static Set<UUID> getViewers(Player player){
+	public static Set<UUID> getViewers(final Player player) {
 		return getViewers(player.getUniqueId());
 	}
 
-	public static void addNewPlayer(Player player) {
-		playersData.add(new PlayerInfo(player));
+	public static Set<UUID> getViewers(final UUID uuid) {
+		return viewers.get(uuid);
 	}
-	
+
+	public static void openVerifGUi(final Player viewer, final Player target) {
+		final Inventory inventory = Bukkit.createInventory(null, VerifPlayer.guiSize, ConfigUtils.VERIFGUI_NAME.getString() + target.getName());
+		final UUID targetUuid = target.getUniqueId();
+		if(viewers.containsKey(targetUuid)) {
+			viewers.get(targetUuid).add(viewer.getUniqueId());
+		} else {
+			final Set<UUID> viewersUuid = new HashSet<>();
+			viewersUuid.add(viewer.getUniqueId());
+			viewers.put(targetUuid, viewersUuid);
+		}
+
+		viewer.openInventory(inventory);
+	}
+
 	public static void removePlayer(final Player player) {
 		final PlayerInfo playerInfo = get(player);
 		if(playerInfo != null) {
 			playersData.remove(playerInfo);
 		}
-		
-		Set<UUID> playerViewers = getViewers(player);
+
+		final Set<UUID> playerViewers = getViewers(player);
 		if(playerViewers != null) {
 			for(final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);

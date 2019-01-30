@@ -1,5 +1,5 @@
 package fr.tristiisch.verifplayer;
- 
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -50,8 +50,8 @@ public class Main extends JavaPlugin {
 
 		new Metrics(this);
 		//new SpigotUpdater(this, 0);
-
+		System.out.println(Bukkit.getServer().getClass().getPackage().getName());
 		console.sendMessage("§2" + this.getDescription().getName() + "§a by Tristiisch (v" + this.getDescription().getVersion() + ") is activated.");
-
+		System.out.println("test: " + Bukkit.getServer().getClass().getPackage().getName());
 	}
 }

@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
-import fr.tristiisch.verifplayer.utils.Reflector;
+import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.TPS;
 
 public class FastClickRunnable extends BukkitRunnable {
@@ -21,7 +21,7 @@ public class FastClickRunnable extends BukkitRunnable {
 	public void run() {
 		for(final PlayerInfo playerInfo : VerifPlayer.playersData) {
 			final Player player = Bukkit.getPlayer(playerInfo.getUniqueId());
-			final int ping = Reflector.getPing(player);
+			final int ping = Reflection.getPing(player);
 
 			if(playerInfo.getClicksAir().size() >= sizeHistoryCps) {
 				playerInfo.getClicksAir().remove(0);

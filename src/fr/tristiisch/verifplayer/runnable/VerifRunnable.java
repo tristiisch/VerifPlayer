@@ -28,12 +28,13 @@ import fr.tristiisch.verifplayer.VerifPlayer;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.ItemTools;
-import fr.tristiisch.verifplayer.utils.Reflector;
+import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.TPS;
 import fr.tristiisch.verifplayer.utils.Utils;
 
 public class VerifRunnable extends BukkitRunnable {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
 		final double[] tps = TPS.getTPSArray();
@@ -57,7 +58,11 @@ public class VerifRunnable extends BukkitRunnable {
 			// Tête de target
 			item = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
 			final SkullMeta skullmeta = (SkullMeta) item.getItemMeta();
-			skullmeta.setOwner(player.getName());
+			if(VerifPlayer.is1_9) {
+				skullmeta.setOwningPlayer(player);
+			} else {
+				skullmeta.setOwner(player.getName());
+			}
 			skullmeta.setDisplayName("§6" + player.getName());
 
 			final Map<String, String> replace = new HashMap<>();
@@ -181,7 +186,7 @@ public class VerifRunnable extends BukkitRunnable {
 			items.put(slot++, item);
 
 			// PING
-			int ping = Reflector.getPing(player);
+			int ping = Reflection.getPing(player);
 
 			glassPaneColor = VerifPlayer.getIntervalGlassPaneColor(ping, 100, 200);
 			ChatColor chatColor = VerifPlayer.getIntervalChatColor(ping, 100, 200);
@@ -191,6 +196,43 @@ public class VerifRunnable extends BukkitRunnable {
 			if(ping == 0) {
 				ping = 1;
 			}
+			lore.add("");
+			lore.add(ConfigUtils.VERIFGUI_TPSITEMNAME.getString());
+			lore.add("");
+
+			for(int i = 0; i < tps.length; i++) {
+				final double tpsDouble = tps[i];
+				final int tpsInt = (int) Math.round(tpsDouble);
+				if(tpsInt >= 18) {
+					chatColor = ChatColor.GREEN;
+				} else if(tpsInt >= 16) {
+					chatColor = ChatColor.GOLD;
+				} else {
+					chatColor = ChatColor.RED;
+				}
+
+				String tpsFormat = ConfigUtils.VERIFGUI_TPSFORMAT.getString();
+				final int time;
+				switch(i) {
+				case 0:
+					time = 1;
+					break;
+				case 1:
+					time = 5;
+					break;
+				case 2:
+					time = 15;
+					break;
+				default:
+					time = -1;
+					break;
+				}
+
+				tpsFormat = tpsFormat.replace("%time%", String.valueOf(time));
+				tpsFormat = tpsFormat.replace("%color%", chatColor.toString());
+				tpsFormat = tpsFormat.replace("%tps%", String.valueOf(tpsDouble));
+				lore.add(tpsFormat);
+			}
 
 			item = ItemTools.create(Material.STAINED_GLASS_PANE, ping, (byte) glassPaneColor, ConfigUtils.VERIFGUI_PINGITEMNAME.getString(), lore);
 			lore.clear();
@@ -199,7 +241,7 @@ public class VerifRunnable extends BukkitRunnable {
 
 			// TPS
 
-			lore.add("");
+			/*lore.add("");
 
 			int tpsIntNow = 1;
 			for(int i = 0; i < tps.length; i++) {
@@ -246,7 +288,7 @@ public class VerifRunnable extends BukkitRunnable {
 			item = ItemTools.create(Material.STAINED_GLASS_PANE, tpsIntNow, (byte) glassPaneColor, ConfigUtils.VERIFGUI_TPSITEMNAME.getString(), lore);
 
 			lore.clear();
-			items.put(slot++, item);
+			items.put(slot++, item);*/
 
 			final PlayerInventory targetInventory = player.getInventory();
 
@@ -266,10 +308,14 @@ public class VerifRunnable extends BukkitRunnable {
 			for(final ItemStack itemStack : targetInventory.getContents()) {
 				if(slotHotbar < VerifPlayer.slotHotBar + 9) {
 					items.put(slotHotbar++, itemStack);
-				} else {
+				} else if(slotInv < VerifPlayer.slotHotBar) {
 					items.put(slotInv++, itemStack);
 				}
 
+			}
+
+			if(VerifPlayer.is1_9) {
+				items.put(slot, targetInventory.getItemInOffHand());
 			}
 
 			// Holding

@@ -6,17 +6,32 @@ import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import fr.tristiisch.verifplayer.utils.Reflection.ClassEnum;
+
 public class TPS {
 
-	private static final Class<?> spigotServerClass = Reflector.getClass("org.bukkit.Server$Spigot");
-	private static final Method getSpigotMethod = Reflector.makeMethod(Bukkit.class, "spigot");
-	private static final Method getTPSMethod = spigotServerClass != null ? Reflector.makeMethod(spigotServerClass, "getTPS") : null;
-	private static final Class<?> minecraftServerClass = Reflector.getClass("{nms}.MinecraftServer");
-	private static final Method getServerMethod = minecraftServerClass != null ? Reflector.makeMethod(minecraftServerClass, "getServer") : null;
-	private static final Field recentTpsField = minecraftServerClass != null ? Reflector.makeField(minecraftServerClass, "recentTps") : null;
+	static boolean usePaper;
+	private static Method getServerMethod;
+	private static Field recentTpsField;
+
+	static {
+		final Class<?> spigotServerClass = Reflection.getClass("org.bukkit.Server$Spigot");
+		if(spigotServerClass != null) {
+			usePaper = Reflection.makeMethod(spigotServerClass, "getTPS") != null;
+		}
+
+		final Class<?> minecraftServerClass = Reflection.getClass(ClassEnum.NMS, "MinecraftServer");
+		if(minecraftServerClass != null) {
+			getServerMethod = Reflection.makeMethod(minecraftServerClass, "getServer");
+			recentTpsField = Reflection.makeField(minecraftServerClass, "recentTps");
+		}
+		final Method getSpigotMethod = Reflection.makeMethod(Bukkit.class, "spigot");
+
+		usePaper = getSpigotMethod != null && usePaper;
+	}
 
 	private static boolean canGetWithPaper() {
-		return getSpigotMethod != null && getTPSMethod != null;
+		return usePaper;
 	}
 
 	public static String getColor(final double tps) {
@@ -37,8 +52,8 @@ public class TPS {
 				e.printStackTrace();
 			}
 		}
-		final Object server = Reflector.callMethod(getServerMethod, null);
-		final double[] recent = Reflector.getFieldValue(recentTpsField, server);
+		final Object server = Reflection.callMethod(getServerMethod, null);
+		final double[] recent = Reflection.getFieldValue(recentTpsField, server);
 		return recent;
 	}
 
@@ -46,8 +61,8 @@ public class TPS {
 		if(!canGetWithPaper()) {
 			throw new UnsupportedOperationException("Can't get TPS from Paper");
 		}
-		final Object server = Reflector.callMethod(getServerMethod, null);
-		final double[] recent = Reflector.getFieldValue(recentTpsField, server);
+		final Object server = Reflection.callMethod(getServerMethod, null);
+		final double[] recent = Reflection.getFieldValue(recentTpsField, server);
 		return recent;
 	}
 
