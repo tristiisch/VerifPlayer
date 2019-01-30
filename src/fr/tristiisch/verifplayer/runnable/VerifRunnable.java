@@ -31,6 +31,9 @@ import fr.tristiisch.verifplayer.utils.ItemTools;
 import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.TPS;
 import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.gui.GuiName;
+import fr.tristiisch.verifplayer.utils.gui.GuiTool;
+import fr.tristiisch.verifplayer.utils.gui.GuiTools;
 
 public class VerifRunnable extends BukkitRunnable {
 
@@ -329,18 +332,21 @@ public class VerifRunnable extends BukkitRunnable {
 			final Set<UUID> viewers = entry.getValue();
 			for(final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
-				final Inventory topInventory = viewer.getOpenInventory().getTopInventory();
-				if(topInventory != null && topInventory.getTitle().startsWith(ConfigUtils.VERIFGUI_NAME.getString())) {
-					final InventoryView inventory = viewer.getOpenInventory();
-					for(final Entry<Integer, ItemStack> entryItem : items.entrySet()) {
-						if(entryItem.getValue() == null || !entryItem.getValue().equals(inventory.getItem(entryItem.getKey()))) {
-							inventory.setItem(entryItem.getKey(), entryItem.getValue());
-						}
-					}
-				} else {
+				//final Inventory topInventory = viewer.getOpenInventory().getTopInventory();
+				GuiTool guiTool = GuiTools.get(viewersUuid);
+				
+				if(guiTool.getGuiName() != GuiName.VERIF_PLAYER) {
 					VerifPlayer.removeViewer(viewersUuid);
 					return;
 				}
+				
+				final InventoryView inventory = viewer.getOpenInventory();
+				for(final Entry<Integer, ItemStack> entryItem : items.entrySet()) {
+					if(entryItem.getValue() == null || !entryItem.getValue().equals(inventory.getItem(entryItem.getKey()))) {
+						inventory.setItem(entryItem.getKey(), entryItem.getValue());
+					}
+				}
+				
 			}
 		}
 	}

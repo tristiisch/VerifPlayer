@@ -10,11 +10,12 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.VersionUtils.VersionsUtils;
+import fr.tristiisch.verifplayer.utils.gui.GuiName;
+import fr.tristiisch.verifplayer.utils.gui.GuiTool;
 
 public class VerifPlayer {
 
@@ -79,7 +80,12 @@ public class VerifPlayer {
 	}
 
 	public static void openVerifGUi(final Player viewer, final Player target) {
-		final Inventory inventory = Bukkit.createInventory(null, VerifPlayer.guiSize, ConfigUtils.VERIFGUI_NAME.getString() + target.getName());
+		GuiTool guiTool = new GuiTool(GuiName.VERIF_PLAYER, ConfigUtils.VERIFGUI_NAME.getString() + target.getName(), VerifPlayer.guiSize);
+		
+		/*
+		 * final Inventory inventory = Bukkit.createInventory(null, VerifPlayer.guiSize,
+		 * ConfigUtils.VERIFGUI_NAME.getString() + target.getName());
+		 */
 		final UUID targetUuid = target.getUniqueId();
 		if(viewers.containsKey(targetUuid)) {
 			viewers.get(targetUuid).add(viewer.getUniqueId());
@@ -89,7 +95,8 @@ public class VerifPlayer {
 			viewers.put(targetUuid, viewersUuid);
 		}
 
-		viewer.openInventory(inventory);
+		/* viewer.openInventory(inventory); */
+		guiTool.open(viewer);
 	}
 
 	public static void removePlayer(final Player player) {
@@ -106,6 +113,7 @@ public class VerifPlayer {
 				viewer.sendMessage(ConfigUtils.VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
+		viewers.remove(player.getUniqueId());
 	}
 
 	public static void removeViewer(final UUID uuidViewer) {

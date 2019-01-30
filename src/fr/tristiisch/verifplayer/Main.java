@@ -9,10 +9,12 @@ import fr.tristiisch.verifplayer.command.AlertCPSCommand;
 import fr.tristiisch.verifplayer.command.VerifCommand;
 import fr.tristiisch.verifplayer.command.VerifPlayerCommand;
 import fr.tristiisch.verifplayer.listener.FastClickListener;
+import fr.tristiisch.verifplayer.listener.GuiListener;
 import fr.tristiisch.verifplayer.listener.VerifPlayerListener;
 import fr.tristiisch.verifplayer.runnable.FastClickRunnable;
 import fr.tristiisch.verifplayer.runnable.VerifRunnable;
 import fr.tristiisch.verifplayer.utils.Metrics;
+import fr.tristiisch.verifplayer.utils.gui.GuiToolsListener;
 
 public class Main extends JavaPlugin {
 
@@ -42,6 +44,8 @@ public class Main extends JavaPlugin {
 		final PluginManager pluginManager = this.getServer().getPluginManager();
 		pluginManager.registerEvents(new FastClickListener(), this);
 		pluginManager.registerEvents(new VerifPlayerListener(), this);
+		pluginManager.registerEvents(new GuiToolsListener(), this);
+		pluginManager.registerEvents(new GuiListener(), this);
 
 		// 1 sec
 		new FastClickRunnable().runTaskTimerAsynchronously(this, 0, 20);
