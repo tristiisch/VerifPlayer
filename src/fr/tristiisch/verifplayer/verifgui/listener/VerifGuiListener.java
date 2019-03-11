@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.listener;
+package fr.tristiisch.verifplayer.verifgui.listener;
 
 import java.util.Set;
 import java.util.UUID;
@@ -7,28 +7,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.VerifPlayerData;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
-import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.verifgui.*;
+import fr.tristiisch.verifplayer.utils.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
+import fr.tristiisch.verifplayer.verifgui.VerifGuiPage;
 
-public class VerifPlayerListener implements Listener {
-
-	public VerifPlayerListener() {
-		for(final Player player : Bukkit.getOnlinePlayers()) {
-			VerifPlayerData.addNewPlayerInfo(player);
-		}
-	}
+public class VerifGuiListener implements Listener {
 
 	@EventHandler
-	public void onPlayerJoin(final PlayerJoinEvent event) {
+	public void onGuiClose(final GuiCloseEvent event) {
 		final Player player = event.getPlayer();
-		VerifPlayerData.addNewPlayerInfo(player);
-		if(player.getUniqueId().toString().equals("ca0a1663-1696-4d62-b93f-281965522a76")) {
-			player.sendMessage(Utils.color("&2VerifPlayer &7» &aThis server uses &2VerifCPS&a develop by Tristiisch"));
+		if(event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
+			VerifGuiManager.remove(player);
 		}
 	}
 
@@ -43,6 +35,6 @@ public class VerifPlayerListener implements Listener {
 				viewer.sendMessage(ConfigUtils.VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
-		VerifPlayerData.removePlayerInfo(player);
+		VerifGuiManager.remove(player);
 	}
 }

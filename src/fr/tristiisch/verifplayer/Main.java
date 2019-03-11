@@ -8,13 +8,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.tristiisch.verifplayer.command.AlertCPSCommand;
 import fr.tristiisch.verifplayer.command.VerifCommand;
 import fr.tristiisch.verifplayer.command.VerifPlayerCommand;
-import fr.tristiisch.verifplayer.listener.FastClickListener;
-import fr.tristiisch.verifplayer.listener.GuiListener;
 import fr.tristiisch.verifplayer.listener.VerifPlayerListener;
-import fr.tristiisch.verifplayer.runnable.FastClickRunnable;
-import fr.tristiisch.verifplayer.runnable.VerifRunnable;
 import fr.tristiisch.verifplayer.utils.Metrics;
-import fr.tristiisch.verifplayer.utils.gui.GuiToolsListener;
+import fr.tristiisch.verifplayer.utils.gui.listener.GuiListener;
+import fr.tristiisch.verifplayer.verifclick.FastClickRunnable;
+import fr.tristiisch.verifplayer.verifclick.PlayerClicksListener;
+import fr.tristiisch.verifplayer.verifgui.runnable.VerifGuiRunnable;
 
 public class Main extends JavaPlugin {
 
@@ -42,15 +41,14 @@ public class Main extends JavaPlugin {
 		this.getCommand("alertcps").setExecutor(new AlertCPSCommand());
 
 		final PluginManager pluginManager = this.getServer().getPluginManager();
-		pluginManager.registerEvents(new FastClickListener(), this);
+		pluginManager.registerEvents(new PlayerClicksListener(), this);
 		pluginManager.registerEvents(new VerifPlayerListener(), this);
-		pluginManager.registerEvents(new GuiToolsListener(), this);
 		pluginManager.registerEvents(new GuiListener(), this);
 
 		// 1 sec
 		new FastClickRunnable().runTaskTimerAsynchronously(this, 0, 20);
 		// 0.05 sec
-		new VerifRunnable().runTaskTimerAsynchronously(this, 0, 1);
+		new VerifGuiRunnable().runTaskTimerAsynchronously(this, 0, 1);
 
 		new Metrics(this);
 		//new SpigotUpdater(this, 0);

@@ -2,45 +2,37 @@ package fr.tristiisch.verifplayer.object;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class PlayerInfo {
 
-	private Integer clickAir = 0;
-	private Integer clickEntity = 0;
-	private final UUID uuid;
-	// TODO use this instand of clicksAir & clicksEntity
-	//private final LinkedHashMap<Integer, Integer> clicks = new LinkedHashMap<>();
-	private final List<Integer> clicksAir = new ArrayList<>();
-	private final List<Integer> clicksEntity = new ArrayList<>();
-	private long lastAlert = 0L;
-	/*	public long lastBlockInteraction = 0L;
-		public long lastBlockPlace = 0L;*/
+	private Integer clickAir;
+	private Integer clickEntity;
+	private final List<Integer> clicksAir;
+	private final List<Integer> clicksEntity;
+	private long lastAlert;
+	private int maxCPS;
+	private int nbAlerts;
 
-	private int maxCPS = 0;
-
-	private int nbAlerts = 0;
-
-	public PlayerInfo(final Player player) {
-		this.uuid = player.getUniqueId();
+	public PlayerInfo() {
+		this.clickAir = 0;
+		this.clickEntity = 0;
+		this.clicksAir = new ArrayList<>();
+		this.clicksEntity = new ArrayList<>();
+		this.lastAlert = 0L;
+		this.maxCPS = 0;
+		this.nbAlerts = 0;
 	}
 
 	public void addClickAir() {
-		if(this.clickAir > this.maxCPS) {
-			this.maxCPS = this.clickAir;
-		}
-		this.clickAir++;
+		++this.clickAir;
 	}
 
 	public void addClickEntity() {
-		this.clickEntity++;
+		++this.clickEntity;
 	}
 
 	public void addNbAlerts() {
-		this.nbAlerts++;
+		++this.nbAlerts;
 	}
 
 	public Integer getClickAir() {
@@ -79,20 +71,8 @@ public class PlayerInfo {
 		return this.nbAlerts;
 	}
 
-	public Player getPlayer() {
-		return Bukkit.getPlayer(this.uuid);
-	}
-
-	public UUID getUniqueId() {
-		return this.uuid;
-	}
-
-	public UUID getUuid() {
-		return this.uuid;
-	}
-
 	public void removeClickAir() {
-		this.clickAir--;
+		--this.clickAir;
 	}
 
 	public void resetClickAir() {
@@ -105,5 +85,9 @@ public class PlayerInfo {
 
 	public void setLastAlert(final long timestamp) {
 		this.lastAlert = timestamp;
+	}
+
+	public void setMaxCPS(final int maxCPS) {
+		this.maxCPS = maxCPS;
 	}
 }
