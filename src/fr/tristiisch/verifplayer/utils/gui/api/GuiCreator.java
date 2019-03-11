@@ -1,18 +1,14 @@
-package fr.tristiisch.verifplayer.utils.gui;
+package fr.tristiisch.verifplayer.utils.gui.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiPage;
 
 public class GuiCreator {
 
-	public static int nbBoxPerRow;
-	static {
-		GuiCreator.nbBoxPerRow = 9;
-	}
+	public static int nbBoxPerRow = 9;
 	private final GuiPage guiPage;
 	private String data;
 	private boolean missClickClosing;

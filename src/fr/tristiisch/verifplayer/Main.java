@@ -10,9 +10,13 @@ import fr.tristiisch.verifplayer.command.VerifCommand;
 import fr.tristiisch.verifplayer.command.VerifPlayerCommand;
 import fr.tristiisch.verifplayer.listener.VerifPlayerListener;
 import fr.tristiisch.verifplayer.utils.Metrics;
+import fr.tristiisch.verifplayer.utils.gui.GuiManager;
 import fr.tristiisch.verifplayer.utils.gui.listener.GuiListener;
+import fr.tristiisch.verifplayer.utils.permission.PermissionManager;
 import fr.tristiisch.verifplayer.verifclick.FastClickRunnable;
 import fr.tristiisch.verifplayer.verifclick.PlayerClicksListener;
+import fr.tristiisch.verifplayer.verifgui.listener.VerifGuiListener;
+import fr.tristiisch.verifplayer.verifgui.listener.items.HeadListener;
 import fr.tristiisch.verifplayer.verifgui.runnable.VerifGuiRunnable;
 
 public class Main extends JavaPlugin {
@@ -25,6 +29,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		GuiManager.closeAll();
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
 		console.sendMessage("§4" + this.getDescription().getName() + "§c by Tristiisch (v" + this.getDescription().getVersion() + ") is disabled.");
 	}
@@ -35,20 +40,23 @@ public class Main extends JavaPlugin {
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
 
 		this.saveDefaultConfig();
+		PermissionManager.createPermFile(this);
 
 		this.getCommand("verifplayer").setExecutor(new VerifPlayerCommand());
 		this.getCommand("verif").setExecutor(new VerifCommand());
 		this.getCommand("alertcps").setExecutor(new AlertCPSCommand());
 
 		final PluginManager pluginManager = this.getServer().getPluginManager();
-		pluginManager.registerEvents(new PlayerClicksListener(), this);
 		pluginManager.registerEvents(new VerifPlayerListener(), this);
 		pluginManager.registerEvents(new GuiListener(), this);
+		pluginManager.registerEvents(new PlayerClicksListener(), this);
+		pluginManager.registerEvents(new VerifGuiListener(), this);
+
+		pluginManager.registerEvents(new HeadListener(), this);
 
 		// 1 sec
 		new FastClickRunnable().runTaskTimerAsynchronously(this, 0, 20);
-		// 0.05 sec
-		new VerifGuiRunnable().runTaskTimerAsynchronously(this, 0, 1);
+		VerifGuiRunnable.start();
 
 		new Metrics(this);
 		//new SpigotUpdater(this, 0);

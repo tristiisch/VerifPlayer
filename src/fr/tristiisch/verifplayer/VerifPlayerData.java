@@ -9,33 +9,21 @@ import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.object.PlayerInfo;
 import fr.tristiisch.verifplayer.utils.VersionUtils;
-import fr.tristiisch.verifplayer.utils.gui.GuiCreator;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiPage;
+import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.utils.gui.api.GuiPage.GuiPageVariable;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiPage;
+import fr.tristiisch.verifplayer.verifgui.runnable.VerifGuiRunnable;
 
 public class VerifPlayerData {
 
 	public static final Map<UUID, PlayerInfo> playersData = new HashMap<>();
 	public static final int boxPerRow = 9;
 	public static final int guiSize = 63;
-	public static final int slotArmor = 4;
-	public static final int slotInv = 9;
-	public static final int slotHotBar = VerifPlayerData.slotInv + 27;
-	public static final int slotHolding = VerifPlayerData.slotHotBar + 9;
-	public static final int slotTools = 0;
 	public static final boolean is1_9 = VersionUtils.VersionsUtils.V1_9.isEqualOrOlder();
 
 	public static void addNewPlayerInfo(final Player player) {
 		VerifPlayerData.playersData.put(player.getUniqueId(), new PlayerInfo());
-	}
-
-	public static PlayerInfo get(final Player player) {
-		return VerifPlayerData.playersData.get(player.getUniqueId());
-	}
-
-	public static PlayerInfo get(final UUID uuid) {
-		return VerifPlayerData.playersData.get(uuid);
 	}
 
 	public static ChatColor getIntervalChatColor(final int i, final int min, final int max) {
@@ -64,9 +52,18 @@ public class VerifPlayerData {
 		return 14;
 	}
 
+	public static PlayerInfo getPlayerInfo(final Player player) {
+		return VerifPlayerData.playersData.get(player.getUniqueId());
+	}
+
+	public static PlayerInfo getPlayerInfo(final UUID uuid) {
+		return VerifPlayerData.playersData.get(uuid);
+	}
+
 	public static void openVerifGUi(final Player viewer, final Player target) {
+		VerifGuiRunnable.start();
 		final GuiCreator guiCreator = new GuiCreator(VerifGuiPage.HOME);
-		guiCreator.getGuiPage().replaceVariable(GuiPage.GuiPageVariable.PLAYER, target.getName());
+		guiCreator.getGuiPage().replaceTitleVariable(GuiPageVariable.PLAYER, target.getName());
 		guiCreator.setData(target.getUniqueId().toString());
 		VerifGuiManager.set(viewer, guiCreator, target);
 		guiCreator.openGui(viewer);

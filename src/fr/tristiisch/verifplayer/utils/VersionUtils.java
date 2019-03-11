@@ -8,6 +8,8 @@ public class VersionUtils {
 
 	public enum VersionsUtils {
 
+		V1_15(1.15f),
+		V1_14(1.14f),
 		V1_13(1.13f),
 		V1_12(1.12f),
 		V1_11(1.11f),
@@ -30,8 +32,6 @@ public class VersionUtils {
 		}
 
 		public boolean isEqualOrOlder() {
-			System.out.print("this.getFloat() " + this.getFloat());
-			System.out.println(" VersionUtils.version.getFloat() " + VersionUtils.version.getFloat());
 			return VersionUtils.version.getFloat() >= this.getFloat();
 		}
 
@@ -52,7 +52,6 @@ public class VersionUtils {
 
 	public static VersionsUtils getVersion() {
 		final String serverPackageVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].substring(1).replace("_", ".");
-		System.out.println(serverPackageVersion);
 		return Arrays.stream(VersionsUtils.values()).filter(version -> serverPackageVersion.startsWith(version.getName())).findFirst().orElse(null);
 	}
 

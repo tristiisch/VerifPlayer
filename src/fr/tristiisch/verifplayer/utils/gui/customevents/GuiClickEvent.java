@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerEvent;
 
-import fr.tristiisch.verifplayer.utils.gui.GuiCreator;
+import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
 
 public class GuiClickEvent extends PlayerEvent implements Cancellable {
 

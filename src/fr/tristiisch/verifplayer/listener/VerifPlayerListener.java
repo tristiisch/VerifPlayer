@@ -10,10 +10,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import fr.tristiisch.verifplayer.Main;
 import fr.tristiisch.verifplayer.VerifPlayerData;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.verifgui.*;
+import fr.tristiisch.verifplayer.utils.permission.Permission;
+import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
 
 public class VerifPlayerListener implements Listener {
 
@@ -27,8 +29,8 @@ public class VerifPlayerListener implements Listener {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
 		VerifPlayerData.addNewPlayerInfo(player);
-		if(player.getUniqueId().toString().equals("ca0a1663-1696-4d62-b93f-281965522a76")) {
-			player.sendMessage(Utils.color("&2VerifPlayer &7» &aThis server uses &2VerifCPS&a develop by Tristiisch"));
+		if(Permission.isAuthor(player)) {
+			player.sendMessage(Utils.color("&2VerifPlayer &7» &aThis server uses &2VerifCPS&a V&2" + Main.getInstance().getDescription().getVersion() + "&a develop by Tristiisch"));
 		}
 	}
 

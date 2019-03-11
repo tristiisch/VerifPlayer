@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.VerifPlayerData;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.permission.Permission;
 
 public class VerifCommand implements CommandExecutor {
 
@@ -18,7 +19,7 @@ public class VerifCommand implements CommandExecutor {
 			return true;
 		}
 		final Player player = (Player) sender;
-		if(!player.hasPermission("verifplayer.mod")) {
+		if(!Permission.MODERATOR_COMMAND_VERIF.hasPermission(sender)) {
 			player.sendMessage(ConfigUtils.NOPERM.getString());
 			return true;
 		}
@@ -33,6 +34,17 @@ public class VerifCommand implements CommandExecutor {
 			player.sendMessage(ConfigUtils.VERIF_ISNOTCONNECTED.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
+
+		if(Permission.ADMIN.hasPermission(target) && !Permission.ADMIN.hasPermission(player)) {
+			player.sendMessage(ConfigUtils.VERIF_CANTVERIFADMIN.getString().replaceAll("%player%", args[0]));
+			return true;
+		}
+
+		/*		if(target.getUniqueId().equals(player.getUniqueId())) {
+					player.sendMessage(ConfigUtils.VERIF_CANTVERIFYOURSELF.getString().replaceAll("%player%", args[0]));
+					return true;
+				}*/
+
 		VerifPlayerData.openVerifGUi(player, target);
 		return true;
 	}

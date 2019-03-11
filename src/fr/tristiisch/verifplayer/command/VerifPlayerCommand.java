@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import fr.tristiisch.verifplayer.Main;
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.permission.Permission;
 
 public class VerifPlayerCommand implements CommandExecutor {
 
@@ -18,7 +19,7 @@ public class VerifPlayerCommand implements CommandExecutor {
 		final Player player;
 		if(sender instanceof Player) {
 			player = (Player) sender;
-			if(!player.hasPermission("verifplayer.admin")) {
+			if(!Permission.ADMIN.hasPermission(sender)) {
 				player.sendMessage(ConfigUtils.NOPERM.getString());
 				return true;
 			}
@@ -29,10 +30,10 @@ public class VerifPlayerCommand implements CommandExecutor {
 
 		} else if(args[0].equalsIgnoreCase("reload")) {
 			Main.getInstance().reloadConfig();
-			sender.sendMessage(Utils.color("&2VerifCPS &7» &aThe config has been reload successfully"));
+			sender.sendMessage(Utils.color("&2VerifPlayer &7» &aThe config has been reload successfully"));
 
 		} else if(args[0].equalsIgnoreCase("about")) {
-			sender.sendMessage(Utils.color("&2VerifCPS &aV" + Main.getInstance().getDescription().getVersion() + " develop by Tristiisch."));
+			sender.sendMessage(Utils.color("&2VerifPlayer &aV" + Main.getInstance().getDescription().getVersion() + " develop by Tristiisch."));
 
 		} else if(Bukkit.getPlayer(args[0]) != null) {
 			sender.sendMessage(Utils.color("&cUsage &7» &c/verif <player>"));

@@ -16,6 +16,7 @@ public enum ConfigUtils {
 	VERIF_ISNOTCONNECTED,
 	VERIF_PLAYERDISCONNECT,
 	VERIF_SENDALERT,
+	VERIF_CANTVERIFYOURSELF,
 	VERIF_USAGE,
 	VERIFGUI_CPSFORMAT,
 	VERIFGUI_CPSITEMNAME,
@@ -29,7 +30,8 @@ public enum ConfigUtils {
 	VERIFGUI_PINGFORMAT,
 	VERIFGUI_PINGITEMNAME,
 	VERIFGUI_TPSFORMAT,
-	VERIFGUI_TPSITEMNAME;
+	VERIFGUI_TPSITEMNAME,
+	VERIF_CANTVERIFADMIN;
 
 	public String getString() {
 		return Utils.color(Main.getInstance().getConfig().getString("messages." + this.name().toLowerCase().toString()));

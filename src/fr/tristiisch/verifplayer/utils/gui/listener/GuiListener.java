@@ -8,8 +8,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.utils.gui.GuiCreator;
 import fr.tristiisch.verifplayer.utils.gui.GuiManager;
+import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
 import fr.tristiisch.verifplayer.utils.gui.customevents.GuiClickEvent;
 import fr.tristiisch.verifplayer.utils.gui.customevents.GuiCloseEvent;
 

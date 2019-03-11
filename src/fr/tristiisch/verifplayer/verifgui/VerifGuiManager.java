@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.gui.GuiCreator;
 import fr.tristiisch.verifplayer.utils.gui.GuiManager;
+import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
 
 public class VerifGuiManager extends GuiManager {
 

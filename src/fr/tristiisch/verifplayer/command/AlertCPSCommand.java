@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.utils.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.permission.Permission;
 
 public class AlertCPSCommand implements CommandExecutor {
 
@@ -25,7 +26,7 @@ public class AlertCPSCommand implements CommandExecutor {
 		}
 
 		final Player player = (Player) sender;
-		if(!player.hasPermission("verifplayer.mod")) {
+		if(!Permission.MODERATOR_COMMAND_ALERTCPS.hasPermission(sender)) {
 			sender.sendMessage(ConfigUtils.NOPERM.getString());
 			return true;
 		}

@@ -22,7 +22,7 @@ public class PlayerClicksListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getDamager();
-		final PlayerInfo playerInfo = VerifPlayerData.get(player);
+		final PlayerInfo playerInfo = VerifPlayerData.getPlayerInfo(player);
 		playerInfo.addClickEntity();
 		final Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
 		if(blockTarget.getType() == Material.AIR) {
@@ -37,7 +37,7 @@ public class PlayerClicksListener implements Listener {
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if(event.getAction() == Action.LEFT_CLICK_AIR) {
 			final Player player = event.getPlayer();
-			final PlayerInfo playerInfo = VerifPlayerData.get(player);
+			final PlayerInfo playerInfo = VerifPlayerData.getPlayerInfo(player);
 			playerInfo.addClickAir();
 			if(playerInfo.getClickAir() >= 18) {
 				event.setCancelled(true);

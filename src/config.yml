@@ -4,17 +4,19 @@ messages:
     noperm: "&cYou haven't got the permission"
     
     alertcps_usage: "&cUsage &7» &c/alertcps <on|off>"
-    alertcps_disabled: "&2VerifCPS &7» &aYou will no longer receive CPS alerts."
-    alertcps_enabled: "&2VerifCPS &7» &aYou now receive CPS alerts."
-    alertcps_already_disabled: "&2VerifCPS &7» &cCps alerts are already disabled."
-    alertcps_already_enabled: "&2VerifCPS &7» &cCps alerts are already enabled."
+    alertcps_disabled: "&2VerifPlayer &7» &aYou will no longer receive CPS alerts."
+    alertcps_enabled: "&2VerifPlayer &7» &aYou now receive CPS alerts."
+    alertcps_already_disabled: "&2VerifPlayer &7» &cCps alerts are already disabled."
+    alertcps_already_enabled: "&2VerifPlayer &7» &cCps alerts are already enabled."
     
     verif_usage: "&cUsage &7» &c/verif <player>"
-    verif_isnotconnected: "&2VerifCPS &7» &4%player% &cis not connected."
-    verif_sendalert: "&2VerifCPS &7» &4%player% &c%cps% cps, %ping% ms, %tps% tps."
-    verif_playerdisconnect: "&2VerifCPS &7» &4%player% &chas disconnected."
+    verif_isnotconnected: "&2VerifPlayer &7» &4%player% &cis not connected."
+    verif_sendalert: "&2VerifPlayer &7» &4%player% &c%cps% cps, %ping% ms, %tps% tps."
+    verif_playerdisconnect: "&2VerifPlayer &7» &4%player% &chas disconnected."
+    verif_cantverifyourself: "&2VerifPlayer &7» &4You can't verif yourself."
+    verif_cantverifadmin: "&2VerifPlayer &7» &4You can't verif an Admin."
     
-    verifgui_name: "&2VerifCPS ➤ &a"
+    verifgui_name: "&2VerifPlayer ➤ &a%player%"
     
     verifgui_info:
       - ""
@@ -22,7 +24,7 @@ messages:
       - "&7Food: &e%food%"
       - "&7XP Level: &e%xp_level%"
       - "&7First played: &e%first_played%"
-      - "&7Last played: &e%last_played%"
+      - "&7Connected for: &e%last_played%"
       - ""
       - "&7In vehicule: &e%vehicule%"
       - "&7Gui: &e%gui%"
