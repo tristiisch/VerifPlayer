@@ -1,14 +1,17 @@
 package fr.tristiisch.verifplayer.object;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerInfo {
 
 	private Integer clickAir;
 	private Integer clickEntity;
-	private final List<Integer> clicksAir;
-	private final List<Integer> clicksEntity;
+	private final List<Integer> clicksAir = new ArrayList<>();
+	private final List<Integer> clicksEntity = new ArrayList<>();
+	private final Map<Long, Integer> alertHistory = new HashMap<>();
 	private long lastAlert;
 	private int maxCPS;
 	private int nbAlerts;
@@ -16,8 +19,6 @@ public class PlayerInfo {
 	public PlayerInfo() {
 		this.clickAir = 0;
 		this.clickEntity = 0;
-		this.clicksAir = new ArrayList<>();
-		this.clicksEntity = new ArrayList<>();
 		this.lastAlert = 0L;
 		this.maxCPS = 0;
 		this.nbAlerts = 0;
@@ -33,6 +34,10 @@ public class PlayerInfo {
 
 	public void addNbAlerts() {
 		++this.nbAlerts;
+	}
+
+	public Map<Long, Integer> getAlertHistory() {
+		return this.alertHistory;
 	}
 
 	public Integer getClickAir() {
@@ -69,6 +74,10 @@ public class PlayerInfo {
 
 	public int getNbAlerts() {
 		return this.nbAlerts;
+	}
+
+	public void putAlertHistory(final long time, final int value) {
+		this.alertHistory.put(time, value);
 	}
 
 	public void removeClickAir() {

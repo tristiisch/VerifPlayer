@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import fr.tristiisch.verifplayer.VerifPlayerData;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
+import fr.tristiisch.verifplayer.utils.VersionUtils.Versions;
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
 
 public class PlayerClicksListener implements Listener {
 
@@ -24,24 +26,32 @@ public class PlayerClicksListener implements Listener {
 		final Player player = (Player) event.getDamager();
 		final PlayerInfo playerInfo = VerifPlayerData.getPlayerInfo(player);
 		playerInfo.addClickEntity();
-		final Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
+		Block blockTarget;
+		if(Versions.V1_8.isEqualOrOlder()) {
+			blockTarget = player.getTargetBlock((Set<Material>) null, 6);
+		} else {
+			blockTarget = player.getTargetBlock(null, 6);
+		}
+
 		if(blockTarget.getType() == Material.AIR) {
 			playerInfo.removeClickAir();
 		}
-		if(playerInfo.getClickEntity() >= 18) {
+		if(playerInfo.getClickEntity() > ConfigUtils.SETTINGS_SIZEHISTORYCPS.getInt()) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if(event.getAction() == Action.LEFT_CLICK_AIR) {
-			final Player player = event.getPlayer();
-			final PlayerInfo playerInfo = VerifPlayerData.getPlayerInfo(player);
-			playerInfo.addClickAir();
-			if(playerInfo.getClickAir() >= 18) {
-				event.setCancelled(true);
-			}
+		if(event.getAction() != Action.LEFT_CLICK_AIR) {
+			return;
 		}
+		final Player player = event.getPlayer();
+		final PlayerInfo playerInfo = VerifPlayerData.getPlayerInfo(player);
+		playerInfo.addClickAir();
+		if(playerInfo.getClickAir() > ConfigUtils.SETTINGS_SIZEHISTORYCPS.getInt()) {
+			event.setCancelled(true);
+		}
+
 	}
 }

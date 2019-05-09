@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.utils.gui.customevents;
+package fr.tristiisch.verifplayer.gui.customevents;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerEvent;
 
-import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.gui.api.GuiCreator;
 
 public class GuiClickEvent extends PlayerEvent implements Cancellable {
 

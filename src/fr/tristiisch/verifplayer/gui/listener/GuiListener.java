@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.utils.gui.listener;
+package fr.tristiisch.verifplayer.gui.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,10 +8,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.utils.gui.GuiManager;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
-import fr.tristiisch.verifplayer.utils.gui.customevents.GuiClickEvent;
-import fr.tristiisch.verifplayer.utils.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.gui.GuiManager;
+import fr.tristiisch.verifplayer.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.gui.customevents.GuiClickEvent;
+import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
 
 public class GuiListener implements Listener {
 
@@ -28,6 +28,7 @@ public class GuiListener implements Listener {
 		final GuiClickEvent guiClickEvent = new GuiClickEvent(player, gui, event);
 		Bukkit.getPluginManager().callEvent(guiClickEvent);
 		gui = guiClickEvent.getGui();
+
 		if(gui.isMissClickClosing() && event.getClickedInventory() == null) {
 			event.getWhoClicked().closeInventory();
 			return;

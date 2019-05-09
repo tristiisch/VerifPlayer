@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
+
 public class Utils {
 
 	public static List<String> color(final List<String> l) {
@@ -34,13 +36,18 @@ public class Utils {
 
 	public static List<String> replaceAll(final List<String> list, final Map<String, String> replace) {
 		for(int i = 0; list.size() > i; i++) {
-			final String s = list.get(i);
-			final List<Entry<String, String>> entryToReplace = replace.entrySet().stream().filter(entry -> s.contains(entry.getKey())).collect(Collectors.toList());
-			if(!entryToReplace.isEmpty()) {
-				for(final Entry<String, String> entry : entryToReplace) {
-					list.set(i, s.replaceAll(entry.getKey(), entry.getValue()));
+			String string = list.get(i);
+			/*			final List<Entry<String, String>> entryToReplace = replace.entrySet().stream().filter(entry -> s.contains(entry.getKey())).collect(Collectors.toList());
+						if(!entryToReplace.isEmpty()) {*/
+			for(final Entry<String, String> entry : replace.entrySet()) {
+
+				if(string.contains(entry.getKey())) {
+					string = string.replaceAll(entry.getKey(), entry.getValue());
 				}
+
 			}
+			list.add(i, string);
+			/*			}*/
 		}
 		return list;
 	}
@@ -110,48 +117,51 @@ public class Utils {
 		final long minute = dur.toMinutes() - 60 * dur.toHours();
 		final long second = dur.getSeconds() - 60 * dur.toMinutes();
 
-		final List<String> msg = new ArrayList<>();
-		if(year > 1) {
-			msg.add(year + " ans");
-		} else if(year == 1) {
-			msg.add(year + " an");
-		}
-		if(month != 0) {
-			msg.add(month + " mois");
-		}
-
-		if(day > 1) {
-			msg.add(day + " jours");
-		} else if(day == 1) {
-			msg.add(day + " jour");
-		}
-		if(hour > 1) {
-			msg.add(hour + " heures");
-		} else if(hour == 1) {
-			msg.add(hour + " heure");
-		}
-		if(minute > 1) {
-			msg.add(minute + " minutes");
-		} else if(minute == 1) {
-			msg.add(minute + " minute");
-		}
-		if(second > 1) {
-			msg.add(second + " secondes");
-		} else if(second == 1) {
-			msg.add(second + " seconde");
-		}
-		// System.out.println("Timestamp " + timestamp + " " + year + "year " + month +
-		// "month " + day + "day " + hour + "hour " + minute + "minute " + second +
-		// "second ");
-
 		final List<String> msgs = new ArrayList<>();
-		for(final String message : msg) {
-			if(message != null) {
-				msgs.add(message);
+		if(year > 1) {
+			msgs.add(year + " " + ConfigUtils.MESSAGES_TIME_YEARS.getString());
+		} else if(year == 1) {
+			msgs.add(year + " " + ConfigUtils.MESSAGES_TIME_YEAR.getString());
+		}
+
+		if(month > 1) {
+			msgs.add(month + " " + ConfigUtils.MESSAGES_TIME_MONTHS.getString());
+		} else if(month == 1) {
+			msgs.add(month + " " + ConfigUtils.MESSAGES_TIME_MONTH.getString());
+		}
+
+		if(msgs.size() < 2) {
+			if(day > 1) {
+				msgs.add(day + " " + ConfigUtils.MESSAGES_TIME_DAYS.getString());
+			} else if(day == 1) {
+				msgs.add(day + " " + ConfigUtils.MESSAGES_TIME_DAY.getString());
 			}
-			if(msgs.size() >= 2) {
-				break;
+
+			if(msgs.size() < 2) {
+				if(hour > 1) {
+					msgs.add(hour + " " + ConfigUtils.MESSAGES_TIME_HOURS.getString());
+				} else if(hour == 1) {
+					msgs.add(hour + " " + ConfigUtils.MESSAGES_TIME_HOUR.getString());
+				}
+
+				if(msgs.size() < 2) {
+					if(minute > 1) {
+						msgs.add(minute + " " + ConfigUtils.MESSAGES_TIME_MINUTES.getString());
+					} else if(minute == 1) {
+						msgs.add(minute + " " + ConfigUtils.MESSAGES_TIME_MINUTE.getString());
+					}
+
+					if(msgs.size() < 2) {
+						if(second > 1) {
+							msgs.add(second + " " + ConfigUtils.MESSAGES_TIME_SECONDS.getString());
+						} else if(second == 1) {
+							msgs.add(second + " " + ConfigUtils.MESSAGES_TIME_SECOND.getString());
+						}
+					}
+
+				}
 			}
+
 		}
 		return String.join(", ", msgs);
 	}

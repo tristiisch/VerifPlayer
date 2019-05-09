@@ -9,8 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.utils.ConfigUtils;
-import fr.tristiisch.verifplayer.utils.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiPage;
 
@@ -32,7 +32,7 @@ public class VerifGuiListener implements Listener {
 			for(final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
-				viewer.sendMessage(ConfigUtils.VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
+				viewer.sendMessage(ConfigUtils.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
 		VerifGuiManager.remove(player);

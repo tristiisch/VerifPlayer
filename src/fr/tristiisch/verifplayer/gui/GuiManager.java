@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.utils.gui;
+package fr.tristiisch.verifplayer.gui;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiPage;
+import fr.tristiisch.verifplayer.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.gui.api.GuiPage;
 
 public abstract class GuiManager {
 

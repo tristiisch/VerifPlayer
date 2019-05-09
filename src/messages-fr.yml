@@ -1,0 +1,61 @@
+messages:
+    version: 1.0
+    cantconsole: "&cImpossible d'utilisé cette commande avec la console"
+    noperm: "&cVous n'avez pas la permission"
+
+    alertcps:
+        usage: "&cUsage &7» &c/alertcps <on|off>"
+        disabled: "&2VerifPlayer &7» &aVous ne recevrez plus les alertes CPS."
+        enabled: "&2VerifPlayer &7» &aVous recevrez désormais les alertes CPS."
+        already_disabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà désactivé."
+        already_enabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà activé."
+    
+    verif:
+        usage: "&cUsage &7» &c/verif <player>"
+        isnotconnected: "&2VerifPlayer &7» &4%player% &cn'est pas connecté."
+        sendalert: "&2VerifPlayer &7» &4%player% &c%cps% cps, %ping% ms, %tps% tps."
+        playerdisconnect: "&2VerifPlayer &7» &4%player% &cs'est déconnecté."
+        cantverifyourself: "&2VerifPlayer &7» &4Vous ne pouvez pas vous vérifier vous-même."
+        cantverifadmin: "&2VerifPlayer &7» &4Vous ne pouvez pas vérifier un admin."
+    
+    verifgui:
+        name: "&2VerifPlayer ➤ &a%player%"
+        info:
+          - ""
+          - "&7Vie: &e%heal% &c\u2764"
+          - "&7Nourriture: &e%food%"
+          - "&7Niveau: &e%xp_level%"
+          - "&7Première connexion: &e%first_played%"
+          - "&7Connecté depuis: &e%last_played%"
+          - ""
+          - "&7Dans un véhicule: &e%vehicule%"
+          - "&7Gui: &e%gui%"
+      
+        effect: "&6Effet"
+        noeffect: "&cPas d'effet"
+        noparticle: " &c(&l✖&c particules)&7 "
+    
+        cpsitemname: "&6CPS"
+        nbalert: "&7Alertes%s%: &e%alert_nb%"
+        cpsmax: "&7CPS max: &e%cps_max%"
+        cpsformat: "%color%%cpsGlobal% &7cps (%cpsAir% air & %cpsEntity% entité)"
+        cpsalertformat: "&c%cps% &7cps &4à &c%time%"
+    
+        pingitemname: "&6Ping"
+        pingformat: "%color%%ping% &7ms"
+
+        tpsitemname: "&6TPS"
+        tpsformat: "&7%time%min: %color%%tps%"
+    time:
+       year: "an"
+       years: "ans"
+       month: "mois"
+       months: "mois"
+       day: "jour"
+       days: "jours"
+       hour: "heure"
+       hours: "heures"
+       minute: "minute"
+       minutes: "minutes"
+       second: "seconde"
+       seconds: "secondes"

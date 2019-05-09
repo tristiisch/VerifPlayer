@@ -2,12 +2,12 @@ package fr.tristiisch.verifplayer.verifgui;
 
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.ConfigUtils;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiPage;
+import fr.tristiisch.verifplayer.gui.api.GuiPage;
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
 
 public class VerifGuiPage extends GuiPage {
 
-	public static VerifGuiPage HOME = new VerifGuiPage(ConfigUtils.VERIFGUI_NAME.getString(), "VerifGui of player '%player%'", 6, new GuiPageVariable[] { GuiPageVariable.PLAYER });
+	public static VerifGuiPage HOME = new VerifGuiPage(ConfigUtils.MESSAGES_VERIFGUI_NAME.getString(), "VerifPlayer of player '%player%'", 6, new GuiPageVariable[] { GuiPageVariable.PLAYER });
 
 	private VerifGuiPage(final String title, final String description, final int rowSize) {
 		super(title, description, rowSize);

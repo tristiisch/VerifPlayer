@@ -10,47 +10,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.tristiisch.verifplayer.utils.TaskManager;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiItem;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiItem.VerifGuiSlot;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
 
-public class VerifGuiRunnable extends BukkitRunnable {
+public class VerifGuiRunnable {
 
-	private static String taskName = "verifgui";
-
-	public static void start() {
-		if(TaskManager.taskExist(taskName)) {
-			return;
-		}
-		// 0.05 sec
-		System.out.println("start VerifGuiRunnable");
-		/*TaskManager.runTaskTimerAsynchronously(taskName, new VerifGuiRunnable(), 0, 1);*/
-	}
-
-	public static void stop() {
-		TaskManager.cancelTaskByName(taskName);
-	}
-
-	@Override
-	public void run() {
-		final Set<Entry<UUID, Set<UUID>>> set = VerifGuiManager.getPlayersBeingChecked().entrySet();
-		if(set.isEmpty()) {
-			stop();
-		}
-		for(final Map.Entry<UUID, Set<UUID>> entry : set) {
+	public static void run() {
+		for(final Entry<UUID, Set<UUID>> entry : VerifGuiManager.getPlayersBeingChecked().entrySet()) {
 			final UUID uuid = entry.getKey();
 			final Set<UUID> viewers = entry.getValue();
 			final Player player = Bukkit.getPlayer(uuid);
 			if(player == null) {
 				return;
 			}
-			final HashMap<Integer, ItemStack> items = new HashMap<>();
-
-			// Head
-			items.put(VerifGuiSlot.SKULL.getSlot(), VerifGuiItem.getSkull(player));
+			final Map<Integer, ItemStack> items = new HashMap<>();
 
 			// Effects
 			items.put(VerifGuiSlot.EFFECTS.getSlot(), VerifGuiItem.getEffects(player));
@@ -61,8 +36,8 @@ public class VerifGuiRunnable extends BukkitRunnable {
 			// Ping + Tps
 			items.put(VerifGuiSlot.PING_AND_TPS.getSlot(), VerifGuiItem.getPingAndTps(player));
 
-			// Inv + armor + Holding slot
-			items.putAll(VerifGuiItem.getInventory(player));
+			/*			// Inv + armor + Holding slot
+						items.putAll(VerifGuiItem.getInventory(player));*/
 
 			for(final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
@@ -76,12 +51,14 @@ public class VerifGuiRunnable extends BukkitRunnable {
 					final ItemStack entryItem = entryItems.getValue();
 					final Integer entrySlot = entryItems.getKey();
 					final ItemStack actuelItem = inventory.getItem(entrySlot);
+					if(entryItem == null) {
 
-					if(entryItem != null && !entryItem.isSimilar(actuelItem)) {
+						inventory.setItem(entrySlot, null);
+					} else if(!entryItem.isSimilar(actuelItem)) {
 
-						if(actuelItem.hasItemMeta() && entrySlot == VerifGuiSlot.SKULL.getSlot() && entryItem.getItemMeta().getLore().equals(actuelItem.getItemMeta().getLore())) {
-							continue;
-						}
+						/*					if(actuelItem.hasItemMeta() && entrySlot == VerifGuiSlot.SKULL.getSlot() && entryItem.getItemMeta().getLore().equals(actuelItem.getItemMeta().getLore())) {
+												continue;
+											}*/
 
 						inventory.setItem(entrySlot, entryItem);
 					}

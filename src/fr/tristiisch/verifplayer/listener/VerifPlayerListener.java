@@ -12,8 +12,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.tristiisch.verifplayer.Main;
 import fr.tristiisch.verifplayer.VerifPlayerData;
-import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 import fr.tristiisch.verifplayer.verifgui.VerifGuiManager;
 
@@ -42,7 +42,7 @@ public class VerifPlayerListener implements Listener {
 			for(final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
-				viewer.sendMessage(ConfigUtils.VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
+				viewer.sendMessage(ConfigUtils.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
 		VerifPlayerData.removePlayerInfo(player);

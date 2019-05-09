@@ -8,16 +8,13 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.gui.GuiManager;
-import fr.tristiisch.verifplayer.utils.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.gui.GuiManager;
+import fr.tristiisch.verifplayer.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.gui.api.GuiPage.GuiPageVariable;
 
 public class VerifGuiManager extends GuiManager {
 
-	private static final HashMap<UUID, Set<UUID>> playersBeingChecked;
-
-	static {
-		playersBeingChecked = new HashMap<>();
-	}
+	private static final HashMap<UUID, Set<UUID>> playersBeingChecked = new HashMap<>();
 
 	public static Map.Entry<UUID, Set<UUID>> getByViewer(final UUID uuidViewer) {
 		return VerifGuiManager.playersBeingChecked.entrySet().stream().filter(pc -> pc.getValue().contains(uuidViewer)).findFirst().orElse(null);
@@ -37,6 +34,14 @@ public class VerifGuiManager extends GuiManager {
 
 	public static boolean isViewer(final Player player) {
 		return VerifGuiManager.playersBeingChecked.entrySet().stream().filter(pc -> pc.getValue().contains(player.getUniqueId())).findFirst().isPresent();
+	}
+
+	public static void openVerifGUi(final Player viewer, final Player target) {
+		final GuiCreator guiCreator = new GuiCreator(VerifGuiPage.HOME);
+		guiCreator.getGuiPage().replaceTitleVariable(GuiPageVariable.PLAYER, target.getName());
+		guiCreator.setItems(VerifGuiItem.getAllItems(target));
+		VerifGuiManager.set(viewer, guiCreator, target);
+		guiCreator.openGui(viewer);
 	}
 
 	public static GuiCreator remove(final Player viewer) {
@@ -65,4 +70,5 @@ public class VerifGuiManager extends GuiManager {
 		}
 		return GuiManager.set(viewer, guiCreator);
 	}
+
 }

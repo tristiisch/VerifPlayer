@@ -7,7 +7,9 @@ public enum Permission {
 
 	MODERATOR_COMMAND_VERIF("Use /verif <player>"),
 	MODERATOR_COMMAND_ALERTCPS("Toggle CPS alert with /alertcps"),
-	ADMIN("Disable Moderator /verif & Allow /verifplayer <reload|about>");
+	MODERATOR_RECEIVEALERT("Receive CPS alerts"),
+	ADMIN("Disable Moderator /verif & Allow /verifplayer <reload|about>"),
+	;
 
 	public static boolean isAuthor(final Player player) {
 		return player.getUniqueId().toString().equals("ca0a1663-1696-4d62-b93f-281965522a76");

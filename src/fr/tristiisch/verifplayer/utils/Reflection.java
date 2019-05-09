@@ -304,7 +304,7 @@ public class Reflection {
 	}
 
 	// Send packet to all connected player
-	public static void sendPacket(final Object packet) {
+	public static void sendPacket(final Object packet) throws Exception {
 		sendPacket(Bukkit.getOnlinePlayers(), packet);
 	}
 

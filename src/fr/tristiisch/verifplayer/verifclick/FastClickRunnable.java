@@ -9,24 +9,52 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.tristiisch.verifplayer.VerifPlayerData;
 import fr.tristiisch.verifplayer.object.PlayerInfo;
-import fr.tristiisch.verifplayer.utils.ConfigUtils;
 import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.TPS;
+import fr.tristiisch.verifplayer.utils.TaskManager;
+import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.permission.Permission;
+import fr.tristiisch.verifplayer.verifgui.runnable.VerifGuiRunnable;
 
 public class FastClickRunnable extends BukkitRunnable {
 
-	public static final int sizeHistoryCps = 10;
-	public static final int alertCPS = 18;
-	private static final int timeBetwenAlert = 30;
+	private static String getTaskName() {
+		return FastClickRunnable.class.getName();
+	}
+
+	private static boolean isRunning() {
+		return TaskManager.taskExist(getTaskName());
+	}
+
+	public static void start() {
+		// 0.05 sec = 1; 1 sec = 20
+		TaskManager.scheduleSyncRepeatingTask(getTaskName(), new FastClickRunnable(), 0, 20);
+	}
+
+	public static void startIfNotRunning() {
+		if(isRunning()) {
+			return;
+		}
+		start();
+	}
+
+	public static void stop() {
+		TaskManager.cancelTaskByName(getTaskName());
+	}
 
 	@Override
 	public void run() {
-		for(final Map.Entry<UUID, PlayerInfo> entry : VerifPlayerData.playersData.entrySet()) {
+		for(final Map.Entry<UUID, PlayerInfo> entry : VerifPlayerData.getPlayersInfos().entrySet()) {
 			final PlayerInfo playerInfo = entry.getValue();
 			final UUID playerUuid = entry.getKey();
 			final Player player = Bukkit.getPlayer(playerUuid);
 			final int ping = Reflection.getPing(player);
-			if(playerInfo.getClicksAir().size() >= FastClickRunnable.sizeHistoryCps) {
+
+			final double tps = TPS.getTPS();
+			final int maxCps = ConfigUtils.SETTINGS_MAXCPS.getInt();
+
+			while(playerInfo.getClicksAir().size() >= ConfigUtils.SETTINGS_SIZEHISTORYCPS.getInt()) {
 				playerInfo.getClicksAir().remove(0);
 				playerInfo.getClicksEntity().remove(0);
 			}
@@ -38,22 +66,24 @@ public class FastClickRunnable extends BukkitRunnable {
 				playerInfo.setMaxCPS(click);
 			}
 
-			if(click >= FastClickRunnable.alertCPS) {
-				final double tps = TPS.getTPS();
+			if(click > maxCps) {
 				int lagAlertCPS = (int) ((20.0 - tps) * 2.0);
 				lagAlertCPS += ping / 50;
-				if(click >= FastClickRunnable.alertCPS + lagAlertCPS) {
+				if(click > maxCps + lagAlertCPS) {
 					playerInfo.addNbAlerts();
-					final long timestamp = System.currentTimeMillis();
-					if(playerInfo.getLastAlert() + FastClickRunnable.timeBetwenAlert * 1000L < timestamp) {
+					final long timestamp = Utils.getCurrentTimeinSeconds();
+					playerInfo.putAlertHistory(timestamp, click);
+
+					if(playerInfo.getLastAlert() + ConfigUtils.SETTINGS_TIMEBETWEENALERTS.getInt() < timestamp) {
 						playerInfo.setLastAlert(timestamp);
-						final String msg = ConfigUtils.VERIF_SENDALERT.getString()
+						final String msg = ConfigUtils.MESSAGES_VERIF_SENDALERT.getString()
 								.replace("%player%", player.getName())
 								.replace("%cps%", String.valueOf(click))
 								.replace("%ping%", String.valueOf(ping))
 								.replace("%tps%", String.valueOf(tps));
+
 						for(final Player players : Bukkit.getOnlinePlayers()) {
-							if(players.hasPermission("verifcps.mod")) {
+							if(Permission.MODERATOR_RECEIVEALERT.hasPermission(players) && !playerUuid.equals(players.getUniqueId())) {
 								players.sendMessage(msg);
 							}
 						}
@@ -62,6 +92,8 @@ public class FastClickRunnable extends BukkitRunnable {
 			}
 			playerInfo.resetClickAir();
 			playerInfo.resetClickEntity();
+			VerifPlayerData.set(player, playerInfo);
 		}
+		VerifGuiRunnable.run();
 	}
 }

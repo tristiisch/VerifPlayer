@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.utils.gui.api;
+package fr.tristiisch.verifplayer.gui.api;
 
 import java.util.Arrays;
 import java.util.List;
