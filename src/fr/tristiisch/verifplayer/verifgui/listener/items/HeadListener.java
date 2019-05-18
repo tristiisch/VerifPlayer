@@ -105,12 +105,12 @@ public class HeadListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerExpChange(final PlayerExpChangeEvent event) {
 		final Player player = event.getPlayer();
-		/*		final int amount = event.getAmount();
-				final float exp = player.getExp();
-				final float expToLevel = player.getExpToLevel();
-				final int level = player.getLevel();
-		
-				System.out.println("Amount: " + amount + " exp: " + exp + " expToLevel: " + expToLevel + " level: " + level);*/
+		//				final int amount = event.getAmount();
+		//				final float exp = player.getExp();
+		//				final float expToLevel = player.getExpToLevel();
+		//				final int level = player.getLevel();
+		//		
+		//				System.out.println("Amount: " + amount + " exp: " + exp + " expToLevel: " + expToLevel + " level: " + level);
 		HeadListener.updateHead(player);
 	}
 

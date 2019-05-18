@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -65,22 +66,6 @@ public class InventoryListener implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void HangingBreakEvent(final HangingBreakByEntityEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
-			return;
-		}
-
-		final Player player = (Player) event.getEntity();
-		updateInventory(player);
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void HangingPlaceEvent(final HangingPlaceEvent event) {
-		final Player player = event.getPlayer();
-		updateInventory(player);
-	}
-
-	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		final Player player = event.getPlayer();
 
@@ -103,6 +88,32 @@ public class InventoryListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
+		updateInventory(player);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onEntityShootBow(final EntityShootBowEvent event) {
+		if(!(event.getEntity() instanceof Player)) {
+			return;
+		}
+
+		final Player player = (Player) event.getEntity();
+		updateInventory(player);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onHangingBreak(final HangingBreakByEntityEvent event) {
+		if(!(event.getEntity() instanceof Player)) {
+			return;
+		}
+
+		final Player player = (Player) event.getEntity();
+		updateInventory(player);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onHangingPlace(final HangingPlaceEvent event) {
+		final Player player = event.getPlayer();
 		updateInventory(player);
 	}
 

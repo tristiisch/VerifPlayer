@@ -203,10 +203,6 @@ public class Reflection {
 		return getTypedMethod(clazz, methodName, null, params);
 	}
 
-	public static MethodInvoker getMethod(final String className, final String methodName, final Class<?>... params) {
-		return getTypedMethod(getClass(className), methodName, null, params);
-	}
-
 	// Get a nms player
 	public static Object getNmsPlayer(final Player p) throws Exception {
 		final Method getHandle = p.getClass().getMethod("getHandle");

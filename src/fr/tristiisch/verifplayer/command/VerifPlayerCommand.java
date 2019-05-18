@@ -8,7 +8,8 @@ import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.Main;
 import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
+import fr.tristiisch.verifplayer.utils.config.CustomConfig;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
 public class VerifPlayerCommand implements CommandExecutor {
@@ -23,7 +24,7 @@ public class VerifPlayerCommand implements CommandExecutor {
 					sender.sendMessage(Utils.color("&2VerifPlayer &aV" + Main.getInstance().getDescription().getVersion() + " develop by Tristiisch."));
 					return true;
 				}
-				player.sendMessage(ConfigUtils.MESSAGES_NOPERM.getString());
+				player.sendMessage(ConfigGet.MESSAGES_NOPERM.getString());
 				return true;
 			}
 		}
@@ -32,8 +33,8 @@ public class VerifPlayerCommand implements CommandExecutor {
 			sender.sendMessage(Utils.color("&cUsage &7» &c/verifplayer <reload|about>"));
 
 		} else if(args[0].equalsIgnoreCase("reload")) {
-			Main.getInstance().reloadConfig();
-			sender.sendMessage(Utils.color("&2VerifPlayer &7» &aThe config has been reload successfully"));
+			final double time = CustomConfig.reloadConfigs();
+			sender.sendMessage(Utils.color("&2VerifPlayer &7» &aThe config has been reload successfully, it took " + String.valueOf(time) + " seconds."));
 
 		} else if(Bukkit.getPlayer(args[0]) != null) {
 			sender.sendMessage(Utils.color("&c&nWrong command&c: &cUsage &7» &c/verif <player>"));

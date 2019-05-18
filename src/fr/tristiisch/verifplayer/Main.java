@@ -10,6 +10,7 @@ import fr.tristiisch.verifplayer.command.VerifCommand;
 import fr.tristiisch.verifplayer.command.VerifPlayerCommand;
 import fr.tristiisch.verifplayer.gui.GuiManager;
 import fr.tristiisch.verifplayer.gui.listener.GuiListener;
+import fr.tristiisch.verifplayer.hook.HookHandler;
 import fr.tristiisch.verifplayer.listener.VerifPlayerListener;
 import fr.tristiisch.verifplayer.utils.Metrics;
 import fr.tristiisch.verifplayer.utils.SpigotUpdater;
@@ -19,8 +20,10 @@ import fr.tristiisch.verifplayer.verifclick.PlayerClicksListener;
 import fr.tristiisch.verifplayer.verifgui.listener.VerifGuiListener;
 import fr.tristiisch.verifplayer.verifgui.listener.items.HeadListener;
 import fr.tristiisch.verifplayer.verifgui.listener.items.InventoryListener;
-import fr.tristiisch.verifplayer.verifgui.listener.items.InventoryListener1_7;
 import fr.tristiisch.verifplayer.verifgui.listener.items.InventoryListener1_12;
+import fr.tristiisch.verifplayer.verifgui.listener.items.InventoryListener1_7;
+import fr.tristiisch.verifplayer.verifspec.VerifSpecCommand;
+import fr.tristiisch.verifplayer.verifspec.listeners.VerifSpecConfigListener;
 
 public class Main extends JavaPlugin {
 
@@ -41,16 +44,16 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		final ConsoleCommandSender console = Bukkit.getConsoleSender();
-
-		//this.saveDefaultConfig();
+		final PluginManager pluginManager = this.getServer().getPluginManager();
 		CustomConfig.loadConfigs(this);
-		//PermissionManager.createPermFile(this);
 
 		this.getCommand("verifplayer").setExecutor(new VerifPlayerCommand());
 		this.getCommand("verif").setExecutor(new VerifCommand());
 		this.getCommand("alertcps").setExecutor(new AlertCPSCommand());
+		// this.getCommand("vanish").setExecutor(new VanishCommand());
+		this.getCommand("verifspec").setExecutor(new VerifSpecCommand());
+		// this.getCommand("freeze").setExecutor(new FreezeCommand());
 
-		final PluginManager pluginManager = this.getServer().getPluginManager();
 		pluginManager.registerEvents(new VerifPlayerListener(), this);
 		pluginManager.registerEvents(new GuiListener(), this);
 		pluginManager.registerEvents(new PlayerClicksListener(), this);
@@ -58,12 +61,19 @@ public class Main extends JavaPlugin {
 
 		pluginManager.registerEvents(new HeadListener(), this);
 		pluginManager.registerEvents(new InventoryListener(), this);
+		pluginManager.registerEvents(new VerifSpecConfigListener(), this);
+		// pluginManager.registerEvents(new FreezeListener(), this);
+		// pluginManager.registerEvents(new VerifSpecListener(), this);
+		// pluginManager.registerEvents(new VerifSpecRestrictListener(), this);
+		// pluginManager.registerEvents(new VanishListener(), this);
 		if(Versions.V1_12.isEqualOrOlder()) {
+			// 	pluginManager.registerEvents(new VanishListener1_12(), this);
 			pluginManager.registerEvents(new InventoryListener1_12(), this);
 		} else {
+			// 	pluginManager.registerEvents(new VanishListener1_7(), this);
 			pluginManager.registerEvents(new InventoryListener1_7(), this);
 		}
-
+		new HookHandler(this);
 		new Metrics(this);
 		new SpigotUpdater(this, 67212);
 		console.sendMessage("§2" + this.getDescription().getName() + "§a by Tristiisch (v" + this.getDescription().getVersion() + ") is activated.");

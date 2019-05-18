@@ -11,6 +11,11 @@ public class InventoryListener1_7 implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		final Player player = event.getPlayer();
+		//				final PlayerContents playerContents = VerifGuiManager.getPlayersChecksInventoryContents(player.getUniqueId());
+		//				if(playerContents != null) {
+		//					event.setCancelled(true);
+		//				} else {
 		InventoryListener.updateInventory(player);
+		//				}
 	}
 }

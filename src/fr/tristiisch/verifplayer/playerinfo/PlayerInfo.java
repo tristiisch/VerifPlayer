@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.object;
+package fr.tristiisch.verifplayer.playerinfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;

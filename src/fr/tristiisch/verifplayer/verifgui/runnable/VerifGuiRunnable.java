@@ -36,16 +36,8 @@ public class VerifGuiRunnable {
 			// Ping + Tps
 			items.put(VerifGuiSlot.PING_AND_TPS.getSlot(), VerifGuiItem.getPingAndTps(player));
 
-			/*			// Inv + armor + Holding slot
-						items.putAll(VerifGuiItem.getInventory(player));*/
-
 			for(final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
-				/*				final GuiCreator gui = GuiManager.get(viewer);
-								if(gui == null || !gui.getGuiPage().isSamePage(VerifGuiPage.HOME)) {
-									System.out.println("BUG: VerifGuiManager.remove(viewer)");
-									VerifGuiManager.remove(viewer);
-								}*/
 				final InventoryView inventory = viewer.getOpenInventory();
 				for(final Map.Entry<Integer, ItemStack> entryItems : items.entrySet()) {
 					final ItemStack entryItem = entryItems.getValue();

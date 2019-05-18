@@ -8,7 +8,10 @@ public enum Permission {
 	MODERATOR_COMMAND_VERIF("Use /verif <player>"),
 	MODERATOR_COMMAND_ALERTCPS("Toggle CPS alert with /alertcps"),
 	MODERATOR_RECEIVEALERT("Receive CPS alerts"),
-	ADMIN("Disable Moderator /verif & Allow /verifplayer <reload|about>"),
+	ADMIN("Disable Moderator /verif & Allow /verifplayer <reload>"),
+	MODERATOR_COMMAND_VERIFSPEC(),
+	MODERATOR_COMMAND_VANISH(),
+	MODERATOR_COMMAND_FREEZE,
 	;
 
 	public static boolean isAuthor(final Player player) {
@@ -19,12 +22,16 @@ public enum Permission {
 
 	String description;
 
-	private Permission(final String description) {
+	private Permission() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(PermissionManager.pluginName);
 		sb.append(".");
 		sb.append(this.toString().replaceAll("_", "."));
 		this.id = sb.toString().toLowerCase();
+	}
+
+	private Permission(final String description) {
+		this();
 		this.description = description;
 	}
 

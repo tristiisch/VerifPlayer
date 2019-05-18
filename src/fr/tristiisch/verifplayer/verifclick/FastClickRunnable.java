@@ -7,13 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.tristiisch.verifplayer.VerifPlayerData;
-import fr.tristiisch.verifplayer.object.PlayerInfo;
+import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
+import fr.tristiisch.verifplayer.playerinfo.PlayersInfos;
 import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.TPS;
 import fr.tristiisch.verifplayer.utils.TaskManager;
 import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 import fr.tristiisch.verifplayer.verifgui.runnable.VerifGuiRunnable;
 
@@ -45,16 +45,16 @@ public class FastClickRunnable extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for(final Map.Entry<UUID, PlayerInfo> entry : VerifPlayerData.getPlayersInfos().entrySet()) {
+		for(final Map.Entry<UUID, PlayerInfo> entry : PlayersInfos.getPlayersInfos().entrySet()) {
 			final PlayerInfo playerInfo = entry.getValue();
 			final UUID playerUuid = entry.getKey();
 			final Player player = Bukkit.getPlayer(playerUuid);
 			final int ping = Reflection.getPing(player);
 
 			final double tps = TPS.getTPS();
-			final int maxCps = ConfigUtils.SETTINGS_MAXCPS.getInt();
+			final int maxCps = ConfigGet.SETTINGS_MAXCPS.getInt();
 
-			while(playerInfo.getClicksAir().size() >= ConfigUtils.SETTINGS_SIZEHISTORYCPS.getInt()) {
+			while(playerInfo.getClicksAir().size() >= ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt()) {
 				playerInfo.getClicksAir().remove(0);
 				playerInfo.getClicksEntity().remove(0);
 			}
@@ -74,9 +74,9 @@ public class FastClickRunnable extends BukkitRunnable {
 					final long timestamp = Utils.getCurrentTimeinSeconds();
 					playerInfo.putAlertHistory(timestamp, click);
 
-					if(playerInfo.getLastAlert() + ConfigUtils.SETTINGS_TIMEBETWEENALERTS.getInt() < timestamp) {
+					if(playerInfo.getLastAlert() + ConfigGet.SETTINGS_TIMEBETWEENALERTS.getInt() < timestamp) {
 						playerInfo.setLastAlert(timestamp);
-						final String msg = ConfigUtils.MESSAGES_VERIF_SENDALERT.getString()
+						final String msg = ConfigGet.MESSAGES_VERIF_SENDALERT.getString()
 								.replace("%player%", player.getName())
 								.replace("%cps%", String.valueOf(click))
 								.replace("%ping%", String.valueOf(ping))
@@ -92,7 +92,7 @@ public class FastClickRunnable extends BukkitRunnable {
 			}
 			playerInfo.resetClickAir();
 			playerInfo.resetClickEntity();
-			VerifPlayerData.set(player, playerInfo);
+			PlayersInfos.set(player, playerInfo);
 		}
 		VerifGuiRunnable.run();
 	}

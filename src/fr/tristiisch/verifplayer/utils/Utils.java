@@ -8,17 +8,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.config.ConfigUtils;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Utils {
 
@@ -32,6 +35,18 @@ public class Utils {
 
 	public static long getCurrentTimeinSeconds() {
 		return System.currentTimeMillis() / 1000L;
+	}
+
+	public static Player getNearestPlayer(final Player checkNear) {
+		Player nearest = null;
+		for(final Player p : checkNear.getWorld().getPlayers()) {
+			if(nearest == null) {
+				nearest = p;
+			} else if(p.getLocation().distance(checkNear.getLocation()) < nearest.getLocation().distance(checkNear.getLocation())) {
+				nearest = p;
+			}
+		}
+		return nearest;
 	}
 
 	public static List<String> replaceAll(final List<String> list, final Map<String, String> replace) {
@@ -119,43 +134,43 @@ public class Utils {
 
 		final List<String> msgs = new ArrayList<>();
 		if(year > 1) {
-			msgs.add(year + " " + ConfigUtils.MESSAGES_TIME_YEARS.getString());
+			msgs.add(year + " " + ConfigGet.MESSAGES_TIME_YEARS.getString());
 		} else if(year == 1) {
-			msgs.add(year + " " + ConfigUtils.MESSAGES_TIME_YEAR.getString());
+			msgs.add(year + " " + ConfigGet.MESSAGES_TIME_YEAR.getString());
 		}
 
 		if(month > 1) {
-			msgs.add(month + " " + ConfigUtils.MESSAGES_TIME_MONTHS.getString());
+			msgs.add(month + " " + ConfigGet.MESSAGES_TIME_MONTHS.getString());
 		} else if(month == 1) {
-			msgs.add(month + " " + ConfigUtils.MESSAGES_TIME_MONTH.getString());
+			msgs.add(month + " " + ConfigGet.MESSAGES_TIME_MONTH.getString());
 		}
 
 		if(msgs.size() < 2) {
 			if(day > 1) {
-				msgs.add(day + " " + ConfigUtils.MESSAGES_TIME_DAYS.getString());
+				msgs.add(day + " " + ConfigGet.MESSAGES_TIME_DAYS.getString());
 			} else if(day == 1) {
-				msgs.add(day + " " + ConfigUtils.MESSAGES_TIME_DAY.getString());
+				msgs.add(day + " " + ConfigGet.MESSAGES_TIME_DAY.getString());
 			}
 
 			if(msgs.size() < 2) {
 				if(hour > 1) {
-					msgs.add(hour + " " + ConfigUtils.MESSAGES_TIME_HOURS.getString());
+					msgs.add(hour + " " + ConfigGet.MESSAGES_TIME_HOURS.getString());
 				} else if(hour == 1) {
-					msgs.add(hour + " " + ConfigUtils.MESSAGES_TIME_HOUR.getString());
+					msgs.add(hour + " " + ConfigGet.MESSAGES_TIME_HOUR.getString());
 				}
 
 				if(msgs.size() < 2) {
 					if(minute > 1) {
-						msgs.add(minute + " " + ConfigUtils.MESSAGES_TIME_MINUTES.getString());
+						msgs.add(minute + " " + ConfigGet.MESSAGES_TIME_MINUTES.getString());
 					} else if(minute == 1) {
-						msgs.add(minute + " " + ConfigUtils.MESSAGES_TIME_MINUTE.getString());
+						msgs.add(minute + " " + ConfigGet.MESSAGES_TIME_MINUTE.getString());
 					}
 
 					if(msgs.size() < 2) {
 						if(second > 1) {
-							msgs.add(second + " " + ConfigUtils.MESSAGES_TIME_SECONDS.getString());
+							msgs.add(second + " " + ConfigGet.MESSAGES_TIME_SECONDS.getString());
 						} else if(second == 1) {
-							msgs.add(second + " " + ConfigUtils.MESSAGES_TIME_SECOND.getString());
+							msgs.add(second + " " + ConfigGet.MESSAGES_TIME_SECOND.getString());
 						}
 					}
 
@@ -164,6 +179,15 @@ public class Utils {
 
 		}
 		return String.join(", ", msgs);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Collector<T, ?, List<T>> toShuffledList() {
+		Collectors.collectingAndThen(Collectors.toList(), list -> {
+			Collections.shuffle(list);
+			return (Collector<T, ?, List<T>>) list;
+		});
+		return null;
 	}
 
 	public static String translateEffects(String s) {

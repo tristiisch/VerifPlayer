@@ -13,8 +13,7 @@ import fr.tristiisch.verifplayer.Main;
 public class TaskManager {
 
 	private static HashMap<String, Integer> taskList = new HashMap<>();
-	static Plugin plugin = Main.getInstance();
-	public static BukkitScheduler scheduler = plugin.getServer().getScheduler();
+	public static BukkitScheduler scheduler = getPlugin().getServer().getScheduler();
 
 	public static void addTask(final String name, final int id) {
 		TaskManager.taskList.put(name, id);
@@ -44,6 +43,10 @@ public class TaskManager {
 		if(taskExist(taskName)) {
 			cancelTaskByName(taskName);
 		}
+	}
+
+	private static Plugin getPlugin() {
+		return Main.getInstance();
 	}
 
 	public static BukkitTask getTask(final int id) {
@@ -90,19 +93,19 @@ public class TaskManager {
 	}
 
 	public static BukkitTask runTask(final Runnable runnable) {
-		return TaskManager.scheduler.runTask(TaskManager.plugin, runnable);
+		return TaskManager.scheduler.runTask(TaskManager.getPlugin(), runnable);
 	}
 
 	public static BukkitTask runTaskAsynchronously(final Runnable runnable) {
-		return TaskManager.scheduler.runTaskAsynchronously(TaskManager.plugin, runnable);
+		return TaskManager.scheduler.runTaskAsynchronously(TaskManager.getPlugin(), runnable);
 	}
 
 	public static BukkitTask runTaskLater(final Runnable runnable, final int tick) {
-		return TaskManager.scheduler.runTaskLater(TaskManager.plugin, runnable, tick);
+		return TaskManager.scheduler.runTaskLater(TaskManager.getPlugin(), runnable, tick);
 	}
 
 	public static BukkitTask runTaskLater(final String taskName, final Runnable task, final int duration) {
-		final BukkitTask bukkitTask = TaskManager.scheduler.runTaskLater(TaskManager.plugin, task, duration);
+		final BukkitTask bukkitTask = TaskManager.scheduler.runTaskLater(TaskManager.getPlugin(), task, duration);
 		final int id = bukkitTask.getTaskId();
 		addTask(taskName, id);
 		runTaskLater(() -> {
@@ -115,14 +118,14 @@ public class TaskManager {
 
 	public static BukkitTask runTaskTimerAsynchronously(final String taskName, final Runnable runnable, final long delay, final long refresh) {
 		cancelTaskByName(taskName);
-		final BukkitTask task = TaskManager.scheduler.runTaskTimerAsynchronously(TaskManager.plugin, runnable, delay, delay);
+		final BukkitTask task = TaskManager.scheduler.runTaskTimerAsynchronously(TaskManager.getPlugin(), runnable, delay, delay);
 		TaskManager.taskList.put(taskName, task.getTaskId());
 		return task;
 	}
 
 	public static BukkitTask scheduleSyncRepeatingTask(final String taskName, final Runnable runnable, final long delay, final long refresh) {
 		cancelTaskByName(taskName);
-		final BukkitTask task = TaskManager.scheduler.runTaskTimer(TaskManager.plugin, runnable, delay, refresh);
+		final BukkitTask task = TaskManager.scheduler.runTaskTimer(TaskManager.getPlugin(), runnable, delay, refresh);
 		TaskManager.taskList.put(taskName, task.getTaskId());
 		return task;
 	}

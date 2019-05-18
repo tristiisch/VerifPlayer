@@ -4,6 +4,7 @@ author: Tristiisch
 version: 2.0
 description: "The best plugin to destroy autoclick and macro inventory"
 website: "https://goo.gl/nKwUuo"
+soft-depend: [GroupManager, PermissionsEx, LuckPerms, PlaceholderAPI]
 commands:
     verifplayer:
       description: "Allows to reload the configuration with /verifplayer reload"
@@ -14,3 +15,10 @@ commands:
     verif:
       description: "Allows to see the inventory, CPS... of a player"
       permission: verifplayer.moderator.command.verif
+    verifspec:
+      description: "Allows to verif"
+      permission: verifplayer.moderator.command.verifspec
+    vanish:
+      permission: verifplayer.moderator.command.vanish
+    freeze:
+      permission: verifplayer.moderator.command.freeze

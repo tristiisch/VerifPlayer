@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.tristiisch.verifplayer.utils.Utils;
 import fr.tristiisch.verifplayer.utils.config.CustomConfig.CustomConfigs;
 
-public enum ConfigUtils {
+public enum ConfigGet {
 
 	MESSAGES_VERSION,
 	MESSAGES_ALERTCPS_ALREADY_DISABLED,
@@ -30,6 +30,7 @@ public enum ConfigUtils {
 	MESSAGES_VERIFGUI_INFO,
 	MESSAGES_VERIFGUI_NAME,
 	MESSAGES_VERIFGUI_NBALERT,
+	MESSAGES_VERIFGUI_NBALERTS,
 	MESSAGES_VERIFGUI_NOEFFECT,
 	MESSAGES_VERIFGUI_NOPARTICLE,
 	MESSAGES_VERIFGUI_PINGFORMAT,

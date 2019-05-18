@@ -16,7 +16,8 @@ public class CustomConfig {
 
 	public enum CustomConfigs {
 		DEFAULT("config.yml"),
-		MESSAGES("messages-%lang%.yml");
+		MESSAGES("messages-%lang%.yml"),
+		INVENTORY("inventory.yml");
 
 		private final String fileName;
 		private YamlConfiguration config;
@@ -50,6 +51,10 @@ public class CustomConfig {
 			return this.fileName;
 		}
 
+		public boolean isSameConfig(final CustomConfigs customConfig) {
+			return this.toString().equals(customConfig.toString());
+		}
+
 		public void load() {
 			this.createFolderIfNotExist();
 			final String fileName = this.getFileName();
@@ -67,6 +72,7 @@ public class CustomConfig {
 				if(this.toString().equals("DEFAULT")) {
 					langague = this.config.getString("settings.language");
 				}
+				Bukkit.getPluginManager().callEvent(new CustomConfigLoadEvent(this));
 			} catch(final IOException e) {
 				Bukkit.getLogger().log(Level.SEVERE, ChatColor.RED + "Unable to load config: " + fileName);
 				e.printStackTrace();
@@ -98,7 +104,7 @@ public class CustomConfig {
 		for(final CustomConfigs config : CustomConfigs.values()) {
 			config.load();
 		}
-		return (double) System.nanoTime() - time;
+		return (System.nanoTime() - time) / 1000000000d;
 	}
 
 	public static double saveConfigs() {
@@ -106,7 +112,7 @@ public class CustomConfig {
 		for(final CustomConfigs config : CustomConfigs.values()) {
 			config.save();
 		}
-		return (double) System.nanoTime() - time;
+		return (System.nanoTime() - time) / 1000000000d;
 
 	}
 }

@@ -11,10 +11,12 @@ import org.bukkit.entity.Player;
 import fr.tristiisch.verifplayer.gui.GuiManager;
 import fr.tristiisch.verifplayer.gui.api.GuiCreator;
 import fr.tristiisch.verifplayer.gui.api.GuiPage.GuiPageVariable;
+import fr.tristiisch.verifplayer.utils.PlayerContents;
 
 public class VerifGuiManager extends GuiManager {
 
 	private static final HashMap<UUID, Set<UUID>> playersBeingChecked = new HashMap<>();
+	private static final HashMap<UUID, PlayerContents> playersChecksInventoryContents = new HashMap<>();
 
 	public static Map.Entry<UUID, Set<UUID>> getByViewer(final UUID uuidViewer) {
 		return VerifGuiManager.playersBeingChecked.entrySet().stream().filter(pc -> pc.getValue().contains(uuidViewer)).findFirst().orElse(null);
@@ -22,6 +24,10 @@ public class VerifGuiManager extends GuiManager {
 
 	public static HashMap<UUID, Set<UUID>> getPlayersBeingChecked() {
 		return VerifGuiManager.playersBeingChecked;
+	}
+
+	public static PlayerContents getPlayersChecksInventoryContents(final UUID uuid) {
+		return playersChecksInventoryContents.get(uuid);
 	}
 
 	public static Set<UUID> getViewers(final Player player) {
@@ -41,6 +47,11 @@ public class VerifGuiManager extends GuiManager {
 		guiCreator.getGuiPage().replaceTitleVariable(GuiPageVariable.PLAYER, target.getName());
 		guiCreator.setItems(VerifGuiItem.getAllItems(target));
 		VerifGuiManager.set(viewer, guiCreator, target);
+
+		//				final PlayerContents playerContents = new PlayerContents(viewer);
+		//				playersChecksInventoryContents.put(viewer.getUniqueId(), playerContents);
+		//				playerContents.clearInventory(viewer);
+
 		guiCreator.openGui(viewer);
 	}
 
@@ -55,6 +66,10 @@ public class VerifGuiManager extends GuiManager {
 			VerifGuiManager.playersBeingChecked.remove(entryPlayerBeingCheck.getKey());
 		}
 		return GuiManager.remove(viewer);
+	}
+
+	public static PlayerContents removePlayersChecksInventoryContents(final UUID uuid) {
+		return playersChecksInventoryContents.remove(uuid);
 	}
 
 	public static GuiCreator set(final Player viewer, final GuiCreator guiCreator, final Player playerBeigCheck) {
