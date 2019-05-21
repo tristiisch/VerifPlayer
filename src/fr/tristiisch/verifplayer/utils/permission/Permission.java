@@ -12,6 +12,7 @@ public enum Permission {
 	MODERATOR_COMMAND_VERIFSPEC(),
 	MODERATOR_COMMAND_VANISH(),
 	MODERATOR_COMMAND_FREEZE,
+	MODERATOR_RECEIVEFREEZEDISCONNECTED,
 	;
 
 	public static boolean isAuthor(final Player player) {

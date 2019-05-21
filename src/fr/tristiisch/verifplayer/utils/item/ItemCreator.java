@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import fr.tristiisch.verifplayer.utils.Utils;
-import fr.tristiisch.verifplayer.utils.VersionUtils.Versions;
+import fr.tristiisch.verifplayer.utils.SpigotUtils;
+import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
 
 public class ItemCreator {
 
@@ -51,11 +51,11 @@ public class ItemCreator {
 		final ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
 		final ItemMeta itemMeta = itemStack.getItemMeta();
 		if(this.customName != null) {
-			itemMeta.setDisplayName(Utils.color(this.customName));
+			itemMeta.setDisplayName(SpigotUtils.color(this.customName));
 		}
 
 		if(this.lore != null) {
-			itemMeta.setLore(Utils.color(this.lore));
+			itemMeta.setLore(SpigotUtils.color(this.lore));
 		}
 
 		if(this.enchantements != null) {
@@ -73,7 +73,7 @@ public class ItemCreator {
 		this.material = Material.SKULL;
 		final ItemStack itemStack = this.getItemStack();
 		final SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
-		if(Versions.V1_9.isEqualOrOlder()) {
+		if(ServerVersion.V1_9.isEqualOrOlder()) {
 			skullmeta.setOwningPlayer(player);
 		} else {
 			skullmeta.setOwner(player.getName());

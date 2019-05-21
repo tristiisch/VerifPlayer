@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.listener;
+package fr.tristiisch.verifplayer.core.verifgui.listener;
 
 import java.util.Set;
 import java.util.UUID;
@@ -7,30 +7,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.Main;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
-import fr.tristiisch.verifplayer.playerinfo.PlayersInfos;
-import fr.tristiisch.verifplayer.utils.SpigotUtils;
+import fr.tristiisch.verifplayer.core.verifgui.VerifGuiPage;
+import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.utils.PlayerContents;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
-import fr.tristiisch.verifplayer.utils.permission.Permission;
 
-public class VerifPlayerListener implements Listener {
-
-	public VerifPlayerListener() {
-		for(final Player player : Bukkit.getOnlinePlayers()) {
-			PlayersInfos.addNewPlayerInfo(player);
-		}
-	}
+public class VerifGuiListener implements Listener {
 
 	@EventHandler
-	public void onPlayerJoin(final PlayerJoinEvent event) {
+	public void onGuiClose(final GuiCloseEvent event) {
 		final Player player = event.getPlayer();
-		PlayersInfos.addNewPlayerInfo(player);
-		if(Permission.isAuthor(player)) {
-			player.sendMessage(SpigotUtils.color("&2VerifPlayer &7» &aThis server uses &2VerifCPS&a V&2" + Main.getInstance().getDescription().getVersion() + "&a develop by Tristiisch"));
+		if(event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
+			VerifGuiManager.remove(player);
+			final PlayerContents playerContents = VerifGuiManager.removePlayersChecksInventoryContents(player.getUniqueId());
+			if(playerContents != null) {
+				playerContents.returnHisInventory();
+			}
 		}
 	}
 
@@ -45,6 +40,6 @@ public class VerifPlayerListener implements Listener {
 				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
-		PlayersInfos.removePlayerInfo(player);
+		VerifGuiManager.remove(player);
 	}
 }

@@ -18,35 +18,13 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Utils {
 
-	public static List<String> color(final List<String> l) {
-		return l.stream().map(s -> Utils.color(s)).collect(Collectors.toList());
-	}
-
-	public static String color(final String s) {
-		return s != null ? ChatColor.translateAlternateColorCodes('&', s) : "";
-	}
-
 	public static long getCurrentTimeinSeconds() {
 		return System.currentTimeMillis() / 1000L;
-	}
-
-	public static Player getNearestPlayer(final Player checkNear) {
-		Player nearest = null;
-		for(final Player p : checkNear.getWorld().getPlayers()) {
-			if(nearest == null) {
-				nearest = p;
-			} else if(p.getLocation().distance(checkNear.getLocation()) < nearest.getLocation().distance(checkNear.getLocation())) {
-				nearest = p;
-			}
-		}
-		return nearest;
 	}
 
 	public static List<String> replaceAll(final List<String> list, final Map<String, String> replace) {

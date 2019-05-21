@@ -2,6 +2,7 @@ package fr.tristiisch.verifplayer.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +16,14 @@ public class SpigotUtils {
 
 	public static Location addYToLocation(final Location location, final float y) {
 		return new Location(location.getWorld(), location.getX(), location.getY() + 1, location.getZ(), location.getYaw(), location.getPitch());
+	}
+
+	public static List<String> color(final List<String> l) {
+		return l.stream().map(s -> SpigotUtils.color(s)).collect(Collectors.toList());
+	}
+
+	public static String color(final String s) {
+		return s != null ? ChatColor.translateAlternateColorCodes('&', s) : "";
 	}
 
 	public static List<Location> getBlockAround(final Location location, final int raduis) {
@@ -64,6 +73,18 @@ public class SpigotUtils {
 			return 1;
 		}
 		return 14;
+	}
+
+	public static Player getNearestPlayer(final Player checkNear) {
+		Player nearest = null;
+		for(final Player p : checkNear.getWorld().getPlayers()) {
+			if(nearest == null) {
+				nearest = p;
+			} else if(p.getLocation().distance(checkNear.getLocation()) < nearest.getLocation().distance(checkNear.getLocation())) {
+				nearest = p;
+			}
+		}
+		return nearest;
 	}
 
 	public static boolean hasEnoughPlace(final Inventory inventory, final ItemStack... items) {

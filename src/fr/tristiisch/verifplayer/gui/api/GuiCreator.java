@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.SpigotUtils;
 
 public class GuiCreator {
 
@@ -42,7 +42,7 @@ public class GuiCreator {
 	}
 
 	private Inventory getInventory() {
-		final Inventory inventory = Bukkit.createInventory(null, this.guiPage.getSize(), Utils.color(this.guiPage.getTitle()));
+		final Inventory inventory = Bukkit.createInventory(null, this.guiPage.getSize(), SpigotUtils.color(this.guiPage.getTitle()));
 		if(!this.items.isEmpty()) {
 			this.items.entrySet().forEach(entry -> inventory.setItem(entry.getKey(), entry.getValue()));
 		}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import fr.tristiisch.verifplayer.utils.Utils;
+import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.config.CustomConfig.CustomConfigs;
 
 public enum ConfigGet {
@@ -78,7 +78,7 @@ public enum ConfigGet {
 	}
 
 	public String getString() {
-		return Utils.color(this.getStringBrut());
+		return SpigotUtils.color(this.getStringBrut());
 	}
 
 	public String getStringBrut() {
@@ -86,6 +86,6 @@ public enum ConfigGet {
 	}
 
 	public List<String> getStringList() {
-		return Utils.color(this.getConfig().getStringList(this.getPath()));
+		return SpigotUtils.color(this.getConfig().getStringList(this.getPath()));
 	}
 }

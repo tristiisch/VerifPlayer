@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.verifclick.FastClickRunnable;
+import fr.tristiisch.verifplayer.core.verifclick.FastClickRunnable;
 
 public class PlayersInfos {
 

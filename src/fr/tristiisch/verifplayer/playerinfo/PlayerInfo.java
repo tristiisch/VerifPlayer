@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class PlayerInfo {
 
@@ -15,6 +20,7 @@ public class PlayerInfo {
 	private long lastAlert;
 	private int maxCPS;
 	private int nbAlerts;
+	private List<UUID> alreadyTeleportedPlayers = new ArrayList<>();
 
 	public PlayerInfo() {
 		this.clickAir = 0;
@@ -38,6 +44,10 @@ public class PlayerInfo {
 
 	public Map<Long, Integer> getAlertHistory() {
 		return this.alertHistory;
+	}
+
+	public List<Player> getAlreadyTeleportedPlayers() {
+		return this.alreadyTeleportedPlayers.stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(player -> player != null).collect(Collectors.toList());
 	}
 
 	public Integer getClickAir() {
@@ -92,6 +102,10 @@ public class PlayerInfo {
 		this.clickEntity = 0;
 	}
 
+	public void setAlreadyTeleportedPlayers(final List<Player> alreadyTeleportedPlayers) {
+		this.alreadyTeleportedPlayers = alreadyTeleportedPlayers.stream().map(Player::getUniqueId).collect(Collectors.toList());
+	}
+
 	public void setLastAlert(final long timestamp) {
 		this.lastAlert = timestamp;
 	}
@@ -99,4 +113,5 @@ public class PlayerInfo {
 	public void setMaxCPS(final int maxCPS) {
 		this.maxCPS = maxCPS;
 	}
+
 }

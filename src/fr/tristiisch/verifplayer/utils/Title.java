@@ -32,8 +32,8 @@ public class Title {
 	 * @param subtitle String avec gestion des couleurs
 	 */
 	public static void sendTitle(final Player player, String title, String subtitle, final Integer fadeIn, final Integer stay, final Integer fadeOut) {
-		title = Utils.color(title);
-		subtitle = Utils.color(subtitle);
+		title = SpigotUtils.color(title);
+		subtitle = SpigotUtils.color(subtitle);
 		try {
 
 			final Object enumTitle = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
@@ -70,7 +70,7 @@ public class Title {
 				Object subtitlePacket;
 	
 				if(title != null) {
-					title = Utils.color(title);
+					title = SpigotUtils.color(title);
 					title = title.replaceAll("%player%", player.getDisplayName());
 	
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get((Object) null);
@@ -92,7 +92,7 @@ public class Title {
 				}
 	
 				if(subtitle != null) {
-					subtitle = Utils.color(subtitle);
+					subtitle = SpigotUtils.color(subtitle);
 					subtitle = subtitle.replaceAll("%player%", player.getDisplayName());
 	
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get((Object) null);

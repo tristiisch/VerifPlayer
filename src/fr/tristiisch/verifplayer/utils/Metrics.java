@@ -33,7 +33,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import fr.tristiisch.verifplayer.utils.VersionUtils.Versions;
+import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
 
 /**
  * bStats collects some data for plugin authors.
@@ -607,7 +607,7 @@ public class Metrics {
 					.size() : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
 		} catch(final Exception e) {
 			// Just use the new method if the Reflection failed
-			if(Versions.V1_8.isEqualOrOlder()) {
+			if(ServerVersion.V1_8.isEqualOrOlder()) {
 				playerAmount = Bukkit.getOnlinePlayers().size();
 			} else {
 				playerAmount = -1;
