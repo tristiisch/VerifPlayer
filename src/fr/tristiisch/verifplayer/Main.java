@@ -53,8 +53,8 @@ public class Main extends JavaPlugin {
 		this.getCommand("verifplayer").setExecutor(new VerifPlayerCommand());
 		this.getCommand("verif").setExecutor(new VerifCommand());
 		this.getCommand("alertcps").setExecutor(new AlertCpsCommand());
-		// this.getCommand("vanish").setExecutor(new VanishCommand());
 		this.getCommand("verifspec").setExecutor(new VerifSpecCommand());
+		// this.getCommand("vanish").setExecutor(new VanishCommand());
 		// this.getCommand("freeze").setExecutor(new FreezeCommand());
 
 		pluginManager.registerEvents(new VerifPlayerListener(), this);

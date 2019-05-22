@@ -1,5 +1,10 @@
 package fr.tristiisch.verifplayer.utils.permission;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,7 +17,8 @@ public enum Permission {
 	MODERATOR_COMMAND_VERIFSPEC(),
 	MODERATOR_COMMAND_VANISH(),
 	MODERATOR_COMMAND_FREEZE,
-	MODERATOR_RECEIVEFREEZEDISCONNECTED,
+	MODERATOR_RECEIVEFREEZEDISCONNECTED, 
+	ADMIN_SEEVANISHED,
 	;
 
 	public static boolean isAuthor(final Player player) {
@@ -46,5 +52,22 @@ public enum Permission {
 
 	public boolean hasPermission(final CommandSender sender) {
 		return sender.hasPermission(this.getId());
+	}
+	
+	public Stream<? extends Player> getOnlinePlayersStream() {
+		return Bukkit.getOnlinePlayers().stream().filter(player -> hasPermission(player));
+	}
+	
+	public Stream<? extends Player> getOnlinePlayersOpositeStream() {
+		return Bukkit.getOnlinePlayers().stream().filter(player -> !hasPermission(player));
+	}
+
+
+	public Set<Player> getOnlinePlayers() {
+		return getOnlinePlayersStream().collect(Collectors.toSet());
+	}
+	
+	public void sendMessageToOnlinePlayers(String message) {
+		getOnlinePlayersStream().forEach(p -> p.sendMessage(message));;
 	}
 }

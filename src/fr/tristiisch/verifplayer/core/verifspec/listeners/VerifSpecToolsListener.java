@@ -122,7 +122,7 @@ public class VerifSpecToolsListener implements Listener {
 				final List<Player> alreadyTeleportedPlayers = playerInfos.getAlreadyTeleportedPlayers();
 
 				final Predicate<Player> predicate = playerOnline -> alreadyTeleportedPlayers
-						.contains(playerOnline) && !playerOnline.getUniqueId().equals(player.getUniqueId()) && !VerifSpec.isIn(playerOnline) && !Vanish.isVanish(playerOnline);
+						.contains(playerOnline) && !playerOnline.getUniqueId().equals(player.getUniqueId()) && !VerifSpec.isIn(playerOnline) && !Vanish.isVanished(playerOnline);
 
 				final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 

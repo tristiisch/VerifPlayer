@@ -1,7 +1,7 @@
 name: VerifPlayer
 main: fr.tristiisch.verifplayer.Main
 author: Tristiisch
-version: 2.0
+version: 0.2
 description: "The best plugin to destroy autoclick and macro inventory"
 website: "https://goo.gl/nKwUuo"
 soft-depend: [GroupManager, PermissionsEx, LuckPerms, PlaceholderAPI]

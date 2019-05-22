@@ -29,7 +29,7 @@ public class VanishCommand implements CommandExecutor {
 		} else {
 			target = player;
 		}
-		if(Vanish.isVanish(target)) {
+		if(Vanish.isVanished(target)) {
 			Vanish.disable(target, true);
 		} else {
 			Vanish.enable(target, true);

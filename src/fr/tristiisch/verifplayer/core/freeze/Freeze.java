@@ -9,16 +9,17 @@ import org.bukkit.entity.Player;
 
 import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.Title;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Freeze {
 
 	private static final List<UUID> players = new ArrayList<>();
 
 	public static void freeze(final Player player) {
-		freeze(player, "&cVenez sur le ts &a&l&nts.emeraldmc.fr&c au plus vite");
+		freeze(player, ConfigGet.MESSAGES_FREEZE_SUBTITLE.getString());
 	}
 
-	public static void freeze(final Player player, final String motif) {
+	public static void freeze(final Player player, final String reason) {
 		player.setWalkSpeed(0);
 		final Location underPlayer = SpigotUtils.getFirstBlockUnderPlayer(player);
 		if(underPlayer != null) {
@@ -27,7 +28,7 @@ public class Freeze {
 			//			player.teleport(EmeraldSpigot.getSpawn());
 		}
 		players.add(player.getUniqueId());
-		Title.sendTitle(player, "&4Vous avez été freeze", motif, 0, 100000000, 0);
+		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_TITLE.getString(), reason, 0, 100000000, 0);
 	}
 
 	public static boolean isFreeze(final Player player) {
@@ -37,6 +38,8 @@ public class Freeze {
 	public static void unfreeze(final Player player) {
 		player.setWalkSpeed(0.2f);
 		players.remove(player.getUniqueId());
-		Title.sendTitle(player, "&aVous n'êtes plus freeze", "");
+		//Title.sendTitle(player, "&aVous n'êtes plus freeze", "");
+		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_NOMOREFREEZETITLE.getString(), ConfigGet.MESSAGES_FREEZE_NOMOREFREEZESUBTITLE.getString());
+		
 	}
 }

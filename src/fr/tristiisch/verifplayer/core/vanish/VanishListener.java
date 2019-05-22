@@ -35,7 +35,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
-		if(Vanish.isVanish(player)) {
+		if(Vanish.isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -46,7 +46,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getTarget();
-		if(Vanish.isVanish(player)) {
+		if(Vanish.isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -54,7 +54,7 @@ public class VanishListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDropItem(final PlayerDropItemEvent event) {
 		final Player player = event.getPlayer();
-		if(Vanish.isVanish(player)) {
+		if(Vanish.isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -65,7 +65,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 		final Player player = event.getPlayer();
-		if(!Vanish.isVanish(player)) {
+		if(!Vanish.isVanished(player)) {
 			return;
 		}
 		if(!player.isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -126,17 +126,14 @@ public class VanishListener implements Listener {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
 		player.getActivePotionEffects().removeIf(p -> p.getType() == PotionEffectType.INVISIBILITY && p.getDuration() == 0);
-		for(final Player vanish : Vanish.getVanish()) {
-			player.hidePlayer(vanish);
-		}
+		Vanish.getVanished().forEach(vanishPlayer -> player.hidePlayer(vanishPlayer));
 	}
 
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		if(Vanish.isVanish(player)) {
+		if(Vanish.isVanished(player)) {
 			event.setQuitMessage(null);
-			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			Vanish.removeVanish(player);
 		}
 	}
@@ -149,7 +146,7 @@ public class VanishListener implements Listener {
 			}
 
 			final Player player = (Player) entity;
-			if(Vanish.isVanish(player)) {
+			if(Vanish.isVanished(player)) {
 				event.setIntensity(player, 0);
 			}
 		}

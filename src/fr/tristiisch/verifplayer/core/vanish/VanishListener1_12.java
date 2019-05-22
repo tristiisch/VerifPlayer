@@ -13,7 +13,7 @@ public class VanishListener1_12 implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
-		if(Vanish.isVanish(player)) {
+		if(Vanish.isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
