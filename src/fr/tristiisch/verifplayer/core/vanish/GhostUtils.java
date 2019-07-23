@@ -15,7 +15,7 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import fr.tristiisch.verifplayer.Main;
+import fr.tristiisch.verifplayer.VerifPlayer;
 
 @SuppressWarnings("deprecation")
 public class GhostUtils {
@@ -32,7 +32,7 @@ public class GhostUtils {
 
 	static {
 		// In your onEnable function
-		ghostFactory = new GhostUtils(Main.getInstance());
+		ghostFactory = new GhostUtils(VerifPlayer.getInstance());
 	}
 	private boolean closed;
 

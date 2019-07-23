@@ -1,11 +1,11 @@
 package fr.tristiisch.verifplayer.core.verifspec;
 
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
@@ -28,8 +28,10 @@ public class VerifSpecCommand implements CommandExecutor {
 			return true;
 		}
 
-		if(!player.isOnGround()) {
-			player.sendMessage(SpigotUtils.color("&2EmeraldMC &7» &cVous devez être au sol pour utiliser cette commande."));
+		final GameMode gamemode = player.getGameMode();
+		if((gamemode.equals(GameMode.SURVIVAL) || gamemode.equals(GameMode.ADVENTURE)) && !player.isOnGround()) {
+			player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_SHOULDBEONGROUND.getString());
+			// SpigotUtils.color("&2EmeraldMC &7» &cVous devez être au sol pour utiliser cette commande.")
 			return true;
 		}
 

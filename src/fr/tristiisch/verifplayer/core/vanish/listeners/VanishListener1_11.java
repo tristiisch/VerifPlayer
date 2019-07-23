@@ -1,9 +1,11 @@
-package fr.tristiisch.verifplayer.core.vanish;
+package fr.tristiisch.verifplayer.core.vanish.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 
 @SuppressWarnings("deprecation")
 public class VanishListener1_11 implements Listener {
@@ -11,7 +13,7 @@ public class VanishListener1_11 implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		final Player player = event.getPlayer();
-		if(Vanish.isVanished(player)) {
+		if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}

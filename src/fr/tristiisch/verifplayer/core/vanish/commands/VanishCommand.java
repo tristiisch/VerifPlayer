@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.core.vanish;
+package fr.tristiisch.verifplayer.core.vanish.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
+import fr.tristiisch.verifplayer.core.vanish.VanishHandler;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
@@ -29,10 +31,11 @@ public class VanishCommand implements CommandExecutor {
 		} else {
 			target = player;
 		}
-		if(Vanish.isVanished(target)) {
-			Vanish.disable(target, true);
+		final VanishHandler vanishHandler = VerifPlayerPlugin.getInstance().getVanishHandler();
+		if(vanishHandler.isVanished(target)) {
+			vanishHandler.disable(target, true);
 		} else {
-			Vanish.enable(target, true);
+			vanishHandler.enable(target, true);
 		}
 		return true;
 	}

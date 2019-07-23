@@ -13,12 +13,13 @@ public enum Permission {
 	MODERATOR_COMMAND_VERIF("Use /verif <player>"),
 	MODERATOR_COMMAND_ALERTCPS("Toggle CPS alert with /alertcps"),
 	MODERATOR_RECEIVEALERT("Receive CPS alerts"),
-	ADMIN("Disable Moderator /verif & Allow /verifplayer <reload>"),
 	MODERATOR_COMMAND_VERIFSPEC(),
 	MODERATOR_COMMAND_VANISH(),
 	MODERATOR_COMMAND_FREEZE,
-	MODERATOR_RECEIVEFREEZEDISCONNECTED, 
+	MODERATOR_RECEIVEFREEZEDISCONNECTED,
 	ADMIN_SEEVANISHED,
+	ADMIN_CANTVERIF,
+	ADMIN_COMMAND_RELOAD,
 	;
 
 	public static boolean isAuthor(final Player player) {
@@ -50,24 +51,24 @@ public enum Permission {
 		return this.id;
 	}
 
+	public Set<Player> getOnlinePlayers() {
+		return this.getOnlinePlayersStream().collect(Collectors.toSet());
+	}
+
+	public Stream<? extends Player> getOnlinePlayersOpositeStream() {
+		return Bukkit.getOnlinePlayers().stream().filter(player -> !this.hasPermission(player));
+	}
+
+	public Stream<? extends Player> getOnlinePlayersStream() {
+		return Bukkit.getOnlinePlayers().stream().filter(player -> this.hasPermission(player));
+	}
+
 	public boolean hasPermission(final CommandSender sender) {
 		return sender.hasPermission(this.getId());
 	}
-	
-	public Stream<? extends Player> getOnlinePlayersStream() {
-		return Bukkit.getOnlinePlayers().stream().filter(player -> hasPermission(player));
-	}
-	
-	public Stream<? extends Player> getOnlinePlayersOpositeStream() {
-		return Bukkit.getOnlinePlayers().stream().filter(player -> !hasPermission(player));
-	}
 
-
-	public Set<Player> getOnlinePlayers() {
-		return getOnlinePlayersStream().collect(Collectors.toSet());
-	}
-	
-	public void sendMessageToOnlinePlayers(String message) {
-		getOnlinePlayersStream().forEach(p -> p.sendMessage(message));;
+	public void sendMessageToOnlinePlayers(final String message) {
+		this.getOnlinePlayersStream().forEach(p -> p.sendMessage(message));
+		;
 	}
 }

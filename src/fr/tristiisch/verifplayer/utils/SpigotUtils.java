@@ -119,6 +119,12 @@ public class SpigotUtils {
 		return false;
 	}
 
+	public static boolean isOnGround(final Player player) {
+		Location location = player.getLocation();
+		location = new Location(location.getWorld(), location.getBlockX(), location.getBlockY() - 1, location.getBlockZ());
+		return location.getBlock().getType() == Material.AIR;
+	}
+
 	/*
 	 * public static EmeraldPlayer getPlayer(final Player player) { final
 	 * EmeraldPlayer emeraldPlayer = EmeraldPlayers.getPlayer(player.getUniqueId());
@@ -126,14 +132,18 @@ public class SpigotUtils {
 	 * MySQL.getPlayer(player.getUniqueId()); }
 	 */
 
-	public static boolean isOnGround(final Player player) {
-		Location location = player.getLocation();
-		location = new Location(location.getWorld(), location.getBlockX(), location.getBlockY() - 1, location.getBlockZ());
-		return location.getBlock().getType() == Material.AIR;
+	public static boolean isSameLocation(final Location location1, final Location location2) {
+		return location1.getBlockX() == location2.getBlockX() && location1.getBlockY() == location2.getBlockY() && location1.getBlockZ() == location2.getBlockZ();
 	}
 
 	public static boolean isSamePlayer(final Player player, final Player target) {
 		return player.getUniqueId().equals(target.getUniqueId());
+	}
+
+	public static boolean playerisIn(final Player player, final Location location) {
+		final Location playerLocation = player.getLocation();
+		return playerLocation.getBlockX() == location.getBlockX() && (playerLocation.getBlockY() == location.getBlockY() || playerLocation.getBlockY() + 1 == location.getBlockY()) && playerLocation
+				.getBlockZ() == location.getBlockZ();
 	}
 
 }

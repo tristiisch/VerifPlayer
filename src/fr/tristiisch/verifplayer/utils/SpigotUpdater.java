@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 
-import fr.tristiisch.verifplayer.Main;
+import fr.tristiisch.verifplayer.VerifPlayer;
 
 public class SpigotUpdater {
 
@@ -18,13 +18,13 @@ public class SpigotUpdater {
 		return INSTANCE;
 	}
 
-	private final Main plugin;
+	private final VerifPlayer plugin;
 	private final int projectId;
 	private String latestVersion;
 	private boolean compatibleServerVersion = true;
 	private boolean needUpdate;
 
-	public SpigotUpdater(final Main plugin, final int projectId) {
+	public SpigotUpdater(final VerifPlayer plugin, final int projectId) {
 		SpigotUpdater.INSTANCE = this;
 		this.plugin = plugin;
 		this.projectId = projectId;
@@ -36,7 +36,7 @@ public class SpigotUpdater {
 			final String pluginVersion = this.plugin.getDescription().getVersion();
 			if(this.checkNeedUpdate()) {
 
-				if(this.compatibleServerVersion) {
+				if(!this.compatibleServerVersion) {
 					this.plugin.sendMessage(
 							"§cYour version (" + pluginVersion + ") is NOT compatible with the server version, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
 				} else {

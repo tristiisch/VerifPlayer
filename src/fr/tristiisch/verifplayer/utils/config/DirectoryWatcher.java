@@ -8,11 +8,11 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
 
-import fr.tristiisch.verifplayer.Main;
+import fr.tristiisch.verifplayer.VerifPlayer;
 
 public class DirectoryWatcher {
 
-	public static void start(final Main plugin) {
+	public static void start(final VerifPlayer plugin) {
 		// get path object pointing to the directory we wish to monitor
 		final Path path = plugin.getDataFolder().toPath();
 		try {

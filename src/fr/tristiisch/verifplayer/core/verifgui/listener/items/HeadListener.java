@@ -20,20 +20,19 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem;
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem.VerifGuiSlot;
-import fr.tristiisch.verifplayer.utils.TaskManager;
 
 public class HeadListener implements Listener {
 
 	public static void updateHead(final Player player) {
-		final Set<UUID> viewers = VerifGuiManager.getViewers(player);
+		final Set<UUID> viewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
 		if(viewers == null) {
 			return;
 		}
 
-		TaskManager.runTask(() -> {
+		VerifPlayerPlugin.getInstance().getTaskHandler().runTask(() -> {
 			final ItemStack newItem = VerifGuiItem.getSkull(player);
 			final int skullSlot = VerifGuiSlot.SKULL.getSlot();
 			for(final UUID viewersUuid : viewers) {
@@ -109,7 +108,7 @@ public class HeadListener implements Listener {
 		//				final float exp = player.getExp();
 		//				final float expToLevel = player.getExpToLevel();
 		//				final int level = player.getLevel();
-		//		
+		//
 		//				System.out.println("Amount: " + amount + " exp: " + exp + " expToLevel: " + expToLevel + " level: " + level);
 		HeadListener.updateHead(player);
 	}

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
-import fr.tristiisch.verifplayer.utils.config.CustomConfig.CustomConfigs;
+import fr.tristiisch.verifplayer.utils.config.CustomConfigs.CustomConfig;
 
 public class PlayerContents {
 
@@ -20,12 +20,32 @@ public class PlayerContents {
 
 	public static PlayerContents fromDisk(final Player player) {
 		final String uuid = player.getUniqueId().toString();
-		final YamlConfiguration config = CustomConfigs.INVENTORY.getConfig();
-		final ItemStack[] inventoryItemContents = (ItemStack[]) config.get(uuid.toString() + ".contents");
-		final ItemStack[] inventoryArmorContents = (ItemStack[]) config.get(uuid.toString() + ".armor");
+		final CustomConfig customConfig = CustomConfig.INVENTORY;
+		final YamlConfiguration config = customConfig.getConfig();
 
-		config.set(uuid.toString() + ".contents", null);
-		config.set(uuid.toString() + ".armor", null);
+		final Object itemContents = config.get(uuid.toString() + ".contents");
+		ItemStack[] inventoryItemContents = null;
+		if(itemContents != null) {
+			if(itemContents instanceof ItemStack[]) {
+				inventoryItemContents = (ItemStack[]) itemContents;
+			} else {
+				new Exception("An error as occured with " + player.getName() + "'s inventory: his stuff is lost").printStackTrace();
+			}
+		}
+
+		final Object armorContents = config.get(uuid.toString() + ".armor");
+		ItemStack[] inventoryArmorContents = null;
+		if(armorContents != null) {
+			if(armorContents instanceof ItemStack[]) {
+				inventoryArmorContents = (ItemStack[]) armorContents;
+			}
+		}
+
+		if(inventoryItemContents != null || inventoryArmorContents != null) {
+			config.set(uuid.toString() + ".contents", null);
+			config.set(uuid.toString() + ".armor", null);
+			customConfig.save();
+		}
 
 		return new PlayerContents(player.getUniqueId(), inventoryItemContents, inventoryArmorContents);
 	}
@@ -43,7 +63,7 @@ public class PlayerContents {
 		}
 	}
 
-	public PlayerContents(final UUID uuid, final ItemStack[] inventoryItemContents, final ItemStack[] inventoryArmorContents) {
+	private PlayerContents(final UUID uuid, final ItemStack[] inventoryItemContents, final ItemStack[] inventoryArmorContents) {
 		this.uuid = uuid;
 		this.inventoryItemContents = inventoryItemContents;
 		if(ServerVersion.V1_9.isYounger()) {
@@ -88,7 +108,7 @@ public class PlayerContents {
 	}
 
 	public void saveToDisk() {
-		final CustomConfigs customConfig = CustomConfigs.INVENTORY;
+		final CustomConfig customConfig = CustomConfig.INVENTORY;
 		final YamlConfiguration config = customConfig.getConfig();
 		config.set(this.uuid.toString() + ".contents", this.inventoryItemContents);
 		if(this.inventoryArmorContents != null) {

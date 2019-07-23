@@ -7,31 +7,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
-import fr.tristiisch.verifplayer.gui.GuiManager;
-import fr.tristiisch.verifplayer.gui.api.GuiCreator;
-import fr.tristiisch.verifplayer.gui.api.GuiPage;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
+import fr.tristiisch.verifplayer.gui.objects.GuiCreator;
+import fr.tristiisch.verifplayer.gui.objects.GuiPage;
 import fr.tristiisch.verifplayer.hook.HookHandler;
 import fr.tristiisch.verifplayer.hook.PlaceholderAPIHook;
 import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
-import fr.tristiisch.verifplayer.playerinfo.PlayersInfos;
+import fr.tristiisch.verifplayer.tps.TpsGetter;
 import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.SpigotUtils;
-import fr.tristiisch.verifplayer.utils.TPS;
 import fr.tristiisch.verifplayer.utils.Utils;
 import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
@@ -86,28 +84,28 @@ public class VerifGuiItem {
 
 	public static ItemStack getCps(final Player player) {
 		final List<String> lore = new ArrayList<>();
-		final PlayerInfo playerInfo = PlayersInfos.getPlayerInfo(player);
+		final PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
 
-		Integer currentClick = playerInfo.getCurrentClicks();
+		int currentClick = playerInfo.getCurrentClicks();
 		final short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(currentClick, 10, 18);
 		lore.add("");
 
 		String nbAlert;
-		if(playerInfo.getNbAlerts() > 1) {
+		if(playerInfo.getNumberAlert() > 1) {
 			nbAlert = ConfigGet.MESSAGES_VERIFGUI_NBALERTS.getString();
 		} else {
 			nbAlert = ConfigGet.MESSAGES_VERIFGUI_NBALERT.getString();
 		}
 
-		nbAlert = nbAlert.replaceAll("%alert_nb%", String.valueOf(playerInfo.getNbAlerts()));
+		nbAlert = nbAlert.replaceAll("%alert_nb%", String.valueOf(playerInfo.getNumberAlert()));
 		lore.add(nbAlert);
 		String cpsMax = ConfigGet.MESSAGES_VERIFGUI_CPSMAX.getString();
 		cpsMax = cpsMax.replaceAll("%cps_max%", String.valueOf(playerInfo.getMaxCPS()));
 		lore.add(cpsMax);
 		lore.add("");
-		for(int i = playerInfo.getClicksAir().size() - 1; i >= 0; --i) {
-			final int clickAir = playerInfo.getClicksAir().get(i);
-			final int clickEntity = playerInfo.getClicksEntity().get(i);
+		for(int i = playerInfo.getAirClicks().size() - 1; i >= 0; --i) {
+			final int clickAir = playerInfo.getAirClicks().get(i);
+			final int clickEntity = playerInfo.getEntityClicks().get(i);
 			final int clickGlobal = clickAir + clickEntity;
 			final ChatColor chatColor = SpigotUtils.getIntervalChatColor(clickGlobal, 10, 18);
 			String string = ConfigGet.MESSAGES_VERIFGUI_CPSFORMAT.getString();
@@ -148,9 +146,9 @@ public class VerifGuiItem {
 
 	public static ItemStack getEffects(final Player player) {
 		final List<String> lore = new ArrayList<>();
+		lore.add("");
 		final Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
 		int effectSize = potionEffects.size();
-		lore.add("");
 		String name = ConfigGet.MESSAGES_VERIFGUI_EFFECT.getString();
 		Material material;
 		if(effectSize == 0) {
@@ -163,7 +161,7 @@ public class VerifGuiItem {
 			for(final PotionEffect potionEffect : potionEffects) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append("&7");
-				sb.append(potionEffect.getType().getName());
+				sb.append(Utils.capitalizeFirstLetter(potionEffect.getType().getName().replace("_", " ")));
 				sb.append(" ");
 				sb.append(potionEffect.getAmplifier() + 1);
 				if(!potionEffect.hasParticles()) {
@@ -174,7 +172,8 @@ public class VerifGuiItem {
 				lore.add(SpigotUtils.color(sb.toString()));
 			}
 		}
-		return new ItemCreator(material).size(effectSize).customName(name).lore(lore).getItemStack();
+		// TODO add ItemFlag.HIDE_POTION_EFFECTS
+		return new ItemCreator(material).size(effectSize).customName(name).lore(lore).flag(ItemFlag.HIDE_POTION_EFFECTS).getItemStack();
 	}
 
 	public static ConcurrentHashMap<Integer, ItemStack> getInventory(final PlayerInventory playerInventory) {
@@ -198,12 +197,10 @@ public class VerifGuiItem {
 		// OffHand if 1.9+
 		if(ServerVersion.V1_9.isEqualOrOlder()) {
 			ItemStack itemInOffHand = playerInventory.getItemInOffHand();
-			//if(itemInOffHand != null) {
 			if(itemInOffHand == null) {
 				itemInOffHand = itemStackAir;
 			}
 			items.put(VerifGuiSlot.OFFHAND.getSlot(), itemInOffHand);
-			//}
 		}
 
 		// Inv
@@ -239,7 +236,7 @@ public class VerifGuiItem {
 	}
 
 	public static ItemStack getPingAndTps(final Player player) {
-		final double[] tps = TPS.getTPSArray();
+		final double[] tps = new TpsGetter().getDoubleArray();
 		final List<String> lore = new ArrayList<>();
 		int ping = Reflection.getPing(player);
 		final short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(ping, 100, 200);
@@ -322,8 +319,6 @@ public class VerifGuiItem {
 			final Entity entity = player.getVehicle();
 			if(ServerVersion.V1_8.isEqualOrOlder()) {
 				replace.put("%vehicule%", entity.getName());
-			} else {
-				replace.put("%vehicule%", entity.toString().toLowerCase());
 			}
 
 		} else {
@@ -331,22 +326,15 @@ public class VerifGuiItem {
 		}
 
 		final String guiName;
-		final GuiCreator gui = GuiManager.get(player);
+		final GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
 		if(gui != null) {
 			final GuiPage guiPage = gui.getGuiPage();
-			if(guiPage instanceof VerifGuiPage) {
-				final VerifGuiPage verifGuiPage = (VerifGuiPage) guiPage;
+			guiName = guiPage.getDescription();
 
-				final UUID uuidPlayerBeingCheckByPlayerCheck = VerifGuiManager.getByViewer(player.getUniqueId()).getKey();
-				final Player playerBeingCheckByPlayerCheck = Bukkit.getPlayer(uuidPlayerBeingCheckByPlayerCheck);
-				guiName = verifGuiPage.getDescription(playerBeingCheckByPlayerCheck);
-			} else {
-				guiName = guiPage.getDescription();
-			}
 		} else {
 			final InventoryView openInventory = player.getOpenInventory();
 			if(openInventory != null && openInventory.getType() != InventoryType.CRAFTING && openInventory.getType() != InventoryType.CREATIVE) {
-				guiName = openInventory.getType().name().toLowerCase();
+				guiName = Utils.capitalizeFirstLetter(openInventory.getType().name());
 			} else {
 				guiName = SpigotUtils.color("&c\u2716");
 			}

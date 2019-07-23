@@ -17,5 +17,4 @@ public class SortByDistance implements Comparator<Player> {
 	public int compare(final Player player1, final Player player2) {
 		return (int) Math.round(player1.getLocation().distance(this.spawn));
 	}
-
 }

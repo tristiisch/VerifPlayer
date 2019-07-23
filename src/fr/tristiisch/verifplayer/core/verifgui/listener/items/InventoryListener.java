@@ -16,7 +16,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,20 +26,19 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem;
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
-import fr.tristiisch.verifplayer.utils.TaskManager;
 
 @SuppressWarnings("deprecation")
 public class InventoryListener implements Listener {
 
 	public static void updateInventory(final Player player) {
-		final Set<UUID> viewers = VerifGuiManager.getViewers(player);
+		final Set<UUID> viewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
 		if(viewers == null) {
 			return;
 		}
 
-		TaskManager.runTask(() -> {
+		VerifPlayerPlugin.getInstance().getTaskHandler().runTask(() -> {
 
 			final ConcurrentHashMap<Integer, ItemStack> items = VerifGuiItem.getInventory(player.getInventory());
 
@@ -55,7 +55,7 @@ public class InventoryListener implements Listener {
 					final ItemStack newItem = entry.getValue();
 					final ItemStack actuelItem = inventory.getItem(itemSlot);
 
-					if(actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount()) {
+					if(actuelItem != null && newItem != null && actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount()) {
 						items.remove(itemSlot);
 					} else {
 						inventory.setItem(itemSlot, newItem);
@@ -117,13 +117,15 @@ public class InventoryListener implements Listener {
 		updateInventory(player);
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void onInventoryClick(final InventoryClickEvent event) {
-		if(!(event.getWhoClicked() instanceof Player)) {
-			return;
-		}
-		final Player player = (Player) event.getWhoClicked();
+	@EventHandler
+	public void onInventoryClose(final InventoryCloseEvent event) {
+		final Player player = (Player) event.getPlayer();
+		updateInventory(player);
+	}
 
+	@EventHandler(ignoreCancelled = true)
+	public void onInventoryOpen(final InventoryOpenEvent event) {
+		final Player player = (Player) event.getPlayer();
 		updateInventory(player);
 	}
 
@@ -154,7 +156,6 @@ public class InventoryListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerItemHeld(final PlayerItemHeldEvent event) {
 		final Player player = event.getPlayer();
-
 		updateInventory(player);
 	}
 }

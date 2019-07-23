@@ -1,5 +1,5 @@
+version: 1.0
 messages:
-    version: 1.0
     cantconsole: "&cKann diesen Befehl nicht mit der Konsole verwenden."
     noperm: "&cDu hast nicht die Erlaubnis dazu."
 
@@ -24,7 +24,7 @@ messages:
         # You can use Placeholder
         info:
           - ""
-          - "&7Gruppe: &e%group%"
+          - "&7Gruppe: &e%rank%"
           - "&7Heilen: &e%heal%&c\u2764"
           - "&7Lebensmittel: &e%food%"
           - "&7XP Level: &e%xp_level%"
@@ -50,6 +50,7 @@ messages:
 
         tpsitemname: "&6TPS"
         tpsformat: "&7%time%min: %color%%tps%"
+
     time:
        year: "jahr"
        years: "jahre"

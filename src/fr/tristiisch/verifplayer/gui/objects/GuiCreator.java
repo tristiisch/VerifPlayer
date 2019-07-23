@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.gui.api;
+package fr.tristiisch.verifplayer.gui.objects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +21,11 @@ public class GuiCreator {
 	private boolean clickOnItems = false;
 
 	public GuiCreator(final GuiPage guiPage) {
-		this.guiPage = guiPage;
+		this.guiPage = guiPage.clone();
 	}
 
 	public GuiCreator(final GuiPage guiPage, final String data) {
-		this.guiPage = guiPage;
+		this.guiPage = guiPage.clone();
 		this.data = data;
 	}
 

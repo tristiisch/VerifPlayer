@@ -2,13 +2,11 @@ package fr.tristiisch.verifplayer.core.verifspec.listeners;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,44 +16,18 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
-import com.google.common.base.Predicate;
-
-import fr.tristiisch.verifplayer.Main;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.freeze.Freeze;
-import fr.tristiisch.verifplayer.core.vanish.Vanish;
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpec;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpecTool;
-import fr.tristiisch.verifplayer.core.verifspec.teleport.SortByDistance;
-import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
-import fr.tristiisch.verifplayer.playerinfo.PlayersInfos;
+import fr.tristiisch.verifplayer.core.verifspec.teleport.Teleporter;
 import fr.tristiisch.verifplayer.utils.PlayerContents;
-import fr.tristiisch.verifplayer.utils.SpigotUtils;
+import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class VerifSpecToolsListener implements Listener {
-
-	@SuppressWarnings("deprecation")
-	private static void targetPlayer(final Player attacker, final Player target) {
-		final VerifSpecTool verifSpecItem = VerifSpecTool.getTool(attacker.getItemInHand());
-		switch(verifSpecItem) {
-		case FREEZE:
-			if(Freeze.isFreeze(target)) {
-				Freeze.unfreeze(target);
-				attacker.sendMessage(SpigotUtils.color("&cVous avez unfreeze &4" + target.getName() + "&c."));
-			} else {
-				Freeze.freeze(target);
-				attacker.sendMessage(SpigotUtils.color("&aVous avez freeze &2" + target.getName() + "&a."));
-			}
-			break;
-		case VERIF:
-			VerifGuiManager.openVerifGUi(attacker, target);
-			break;
-		default:
-			break;
-
-		}
-	}
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
@@ -64,7 +36,12 @@ public class VerifSpecToolsListener implements Listener {
 			return;
 		}
 
+		if(!(event.getEntity() instanceof Player)) {
+			return;
+		}
+
 		final Player attacker = (Player) event.getDamager();
+		/*final Player target = (Player) event.getEntity();*/
 		if(attacker.getItemInHand() == null) {
 			return;
 		}
@@ -72,25 +49,42 @@ public class VerifSpecToolsListener implements Listener {
 		if(!VerifSpec.isIn(attacker)) {
 			return;
 		}
-		final Entity victim = event.getEntity();
 
-		if(attacker.getItemInHand().isSimilar(VerifSpecTool.KNOCKBACK.getItemStack())) {
-			event.setCancelled(false);
-			return;
+		final VerifSpecTool verifSpecItem = VerifSpecTool.getTool(attacker.getItemInHand());
+
+		switch(verifSpecItem) {
+		case FREEZE:
+			/*			if(Freeze.isFreeze(target)) {
+							Freeze.unfreeze(target);
+							attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERUNFREEZE.getString().replace("%player%", target.getName()));
+						} else {
+							Freeze.freeze(target);
+							attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERFREEZE.getString().replace("%player%", target.getName()));
+						}*/
+			event.setCancelled(true);
+			break;
+		case VERIF:
+			/*VerifPlayerPlugin.getInstance().getVerifGuiHandler().openVerifGUi(attacker, target);*/
+			event.setCancelled(true);
+			break;
+		case KNOCKBACK:
+			break;
+		default:
+			event.setCancelled(true);
+			break;
+
 		}
-
-		event.setCancelled(true);
-
-		if(victim instanceof Player) {
-			final Player target = (Player) victim;
-			VerifSpecToolsListener.targetPlayer(attacker, target);
-		}
-
 	}
 
 	@SuppressWarnings({ "deprecation" })
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
+		if(ServerVersion.V1_9.isEqualOrOlder()) {
+			final EquipmentSlot equipementSlot = event.getHand();
+			if(!equipementSlot.equals(EquipmentSlot.HAND)) {
+				return;
+			}
+		}
 		final Player player = event.getPlayer();
 		if(player.getItemInHand() == null) {
 			return;
@@ -102,10 +96,12 @@ public class VerifSpecToolsListener implements Listener {
 
 		final VerifSpecTool verifSpecItem = VerifSpecTool.getTool(player.getItemInHand());
 
-		switch(verifSpecItem) {
+		if(verifSpecItem == null) {
+			return;
+		}
 
-		default:
-			event.setCancelled(true);
+		event.setCancelled(true);
+		switch(verifSpecItem) {
 
 		case TELEPORTER:
 			/*	for(final Player target : Bukkit.getOnlinePlayers().stream().filter(playerOnline -> !playerOnline.getUniqueId().equals(player.getUniqueId())).collect(Utils.toShuffledList())) {
@@ -116,33 +112,15 @@ public class VerifSpecToolsListener implements Listener {
 				}
 			}
 			*/
-			Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-
-				final PlayerInfo playerInfos = PlayersInfos.getPlayerInfo(player);
-				final List<Player> alreadyTeleportedPlayers = playerInfos.getAlreadyTeleportedPlayers();
-
-				final Predicate<Player> predicate = playerOnline -> alreadyTeleportedPlayers
-						.contains(playerOnline) && !playerOnline.getUniqueId().equals(player.getUniqueId()) && !VerifSpec.isIn(playerOnline) && !Vanish.isVanished(playerOnline);
-
-				final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-
-				final Player target = Bukkit.getOnlinePlayers().stream().filter(predicate).sorted(new SortByDistance(spawn)).findFirst().orElse(null);
-
-				if(target == null) {
-					player.sendMessage(SpigotUtils.color("Il n'y a aucun joueurs."));
-				} else {
-					player.teleport(target);
-					player.sendMessage(SpigotUtils.color("Vous avez été téléporté à " + target.getName() + "&a."));
-					alreadyTeleportedPlayers.add(target);
-					playerInfos.setAlreadyTeleportedPlayers(alreadyTeleportedPlayers);
-				}
+			Bukkit.getScheduler().runTaskAsynchronously(VerifPlayerPlugin.getInstance(), () -> {
+				Teleporter.tp(player);
 			});
 			break;
 
 		case SHUTTLE:
 			final Block block = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 1000);
 			if(block == null) {
-				player.sendMessage(SpigotUtils.color("La distance est trop loin."));
+				player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_DISTANCETOOFAR.getString());
 				return;
 			}
 			final Location playerLocation = player.getLocation();
@@ -182,26 +160,48 @@ public class VerifSpecToolsListener implements Listener {
 			}
 			break;
 
-		case FREEZE:
-			player.sendMessage(SpigotUtils.color("Il n'y a pas de joueur target."));
-			break;
-
-		case KNOCKBACK:
-			event.setCancelled(false);
-			player.sendMessage(SpigotUtils.color("Il n'y a pas de joueur target."));
+		default:
 			break;
 		}
+
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
-		final Player player = event.getPlayer();
-		if(VerifSpec.isIn(player)) {
-			event.setCancelled(true);
-			if(event.getRightClicked() instanceof Player) {
-				final Player target = (Player) event.getRightClicked();
-				VerifSpecToolsListener.targetPlayer(player, target);
+		if(ServerVersion.V1_9.isEqualOrOlder()) {
+			final EquipmentSlot equipementSlot = event.getHand();
+			if(!equipementSlot.equals(EquipmentSlot.HAND)) {
+				return;
 			}
+		}
+
+		final Player attacker = event.getPlayer();
+		if(!VerifSpec.isIn(attacker) && !(event.getRightClicked() instanceof Player)) {
+			return;
+		}
+		final Player target = (Player) event.getRightClicked();
+
+		final VerifSpecTool verifSpecItem = VerifSpecTool.getTool(attacker.getItemInHand());
+		switch(verifSpecItem) {
+
+		case FREEZE:
+			event.setCancelled(true);
+			if(Freeze.isFreeze(target)) {
+				Freeze.unfreeze(target);
+				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERUNFREEZE.getString().replace("%player%", target.getName()));
+			} else {
+				Freeze.freeze(target);
+				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERFREEZE.getString().replace("%player%", target.getName()));
+			}
+			break;
+		case VERIF:
+			event.setCancelled(true);
+			VerifPlayerPlugin.getInstance().getVerifGuiHandler().openVerifGUi(attacker, target);
+			break;
+		default:
+			break;
+
 		}
 	}
 

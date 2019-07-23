@@ -1,4 +1,4 @@
-package fr.tristiisch.verifplayer.utils;
+package fr.tristiisch.verifplayer.tps;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -6,14 +6,14 @@ import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import fr.tristiisch.verifplayer.utils.Reflection;
 import fr.tristiisch.verifplayer.utils.Reflection.ClassEnum;
 
-public class TPS {
+public class TpsGetter {
 
-	static boolean usePaper;
+	private static boolean usePaper;
 	private static Method getServerMethod;
 	private static Field recentTpsField;
-
 	static {
 		final Class<?> spigotServerClass = Reflection.getClass("org.bukkit.Server$Spigot");
 		if(spigotServerClass != null) {
@@ -66,42 +66,45 @@ public class TPS {
 		return recent;
 	}
 
-	public static double getTPS() {
-		return getTPS(1);
+	private double[] tps;
+
+	public TpsGetter() {
+		if(canGetWithPaper()) {
+			this.tps = TpsGetter.getPaperRecentTps();
+		} else {
+			this.tps = TpsGetter.getNMSRecentTps();
+		}
+		for(int i = 0; this.tps.length > i; i++) {
+			this.tps[i] = Math.min(Math.round(this.tps[i] * 100.0) / 100.0, 20.0);
+		}
 	}
 
-	public static double getTPS(final int time) {
-		final double[] recentTps = getTPSArray();
+	public double getDouble() {
+		return this.getDouble(1);
+	}
+
+	public double getDouble(final int time) {
 		switch(time) {
 		case 1:
-			return recentTps[0];
+			return this.tps[0];
 		case 5:
-			return recentTps[1];
+			return this.tps[1];
 		case 15:
-			return recentTps[2];
+			return this.tps[2];
 		default:
 			throw new IllegalArgumentException("Unsupported tps measure time " + time);
 		}
 	}
 
-	public static double[] getTPSArray() {
-		double[] recentTps;
-		if(canGetWithPaper()) {
-			recentTps = getPaperRecentTps();
-		} else {
-			recentTps = getNMSRecentTps();
-		}
-		for(int i = 0; recentTps.length > i; i++) {
-			recentTps[i] = Math.min(Math.round(recentTps[i] * 100.0) / 100.0, 20.0);
-		}
-		return recentTps;
+	public double[] getDoubleArray() {
+		return this.tps;
 	}
 
-	public static int getTPSint() {
-		return getTPSint(1);
+	public int getInt() {
+		return this.getInt(1);
 	}
 
-	public static int getTPSint(final int time) {
-		return (int) Math.round(getTPS(time));
+	public int getInt(final int time) {
+		return (int) Math.round(this.getDouble(time));
 	}
 }

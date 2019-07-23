@@ -3,7 +3,7 @@ package fr.tristiisch.verifplayer.utils.config;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import fr.tristiisch.verifplayer.utils.config.CustomConfig.CustomConfigs;
+import fr.tristiisch.verifplayer.utils.config.CustomConfigs.CustomConfig;
 
 public class CustomConfigLoadEvent extends Event {
 
@@ -13,13 +13,13 @@ public class CustomConfigLoadEvent extends Event {
 		return handlers;
 	}
 
-	CustomConfigs customConfig;
+	CustomConfig customConfig;
 
-	public CustomConfigLoadEvent(final CustomConfigs customConfig) {
+	public CustomConfigLoadEvent(final CustomConfig customConfig) {
 		this.customConfig = customConfig;
 	}
 
-	public CustomConfigs getCustomConfig() {
+	public CustomConfig getCustomConfig() {
 		return this.customConfig;
 	}
 

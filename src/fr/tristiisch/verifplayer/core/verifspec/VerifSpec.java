@@ -9,8 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.utils.PlayerContents;
-import fr.tristiisch.verifplayer.utils.SpigotUtils;
+import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class VerifSpec {
 
@@ -21,29 +22,17 @@ public class VerifSpec {
 			player.setAllowFlight(false);
 		}
 
-		/*		if(!player.isOp()) {
-					player.teleport(EmeraldSpigot.getSpawn());
-				}*/
-
 		final PlayerContents playerContents = PlayerContents.fromDisk(player);
 		if(player.isOnline()) {
 			playerContents.returnHisInventory();
 		} else {
-			/*
-			 * final FileConfiguration config =
-			 * CustomConfigUtils.getConfig(EmeraldSpigot.getInstance(), "data");
-			 * config.set(player.getUniqueId().toString() + ".armure",
-			 * InventoryToBase64.toBase64(datas));
-			 * config.set(player.getUniqueId().toString() + ".inventaire",
-			 * InventoryToBase64.toBase64(datas.getInventoryItemContents()));
-			 */
-
 		}
 
-		//Vanish.disable(player, false);
+		VerifPlayerPlugin.getInstance().getVanishHandler().disable(player, false);
 
 		remove(player);
-		player.sendMessage(SpigotUtils.color("&cMode staff désactivé"));
+		// player.sendMessage(SpigotUtils.color("&cMode staff désactivé"));
+		player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_DISABLE.getString());
 	}
 
 	public static void enable(final Player player) {
@@ -53,21 +42,14 @@ public class VerifSpec {
 		playerContents.saveToDisk();
 		playerContents.clearInventory();
 
-		//Vanish.enable(player, false);
+		VerifPlayerPlugin.getInstance().getVanishHandler().enable(player, false);
 		setVerifSpecItems(player);
 
-		/*		player.getInventory().setItem(0, VerifSpecItems.TELEPORTER.getItemStack());
-				player.getInventory().setItem(1, VerifSpecItems.FREEZE.getItemStack());
-				player.getInventory().setItem(2, VerifSpecItems.VERIF.getItemStack());
-				player.getInventory().setItem(3, VerifSpecItems.SHUTTLE.getItemStack());
-				player.getInventory().setItem(4, VerifSpecItems.KNOCKBACK.getItemStack());
-
-				player.getInventory().setItem(7, VerifSpecItems.SLOW.getItemStack());
-				player.getInventory().setItem(8, VerifSpecItems.FAST.getItemStack());*/
 		//player.setCompassTarget(EmeraldSpigot.getSpawn());
 
 		player.setAllowFlight(true);
-		player.sendMessage(SpigotUtils.color("&aMode staff activé"));
+		// player.sendMessage(SpigotUtils.color("&aMode staff activé"));
+		player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_ENABLE.getString());
 	}
 
 	public static Player getClosestPlayer(final Location loc) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -20,6 +21,7 @@ public class ItemCreator {
 	String customName = null;
 	List<String> lore = null;
 	List<ItemEnchant> enchantements = null;
+	List<ItemFlag> flags = null;
 
 	public ItemCreator() {
 	}
@@ -47,6 +49,16 @@ public class ItemCreator {
 		return this;
 	}
 
+	public ItemCreator flag(final ItemFlag... flags) {
+		this.flags = Arrays.asList(flags);
+		return this;
+	}
+
+	public ItemCreator flag(final List<ItemFlag> flags) {
+		this.flags = flags;
+		return this;
+	}
+
 	public ItemStack getItemStack() {
 		final ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
 		final ItemMeta itemMeta = itemStack.getItemMeta();
@@ -64,16 +76,23 @@ public class ItemCreator {
 			}
 		}
 
+		if(this.flags != null) {
+			for(final ItemFlag flag : this.flags) {
+				itemMeta.addItemFlags(flag);
+			}
+		}
+
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
 	}
 
 	@SuppressWarnings("deprecation")
 	public ItemStack getPlayerHead(final Player player) {
-		this.material = Material.SKULL;
+		this.material = Material.SKULL_ITEM;
+		this.dataValue = 3;
 		final ItemStack itemStack = this.getItemStack();
 		final SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
-		if(ServerVersion.V1_9.isEqualOrOlder()) {
+		if(ServerVersion.V1_12.isEqualOrOlder()) {
 			skullmeta.setOwningPlayer(player);
 		} else {
 			skullmeta.setOwner(player.getName());

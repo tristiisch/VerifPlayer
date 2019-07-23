@@ -9,7 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
+import fr.tristiisch.verifplayer.core.verifgui.VerifGuiHandler;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiPage;
 import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
 import fr.tristiisch.verifplayer.utils.PlayerContents;
@@ -21,8 +22,9 @@ public class VerifGuiListener implements Listener {
 	public void onGuiClose(final GuiCloseEvent event) {
 		final Player player = event.getPlayer();
 		if(event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
-			VerifGuiManager.remove(player);
-			final PlayerContents playerContents = VerifGuiManager.removePlayersChecksInventoryContents(player.getUniqueId());
+			final VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
+			verifGuiHandler.remove(player);
+			final PlayerContents playerContents = verifGuiHandler.removePlayersChecksInventoryContents(player.getUniqueId());
 			if(playerContents != null) {
 				playerContents.returnHisInventory();
 			}
@@ -32,7 +34,8 @@ public class VerifGuiListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		final Set<UUID> playerViewers = VerifGuiManager.getViewers(player);
+		final VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
+		final Set<UUID> playerViewers = verifGuiHandler.getViewers(player);
 		if(playerViewers != null) {
 			for(final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);
@@ -40,6 +43,6 @@ public class VerifGuiListener implements Listener {
 				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
 			}
 		}
-		VerifGuiManager.remove(player);
+		verifGuiHandler.remove(player);
 	}
 }

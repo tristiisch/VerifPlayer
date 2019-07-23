@@ -16,6 +16,7 @@ public class HookHandler {
 	}
 
 	public HookHandler(final Plugin plugin) {
+		new VanishHook(plugin);
 		new EssentialsHook(plugin);
 		new GroupManagerHook(plugin);
 		new PermissionsExHook(plugin);

@@ -21,8 +21,7 @@ public class FreezeListener implements Listener {
 		if(Freeze.isFreeze(victim)) {
 
 			if(event.getDamager() instanceof Player) {
-				Player attacker = (Player) event.getDamager();
-				// attacker.sendMessage(SpigotUtils.color("&cLe joueur &4" + victim.getName() + "&c est freeze."));
+				final Player attacker = (Player) event.getDamager();
 				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERISFREEZE.getString().replace("%player%", victim.getName()));
 			}
 			event.setCancelled(true);
@@ -38,9 +37,9 @@ public class FreezeListener implements Listener {
 		if(!Freeze.isFreeze(player)) {
 			return;
 		}
-			// TODO 1.8/1.7 comptability
-			// player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 0);
-			player.teleport(event.getFrom());
+		// TODO 1.8/1.7 comptability
+		// player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 0);
+		player.teleport(event.getFrom());
 	}
 
 	@EventHandler
@@ -49,9 +48,9 @@ public class FreezeListener implements Listener {
 		if(Freeze.isFreeze(player)) {
 			return;
 		}
-			Freeze.unfreeze(player);
-			
-			Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED
-			.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString().replace("%player%", player.getName()));
+		Freeze.unfreeze(player);
+
+		Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED
+				.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString().replace("%player%", player.getName()));
 	}
 }

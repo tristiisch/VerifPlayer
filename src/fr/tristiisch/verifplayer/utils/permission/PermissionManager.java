@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import com.google.common.io.ByteStreams;
+
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 
 public class PermissionManager {
 
@@ -37,7 +36,7 @@ public class PermissionManager {
 			}
 
 		} catch(final Exception e) {
-			Bukkit.getLogger().log(Level.SEVERE, ChatColor.RED + "Unable to create file " + fileName);
+			VerifPlayerPlugin.getInstance().sendMessage("Unable to create file " + fileName);
 			e.printStackTrace();
 		}
 
@@ -51,7 +50,7 @@ public class PermissionManager {
 		try {
 			config.save(configFile);
 		} catch(final IOException e) {
-			Bukkit.getLogger().log(Level.SEVERE, ChatColor.RED + "Unable to save file " + fileName);
+			VerifPlayerPlugin.getInstance().sendMessage("Unable to save file " + fileName);
 			e.printStackTrace();
 		}
 	}

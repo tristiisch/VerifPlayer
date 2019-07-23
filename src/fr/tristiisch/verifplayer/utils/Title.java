@@ -31,7 +31,7 @@ public class Title {
 	 * @param title String avec gestion des couleurs
 	 * @param subtitle String avec gestion des couleurs
 	 */
-	public static void sendTitle(final Player player, String title, String subtitle, final Integer fadeIn, final Integer stay, final Integer fadeOut) {
+	public static void sendTitle(final Player player, String title, String subtitle, final int fadeIn, final int stay, final int fadeOut) {
 		title = SpigotUtils.color(title);
 		subtitle = SpigotUtils.color(subtitle);
 		try {
@@ -68,11 +68,11 @@ public class Title {
 				Constructor<?> subtitleConstructor;
 				Object titlePacket;
 				Object subtitlePacket;
-	
+
 				if(title != null) {
 					title = SpigotUtils.color(title);
 					title = title.replaceAll("%player%", player.getDisplayName());
-	
+
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get((Object) null);
 					chatTitle = Reflection.getClass(ClassEnum.NMS, "IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", new Class[] { String.class })
 							.invoke((Object) null, new Object[] { "{\"text\":\"" + title + "\"}" });
@@ -81,7 +81,7 @@ public class Title {
 								"IChatBaseComponent"), Integer.TYPE, Integer.TYPE, Integer.TYPE });
 					titlePacket = subtitleConstructor.newInstance(new Object[] { e, chatTitle, fadeIn, stay, fadeOut });
 					Reflection.sendPacket(player, titlePacket);
-	
+
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get((Object) null);
 					chatTitle = Reflection.getClass(ClassEnum.NMS, "IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", new Class[] { String.class })
 							.invoke((Object) null, new Object[] { "{\"text\":\"" + title + "\"}" });
@@ -90,11 +90,11 @@ public class Title {
 					titlePacket = subtitleConstructor.newInstance(new Object[] { e, chatTitle, fadeIn, stay, fadeOut });
 					Reflection.sendPacket(player, titlePacket);
 				}
-	
+
 				if(subtitle != null) {
 					subtitle = SpigotUtils.color(subtitle);
 					subtitle = subtitle.replaceAll("%player%", player.getDisplayName());
-	
+
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get((Object) null);
 					chatSubtitle = Reflection.getClass(ClassEnum.NMS, "IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", new Class[] { String.class })
 							.invoke((Object) null, new Object[] { "{\"text\":\"" + title + "\"}" });
@@ -103,7 +103,7 @@ public class Title {
 								"IChatBaseComponent"), Integer.TYPE, Integer.TYPE, Integer.TYPE });
 					subtitlePacket = subtitleConstructor.newInstance(new Object[] { e, chatSubtitle, fadeIn, stay, fadeOut });
 					Reflection.sendPacket(player, subtitlePacket);
-	
+
 					e = Reflection.getClass(ClassEnum.NMS, "PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get((Object) null);
 					chatSubtitle = Reflection.getClass(ClassEnum.NMS, "IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", new Class[] { String.class })
 							.invoke((Object) null, new Object[] { "{\"text\":\"" + subtitle + "\"}" });

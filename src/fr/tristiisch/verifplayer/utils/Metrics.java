@@ -7,13 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +33,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
+import fr.tristiisch.verifplayer.utils.config.CustomConfigs;
 
 /**
  * bStats collects some data for plugin authors.
@@ -549,6 +549,14 @@ public class Metrics {
 				this.startSubmitting();
 			}
 		}
+		this.addCustomChart(new Metrics.SimplePie("language", () -> {
+			final String langague2L = CustomConfigs.getLangague();
+			final String langagueName = new Locale("", langague2L).getDisplayCountry();
+			if(!langagueName.isEmpty()) {
+				return langagueName;
+			}
+			return langague2L;
+		}));
 	}
 
 	/**
@@ -607,11 +615,7 @@ public class Metrics {
 					.size() : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
 		} catch(final Exception e) {
 			// Just use the new method if the Reflection failed
-			if(ServerVersion.V1_8.isEqualOrOlder()) {
-				playerAmount = Bukkit.getOnlinePlayers().size();
-			} else {
-				playerAmount = -1;
-			}
+			playerAmount = Bukkit.getOnlinePlayers().size();
 		}
 		final int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
 		final String bukkitVersion = Bukkit.getVersion();
@@ -687,7 +691,7 @@ public class Metrics {
 				for(final RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
 					try {
 						pluginData.add(provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
-					} catch(NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+					} catch(ReflectiveOperationException | NullPointerException | NoClassDefFoundError ignored) {
 					}
 				}
 			} catch(final NoSuchFieldException ignored) {

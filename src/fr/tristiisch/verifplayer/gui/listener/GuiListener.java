@@ -8,10 +8,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.tristiisch.verifplayer.gui.GuiManager;
-import fr.tristiisch.verifplayer.gui.api.GuiCreator;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.gui.customevents.GuiClickEvent;
 import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
+import fr.tristiisch.verifplayer.gui.objects.GuiCreator;
 
 public class GuiListener implements Listener {
 
@@ -21,7 +21,7 @@ public class GuiListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getWhoClicked();
-		GuiCreator gui = GuiManager.get(player);
+		GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
 		if(gui == null) {
 			return;
 		}
@@ -41,7 +41,7 @@ public class GuiListener implements Listener {
 	@EventHandler
 	public void onInventoryClose(final InventoryCloseEvent event) {
 		final Player player = (Player) event.getPlayer();
-		final GuiCreator gui = GuiManager.remove(player);
+		final GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().remove(player);
 		if(gui == null) {
 			return;
 		}
@@ -52,6 +52,6 @@ public class GuiListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		GuiManager.remove(player);
+		VerifPlayerPlugin.getInstance().getVerifGuiHandler().remove(player);
 	}
 }

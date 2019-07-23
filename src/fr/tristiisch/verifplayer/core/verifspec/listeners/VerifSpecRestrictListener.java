@@ -10,6 +10,15 @@ import fr.tristiisch.verifplayer.core.verifspec.VerifSpec;
 
 public class VerifSpecRestrictListener implements Listener {
 
+	/*	static {
+			for(final Player player : Bukkit.getOnlinePlayers()) {
+				final PlayerContents playerContents = PlayerContents.fromDisk(player);
+				if(playerContents.hasData()) {
+					playerContents.returnHisInventory();
+				}
+			}
+		}*/
+
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if(!(event.getEntity() instanceof Player)) {
@@ -31,4 +40,5 @@ public class VerifSpecRestrictListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+
 }

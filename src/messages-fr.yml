@@ -1,5 +1,5 @@
+version: 1.0
 messages:
-    version: 1.0
     cantconsole: "&cImpossible d'utilisé cette commande avec la console"
     noperm: "&cVous n'avez pas la permission"
 
@@ -50,75 +50,6 @@ messages:
 
         tpsitemname: "&6TPS"
         tpsformat: "&7%time%min: %color%%tps%"
-        
-        
-    verifspec:
-      teleporter:
-         # item list: https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html
-         item: COMPASS
-         # slot from 0 to 8
-         slot: 0
-         name: "&2Teleporter"
-         lore:
-           - ""
-           - "&7Random teleportation to players"
-      freeze:
-         enable: true
-         item: BLAZE_ROD
-         slot: 1
-         name: "&2Freeze Stick"
-         lore:
-           - ""
-           - "&7Freeze the player you're aiming at"
-      knockback:
-         enable: true
-         item: STICK
-         slot: 2
-         name: "&2Knockback Stick"
-         lore:
-           - ""
-           - "&7Test the knockback of the player you're aiming at"
-      verif:
-         enable: true
-         item: CHEST
-         slot: 3
-         name: "&2Verificator"
-         lore:
-           - ""
-           - "&7Open VerifPlayer Gui for the player you're aiming at"
-      shuttle:
-         enable: true
-         item: MINECART
-         slot: 4
-         name: "&2Shuttle"
-         lore:
-           - ""
-           - "&7Teleport where you aim"
-      slow:
-         enable: true
-         item: FIREWORK_CHARGE
-         slot: 5
-         name: "&2Slow down"
-         lore:
-           - ""
-           - "&7Slows down your speed"
-      fast:
-         enable: true
-         item: LEATHER_BOOTS
-         slot: 6
-         name: "&2Accelerates"
-         lore:
-           - ""
-           - "&7Increases your speed"
-      # add a custom item
-      custom:
-         enable: false
-         item: BARRIER
-         slot: 7
-         name: ""
-         lore:
-           - ""
-           - ""
         
     time:
        year: "an"

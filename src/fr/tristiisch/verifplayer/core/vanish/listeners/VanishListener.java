@@ -1,15 +1,9 @@
-package fr.tristiisch.verifplayer.core.vanish;
+package fr.tristiisch.verifplayer.core.vanish.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
-import org.bukkit.block.Dispenser;
-import org.bukkit.block.Dropper;
-import org.bukkit.block.Furnace;
-import org.bukkit.block.Hopper;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +21,23 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
+import fr.tristiisch.verifplayer.core.vanish.VanishHandler;
+
 public class VanishListener implements Listener {
+
+	/*	@EventHandler(ignoreCancelled = true)
+		public void onBlockCanBuildEvent(final BlockCanBuildEvent event) {
+			if(event.isBuildable()) {
+				return;
+			}
+			final Location location = event.getBlock().getLocation();
+			final long count = Bukkit.getOnlinePlayers().stream().filter(vanished -> SpigotUtils.playerisIn(vanished, location)).count();
+
+			event.getBlock();
+
+			//event.setBuildable(true);
+		}*/
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
@@ -35,7 +45,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
-		if(Vanish.isVanished(player)) {
+		if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -46,7 +56,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getTarget();
-		if(Vanish.isVanished(player)) {
+		if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -54,21 +64,21 @@ public class VanishListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDropItem(final PlayerDropItemEvent event) {
 		final Player player = event.getPlayer();
-		if(Vanish.isVanished(player)) {
+		if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if(event.isCancelled()) {
-			return;
-		}
 		final Player player = event.getPlayer();
-		if(!Vanish.isVanished(player)) {
+		if(!VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			return;
 		}
-		if(!player.isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+		if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.SOIL) {
+			event.setCancelled(true);
+		} else if(!player.isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			final Block block = event.getClickedBlock();
 			Inventory inventory = null;
 			final BlockState blockState = block.getState();
@@ -83,41 +93,11 @@ public class VanishListener implements Listener {
 				inventory = player.getEnderChest();
 				break;
 			}
-			case DISPENSER: {
-				inventory = ((Dispenser) blockState).getInventory();
-				break;
-			}
-			case HOPPER: {
-				inventory = ((Hopper) blockState).getInventory();
-				break;
-			}
-			case DROPPER: {
-				inventory = ((Dropper) blockState).getInventory();
-				break;
-			}
-			case FURNACE: {
-				inventory = ((Furnace) blockState).getInventory();
-				break;
-			}
-			case BREWING_STAND: {
-				inventory = ((BrewingStand) blockState).getInventory();
-				break;
-			}
-			case BEACON: {
-				inventory = ((Beacon) blockState).getInventory();
-				break;
-			}
 			default:
-				break;
-			}
-			if(inventory != null) {
-				event.setCancelled(true);
-				player.openInventory(inventory);
 				return;
 			}
-		}
-		if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.SOIL) {
 			event.setCancelled(true);
+			player.openInventory(inventory);
 		}
 	}
 
@@ -126,15 +106,16 @@ public class VanishListener implements Listener {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
 		player.getActivePotionEffects().removeIf(p -> p.getType() == PotionEffectType.INVISIBILITY && p.getDuration() == 0);
-		Vanish.getVanished().forEach(vanishPlayer -> player.hidePlayer(vanishPlayer));
+		VerifPlayerPlugin.getInstance().getVanishHandler().getVanished().forEach(vanishPlayer -> player.hidePlayer(vanishPlayer));
 	}
 
 	@EventHandler
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		if(Vanish.isVanished(player)) {
+		final VanishHandler vanishHandler = VerifPlayerPlugin.getInstance().getVanishHandler();
+		if(vanishHandler.isVanished(player)) {
 			event.setQuitMessage(null);
-			Vanish.removeVanish(player);
+			vanishHandler.removeVanishMetadata(player);
 		}
 	}
 
@@ -146,7 +127,7 @@ public class VanishListener implements Listener {
 			}
 
 			final Player player = (Player) entity;
-			if(Vanish.isVanished(player)) {
+			if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 				event.setIntensity(player, 0);
 			}
 		}

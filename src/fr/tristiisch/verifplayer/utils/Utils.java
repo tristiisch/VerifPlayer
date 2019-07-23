@@ -23,6 +23,13 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Utils {
 
+	public static String capitalizeFirstLetter(final String original) {
+		if(original == null || original.length() == 0) {
+			return original;
+		}
+		return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
+	}
+
 	public static long getCurrentTimeinSeconds() {
 		return System.currentTimeMillis() / 1000L;
 	}
@@ -30,8 +37,6 @@ public class Utils {
 	public static List<String> replaceAll(final List<String> list, final Map<String, String> replace) {
 		for(int i = 0; list.size() > i; i++) {
 			String string = list.get(i);
-			/*			final List<Entry<String, String>> entryToReplace = replace.entrySet().stream().filter(entry -> s.contains(entry.getKey())).collect(Collectors.toList());
-						if(!entryToReplace.isEmpty()) {*/
 			for(final Entry<String, String> entry : replace.entrySet()) {
 
 				if(string.contains(entry.getKey())) {
@@ -40,7 +45,6 @@ public class Utils {
 
 			}
 			list.add(i, string);
-			/*			}*/
 		}
 		return list;
 	}
@@ -60,7 +64,7 @@ public class Utils {
 		if(s > 60 * 60 * 24) {
 			return "**:**";
 		} else {
-			return LocalTime.ofSecondOfDay(s).toString();
+			return LocalTime.ofSecondOfDay(s).toString().replaceFirst("^(00:)", "");
 		}
 	}
 

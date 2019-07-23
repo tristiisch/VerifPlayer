@@ -10,60 +10,66 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class PlayerInfo {
+public class PlayerInfo extends PlayerInfoHook {
 
-	private Integer clickAir;
-	private Integer clickEntity;
+	private int clickAir = 0;
+	private int clickEntity = 0;
+	private int maxCPS = 0;
+	private int alert = 0;
+	private long lastAlert = 0L;
+
 	private final List<Integer> clicksAir = new ArrayList<>();
+
 	private final List<Integer> clicksEntity = new ArrayList<>();
 	private final Map<Long, Integer> alertHistory = new HashMap<>();
-	private long lastAlert;
-	private int maxCPS;
-	private int nbAlerts;
 	private List<UUID> alreadyTeleportedPlayers = new ArrayList<>();
 
-	public PlayerInfo() {
-		this.clickAir = 0;
-		this.clickEntity = 0;
-		this.lastAlert = 0L;
-		this.maxCPS = 0;
-		this.nbAlerts = 0;
+	public PlayerInfo(final Player player) {
+		super(player);
 	}
 
-	public void addClickAir() {
+	public void addAirClick() {
 		++this.clickAir;
 	}
 
-	public void addClickEntity() {
+	public void addAlert() {
+		++this.alert;
+	}
+
+	public void addAlertHistory(final long time, final int value) {
+		this.alertHistory.put(time, value);
+	}
+
+	public void addEntityClick() {
 		++this.clickEntity;
 	}
 
-	public void addNbAlerts() {
-		++this.nbAlerts;
+	public void clearAlreadyTeleportedPlayers() {
+		this.alreadyTeleportedPlayers.clear();
+	}
+
+	public List<Integer> getAirClicks() {
+		return this.clicksAir;
 	}
 
 	public Map<Long, Integer> getAlertHistory() {
 		return this.alertHistory;
 	}
 
+	public int getNumberAlert() {
+		return this.alert;
+	}
+
 	public List<Player> getAlreadyTeleportedPlayers() {
 		return this.alreadyTeleportedPlayers.stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(player -> player != null).collect(Collectors.toList());
 	}
 
-	public Integer getClickAir() {
+	public int getClickAir() {
 		return this.clickAir;
 	}
 
-	public Integer getClickEntity() {
+	public int getClickEntity() {
 		return this.clickEntity;
-	}
-
-	public List<Integer> getClicksAir() {
-		return this.clicksAir;
-	}
-
-	public List<Integer> getClicksEntity() {
-		return this.clicksEntity;
 	}
 
 	public int getCurrentClicks() {
@@ -74,6 +80,10 @@ public class PlayerInfo {
 		return this.clicksAir.get(i - 1) + this.clicksEntity.get(i - 1);
 	}
 
+	public List<Integer> getEntityClicks() {
+		return this.clicksEntity;
+	}
+
 	public long getLastAlert() {
 		return this.lastAlert;
 	}
@@ -82,23 +92,15 @@ public class PlayerInfo {
 		return this.maxCPS;
 	}
 
-	public int getNbAlerts() {
-		return this.nbAlerts;
-	}
-
-	public void putAlertHistory(final long time, final int value) {
-		this.alertHistory.put(time, value);
-	}
-
-	public void removeClickAir() {
+	public void removeAirClick() {
 		--this.clickAir;
 	}
 
-	public void resetClickAir() {
+	public void resetAirClick() {
 		this.clickAir = 0;
 	}
 
-	public void resetClickEntity() {
+	public void resetEntityClick() {
 		this.clickEntity = 0;
 	}
 
@@ -106,12 +108,11 @@ public class PlayerInfo {
 		this.alreadyTeleportedPlayers = alreadyTeleportedPlayers.stream().map(Player::getUniqueId).collect(Collectors.toList());
 	}
 
-	public void setLastAlert(final long timestamp) {
-		this.lastAlert = timestamp;
+	public void setLastAlert(final long lastAlert) {
+		this.lastAlert = lastAlert;
 	}
 
 	public void setMaxCPS(final int maxCPS) {
 		this.maxCPS = maxCPS;
 	}
-
 }

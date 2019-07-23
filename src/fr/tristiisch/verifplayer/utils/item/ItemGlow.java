@@ -11,14 +11,6 @@ public class ItemGlow extends EnchantmentWrapper {
 
 	private static Enchantment glow;
 
-	public ItemGlow(final int id) {
-		super(id);
-	}
-
-	public static ItemEnchant getItemGlowEnchant() {
-		return new ItemEnchant(getGlowEnchant());
-	}
-
 	public static Enchantment getGlowEnchant() {
 		if(glow != null) {
 			return glow;
@@ -40,9 +32,23 @@ public class ItemGlow extends EnchantmentWrapper {
 		return glow;
 	}
 
+	public static ItemEnchant getItemGlowEnchant() {
+		return new ItemEnchant(getGlowEnchant());
+	}
+
 	public static boolean isGlow(final ItemStack item) {
 		return item.getEnchantments().containsKey(glow);
 	}
+
+	// TODO 1.13 comptatiblity
+	public ItemGlow(final int id) {
+		super(id);
+	}
+
+	/*
+		public ItemGlow(final String id) {
+			super(id);
+		}*/
 
 	@Override
 	public boolean canEnchantItem(final ItemStack item) {

@@ -11,14 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem;
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem.VerifGuiSlot;
 
 public class VerifGuiRunnable {
 
 	public static void run() {
-		for(final Entry<UUID, Set<UUID>> entry : VerifGuiManager.getPlayersBeingChecked().entrySet()) {
+		for(final Entry<UUID, Set<UUID>> entry : VerifPlayerPlugin.getInstance().getVerifGuiHandler().getPlayersBeingChecked().entrySet()) {
 			final UUID uuid = entry.getKey();
 			final Set<UUID> viewers = entry.getValue();
 			final Player player = Bukkit.getPlayer(uuid);

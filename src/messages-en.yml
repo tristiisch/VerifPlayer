@@ -1,5 +1,5 @@
+version: 1.1
 messages:
-    version: 1.0
     cantconsole: "&cCan not use this command with the console"
     noperm: "&cYou haven't got the permission"
 
@@ -50,9 +50,17 @@ messages:
 
         tpsitemname: "&6TPS"
         tpsformat: "&7%time%min: %color%%tps%"
-        
+
     verifspec:
+      enable: "&2VerifPlayer &7» &aVerifSpec enabled." 
+      disable: "&2VerifPlayer &7» &cVerifSpec disabled."
+      shouldbeonground: "&2VerifPlayer &7» &cYou should be on the ground to use this command."
+      distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
+      teleportermsg:
+        noplayers: "&2VerifPlayer &7» &cThere are no players."
+        succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
       teleporter:
+         enable: true
          # item list: https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html
          item: COMPASS
          # slot from 0 to 8
@@ -109,16 +117,34 @@ messages:
          lore:
            - ""
            - "&7Increases your speed"
-      # add a custom item
-      custom:
-         enable: false
+      # Exit gui item
+      quit:
+         enable: true
          item: BARRIER
-         slot: 7
-         name: ""
-         lore:
-           - ""
-           - ""
-    
+         slot: 35
+         name: "&cExit"
+         lore: null
+
+    freeze:
+      usage: "&cUsage &7» &c/freeze <player> [reason]"
+      playerfreeze: "&2VerifPlayer &7» &aYou have frozen &2%player%&a."
+      playerfreezereason: "&2VerifPlayer &7» &aYou have frozen &2%player%&a for &2%reason%."
+      playerunfreeze: "&2VerifPlayer &7» &cYou have unfrozen &4%player%&c."
+      title: "&cYou have been frozen"
+      subtitle: "&4Follow the instructions of moderator"
+      subtitlereason: "&4Reason : &c"
+      nolongerfreezetitle: "&aYou are no longer frozen"
+      nolongerfreezesubtitle: ""
+      playernotconnected: "&2VerifPlayer &7» &cThe player &4%player%&c is not connected."
+      playerdisconnectwhilefreeze: "&2VerifPlayer &7» &cThe player &4%player%&c disconnected while frozen."
+      # While someone want to attack a frozen player
+      playerisfreeze: "&cDon't hurt him, he is frozen !"
+      
+    vanish:
+      enable: "&2VerifPlayer &7» &aVanish enabled."
+      diable: "&2VerifPlayer &7» &cVanish disabled."
+
+      
     time:
        year: "year"
        years: "years"

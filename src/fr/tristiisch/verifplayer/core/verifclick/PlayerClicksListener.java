@@ -11,8 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
-import fr.tristiisch.verifplayer.playerinfo.PlayersInfos;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class PlayerClicksListener implements Listener {
@@ -23,15 +23,14 @@ public class PlayerClicksListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getDamager();
-		final PlayerInfo playerInfo = PlayersInfos.getPlayerInfo(player);
-		playerInfo.addClickEntity();
-		Block blockTarget;
-		blockTarget = player.getTargetBlock((Set<Material>) null, 6);
+		final PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
+		playerInfo.addEntityClick();
+		final Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
 
 		if(blockTarget.getType() == Material.AIR) {
-			playerInfo.removeClickAir();
+			playerInfo.removeAirClick();
 		}
-		if(playerInfo.getClickEntity() > ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt()) {
+		if(playerInfo.getClickEntity() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
 			event.setCancelled(true);
 		}
 	}
@@ -42,11 +41,10 @@ public class PlayerClicksListener implements Listener {
 			return;
 		}
 		final Player player = event.getPlayer();
-		final PlayerInfo playerInfo = PlayersInfos.getPlayerInfo(player);
-		playerInfo.addClickAir();
-		if(playerInfo.getClickAir() > ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt()) {
+		final PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
+		playerInfo.addAirClick();
+		if(playerInfo.getClickAir() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
 			event.setCancelled(true);
 		}
-
 	}
 }

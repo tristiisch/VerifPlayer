@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.utils.SpigotUtils;
-import fr.tristiisch.verifplayer.utils.config.CustomConfig.CustomConfigs;
+import fr.tristiisch.verifplayer.utils.config.CustomConfigs.CustomConfig;
 
 public enum ConfigGet {
 
@@ -55,26 +56,44 @@ public enum ConfigGet {
 	SETTINGS_SIZEHISTORYCPS,
 	SETTINGS_MAXCPS,
 	SETTINGS_TIMEBETWEENALERTS,
-	SETTINGS_LANGUAGE, 
+	SETTINGS_LANGUAGE,
 
 	MESSAGES_FREEZE_TITLE,
-	MESSAGES_FREEZE_SUBTITLE, 
-	MESSAGES_FREEZE_PLAYERNOTCONNECTED, 
-	MESSAGES_FREEZE_PLAYERUNFREEZE, 
+	MESSAGES_FREEZE_SUBTITLE,
+	MESSAGES_FREEZE_SUBTITLEREASON,
+	MESSAGES_FREEZE_PLAYERNOTCONNECTED,
+	MESSAGES_FREEZE_PLAYERUNFREEZE,
 	MESSAGES_FREEZE_PLAYERFREEZE,
-	MESSAGES_FREEZE_PLAYERFREEZREASON, 
-	MESSAGES_FREEZE_USAGE, 
-	MESSAGES_FREEZE_NOMOREFREEZETITLE,
-	MESSAGES_FREEZE_NOMOREFREEZESUBTITLE,
-	MESSAGES_FREEZE_PLAYERISFREEZE, 
-	MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE, MESSAGES_VANISH_ENABLE, MESSAGES_VANISH_DISABLE,
+	MESSAGES_FREEZE_PLAYERFREEZREASON,
+	MESSAGES_FREEZE_USAGE,
+	MESSAGES_FREEZE_NOLONGERFREEZETITLE,
+	MESSAGES_FREEZE_NOLONGERFREEZESUBTITLE,
+	MESSAGES_FREEZE_PLAYERISFREEZE,
+	MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE,
+	MESSAGES_VANISH_ENABLE,
+	MESSAGES_VANISH_DISABLE,
+	MESSAGES_VERIFSPEC_TELEPORTERMSG_NOPLAYERS,
+	MESSAGES_VERIFSPEC_TELEPORTERMSG_SUCCES,
+	MESSAGES_VERIFSPEC_DISABLE,
+	MESSAGES_VERIFSPEC_ENABLE,
+	MESSAGES_VERIFSPEC_SHOULDBEONGROUND,
+	MESSAGES_VERIFSPEC_DISTANCETOOFAR,
 	;
+
+	static {
+		for(final ConfigGet configGet : ConfigGet.values()) {
+			final YamlConfiguration config = configGet.getConfig();
+			if(config.get(configGet.getPath()) == null) {
+				VerifPlayerPlugin.getInstance().sendMessage("The value in config '" + configGet.getPath() + "' is null.");
+			}
+		}
+	}
 
 	public YamlConfiguration getConfig() {
 		if(this.toString().startsWith("MESSAGES")) {
-			return CustomConfigs.MESSAGES.getConfig();
+			return CustomConfig.MESSAGES.getConfig();
 		}
-		return CustomConfigs.DEFAULT.getConfig();
+		return CustomConfig.DEFAULT.getConfig();
 	}
 
 	public double getDouble() {

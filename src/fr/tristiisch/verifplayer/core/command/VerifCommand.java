@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiManager;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
@@ -35,17 +35,17 @@ public class VerifCommand implements CommandExecutor {
 			return true;
 		}
 
-		if(Permission.ADMIN.hasPermission(target) && !Permission.ADMIN.hasPermission(player)) {
+		if(Permission.ADMIN_CANTVERIF.hasPermission(target) && !Permission.ADMIN_CANTVERIF.hasPermission(player)) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_CANTVERIFADMIN.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
 
-		if(target.getUniqueId().equals(player.getUniqueId()) && !Permission.ADMIN.hasPermission(sender)) {
+		if(target.getUniqueId().equals(player.getUniqueId()) && !Permission.ADMIN_CANTVERIF.hasPermission(sender)) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_CANTVERIFYOURSELF.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
 
-		VerifGuiManager.openVerifGUi(player, target);
+		VerifPlayerPlugin.getInstance().getVerifGuiHandler().openVerifGUi(player, target);
 		return true;
 	}
 }
