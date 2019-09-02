@@ -43,7 +43,7 @@ public class GuiCreator {
 
 	private Inventory getInventory() {
 		final Inventory inventory = Bukkit.createInventory(null, this.guiPage.getSize(), SpigotUtils.color(this.guiPage.getTitle()));
-		if(!this.items.isEmpty()) {
+		if (!this.items.isEmpty()) {
 			this.items.entrySet().forEach(entry -> inventory.setItem(entry.getKey(), entry.getValue()));
 		}
 		return inventory;

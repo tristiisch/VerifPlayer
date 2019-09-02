@@ -34,7 +34,7 @@ public class InventoryListener implements Listener {
 
 	public static void updateInventory(final Player player) {
 		final Set<UUID> viewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
-		if(viewers == null) {
+		if (viewers == null) {
 			return;
 		}
 
@@ -44,18 +44,18 @@ public class InventoryListener implements Listener {
 
 			final Iterator<Entry<Integer, ItemStack>> iterator = items.entrySet().iterator();
 
-			for(final UUID viewersUuid : viewers) {
+			for (final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
 				final InventoryView inventory = viewer.getOpenInventory();
 
-				while(iterator.hasNext()) {
+				while (iterator.hasNext()) {
 					final Entry<Integer, ItemStack> entry = iterator.next();
 
 					final int itemSlot = entry.getKey();
 					final ItemStack newItem = entry.getValue();
 					final ItemStack actuelItem = inventory.getItem(itemSlot);
 
-					if(actuelItem != null && newItem != null && actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount()) {
+					if (actuelItem != null && newItem != null && actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount()) {
 						items.remove(itemSlot);
 					} else {
 						inventory.setItem(itemSlot, newItem);
@@ -70,7 +70,7 @@ public class InventoryListener implements Listener {
 		final Player player = event.getPlayer();
 
 		final ItemStack item = event.getPlayer().getItemInHand();
-		if(item == null || !(item.getItemMeta() instanceof Repairable)) {
+		if (item == null || !(item.getItemMeta() instanceof Repairable)) {
 			return;
 		}
 		updateInventory(player);
@@ -84,7 +84,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
@@ -93,7 +93,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityShootBow(final EntityShootBowEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 
@@ -103,7 +103,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onHangingBreak(final HangingBreakByEntityEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 
@@ -147,7 +147,7 @@ public class InventoryListener implements Listener {
 		final ItemStack item;
 		item = event.getPlayer().getItemInHand();
 
-		if(item == null || !(item.getItemMeta() instanceof Repairable)) {
+		if (item == null || !(item.getItemMeta() instanceof Repairable)) {
 			return;
 		}
 		updateInventory(player);

@@ -24,7 +24,7 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 public class Utils {
 
 	public static String capitalizeFirstLetter(final String original) {
-		if(original == null || original.length() == 0) {
+		if (original == null || original.length() == 0) {
 			return original;
 		}
 		return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
@@ -35,11 +35,11 @@ public class Utils {
 	}
 
 	public static List<String> replaceAll(final List<String> list, final Map<String, String> replace) {
-		for(int i = 0; list.size() > i; i++) {
+		for (int i = 0; list.size() > i; i++) {
 			String string = list.get(i);
-			for(final Entry<String, String> entry : replace.entrySet()) {
+			for (final Entry<String, String> entry : replace.entrySet()) {
 
-				if(string.contains(entry.getKey())) {
+				if (string.contains(entry.getKey())) {
 					string = string.replaceAll(entry.getKey(), entry.getValue());
 				}
 
@@ -50,7 +50,7 @@ public class Utils {
 	}
 
 	public static double round(double value, final int x) {
-		if(x < 0) {
+		if (x < 0) {
 			throw new IllegalArgumentException();
 		}
 
@@ -61,7 +61,7 @@ public class Utils {
 	}
 
 	public static String secondsToCalendar(final long s) {
-		if(s > 60 * 60 * 24) {
+		if (s > 60 * 60 * 24) {
 			return "**:**";
 		} else {
 			return LocalTime.ofSecondOfDay(s).toString().replaceFirst("^(00:)", "");
@@ -90,7 +90,7 @@ public class Utils {
 
 		LocalDateTime start;
 		LocalDateTime end;
-		if(timestamp > now) {
+		if (timestamp > now) {
 			start = now2;
 			end = timestamp2;
 		} else {
@@ -101,7 +101,7 @@ public class Utils {
 		Duration dur = Duration.between(start.toLocalTime(), end.toLocalTime());
 		LocalDate e = end.toLocalDate();
 
-		if(dur.isNegative()) {
+		if (dur.isNegative()) {
 			dur = dur.plusDays(1);
 			e = e.minusDays(1);
 		}
@@ -115,43 +115,43 @@ public class Utils {
 		final long second = dur.getSeconds() - 60 * dur.toMinutes();
 
 		final List<String> msgs = new ArrayList<>();
-		if(year > 1) {
+		if (year > 1) {
 			msgs.add(year + " " + ConfigGet.MESSAGES_TIME_YEARS.getString());
-		} else if(year == 1) {
+		} else if (year == 1) {
 			msgs.add(year + " " + ConfigGet.MESSAGES_TIME_YEAR.getString());
 		}
 
-		if(month > 1) {
+		if (month > 1) {
 			msgs.add(month + " " + ConfigGet.MESSAGES_TIME_MONTHS.getString());
-		} else if(month == 1) {
+		} else if (month == 1) {
 			msgs.add(month + " " + ConfigGet.MESSAGES_TIME_MONTH.getString());
 		}
 
-		if(msgs.size() < 2) {
-			if(day > 1) {
+		if (msgs.size() < 2) {
+			if (day > 1) {
 				msgs.add(day + " " + ConfigGet.MESSAGES_TIME_DAYS.getString());
-			} else if(day == 1) {
+			} else if (day == 1) {
 				msgs.add(day + " " + ConfigGet.MESSAGES_TIME_DAY.getString());
 			}
 
-			if(msgs.size() < 2) {
-				if(hour > 1) {
+			if (msgs.size() < 2) {
+				if (hour > 1) {
 					msgs.add(hour + " " + ConfigGet.MESSAGES_TIME_HOURS.getString());
-				} else if(hour == 1) {
+				} else if (hour == 1) {
 					msgs.add(hour + " " + ConfigGet.MESSAGES_TIME_HOUR.getString());
 				}
 
-				if(msgs.size() < 2) {
-					if(minute > 1) {
+				if (msgs.size() < 2) {
+					if (minute > 1) {
 						msgs.add(minute + " " + ConfigGet.MESSAGES_TIME_MINUTES.getString());
-					} else if(minute == 1) {
+					} else if (minute == 1) {
 						msgs.add(minute + " " + ConfigGet.MESSAGES_TIME_MINUTE.getString());
 					}
 
-					if(msgs.size() < 2) {
-						if(second > 1) {
+					if (msgs.size() < 2) {
+						if (second > 1) {
 							msgs.add(second + " " + ConfigGet.MESSAGES_TIME_SECONDS.getString());
-						} else if(second == 1) {
+						} else if (second == 1) {
 							msgs.add(second + " " + ConfigGet.MESSAGES_TIME_SECOND.getString());
 						}
 					}
@@ -174,7 +174,7 @@ public class Utils {
 
 	public static String translateEffects(String s) {
 		s = WordUtils.capitalize(s.toLowerCase()).replaceAll("_", " ");
-		switch(s) {
+		switch (s) {
 		case "Absorption":
 			return "Absorption";
 		case "Blindness":

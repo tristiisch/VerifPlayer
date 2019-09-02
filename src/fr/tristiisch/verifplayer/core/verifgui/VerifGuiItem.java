@@ -91,7 +91,7 @@ public class VerifGuiItem {
 		lore.add("");
 
 		String nbAlert;
-		if(playerInfo.getNumberAlert() > 1) {
+		if (playerInfo.getNumberAlert() > 1) {
 			nbAlert = ConfigGet.MESSAGES_VERIFGUI_NBALERTS.getString();
 		} else {
 			nbAlert = ConfigGet.MESSAGES_VERIFGUI_NBALERT.getString();
@@ -103,7 +103,7 @@ public class VerifGuiItem {
 		cpsMax = cpsMax.replaceAll("%cps_max%", String.valueOf(playerInfo.getMaxCPS()));
 		lore.add(cpsMax);
 		lore.add("");
-		for(int i = playerInfo.getAirClicks().size() - 1; i >= 0; --i) {
+		for (int i = playerInfo.getAirClicks().size() - 1; i >= 0; --i) {
 			final int clickAir = playerInfo.getAirClicks().get(i);
 			final int clickEntity = playerInfo.getEntityClicks().get(i);
 			final int clickGlobal = clickAir + clickEntity;
@@ -117,15 +117,14 @@ public class VerifGuiItem {
 		}
 		do {
 			lore.add("");
-		} while(ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt() + 4 > lore.size());
+		} while (ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt() + 4 > lore.size());
 
 		final Map<Long, Integer> alertHistory = playerInfo.getAlertHistory();
-		if(!alertHistory.isEmpty()) {
+		if (!alertHistory.isEmpty()) {
 
-			for(final Entry<Long, Integer> entry2 : alertHistory.entrySet()) {
+			for (final Entry<Long, Integer> entry2 : alertHistory.entrySet()) {
 				final long time = entry2.getKey();
-				final int click = entry2.getValue();
-				;
+				final int click = entry2.getValue();;
 				String string = ConfigGet.MESSAGES_VERIFGUI_CPSALERTFORMAT.getString();
 
 				string = string.replace("%cps%", String.valueOf(click));
@@ -135,13 +134,12 @@ public class VerifGuiItem {
 			lore.add("");
 		}
 
-		if(currentClick == 0) {
+		if (currentClick == 0) {
 			currentClick = 1;
 		}
 		final ChatColor[] colors = ChatColor.values();
 		final ChatColor ramdomColor = ChatColor.values()[new Random().nextInt(colors.length)];
-		return new ItemCreator(Material.STAINED_GLASS_PANE).size(currentClick).dataValue(glassPaneColor).customName(ramdomColor + ConfigGet.MESSAGES_VERIFGUI_CPSITEMNAME.getString()).lore(lore)
-				.getItemStack();
+		return new ItemCreator(Material.STAINED_GLASS_PANE).size(currentClick).dataValue(glassPaneColor).customName(ramdomColor + ConfigGet.MESSAGES_VERIFGUI_CPSITEMNAME.getString()).lore(lore).getItemStack();
 	}
 
 	public static ItemStack getEffects(final Player player) {
@@ -151,20 +149,20 @@ public class VerifGuiItem {
 		int effectSize = potionEffects.size();
 		String name = ConfigGet.MESSAGES_VERIFGUI_EFFECT.getString();
 		Material material;
-		if(effectSize == 0) {
+		if (effectSize == 0) {
 			lore.add(ConfigGet.MESSAGES_VERIFGUI_NOEFFECT.getString());
 			material = Material.GLASS_BOTTLE;
 			effectSize = 1;
 		} else {
 			name = String.valueOf(name) + "s";
 			material = Material.POTION;
-			for(final PotionEffect potionEffect : potionEffects) {
+			for (final PotionEffect potionEffect : potionEffects) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append("&7");
 				sb.append(Utils.capitalizeFirstLetter(potionEffect.getType().getName().replace("_", " ")));
 				sb.append(" ");
 				sb.append(potionEffect.getAmplifier() + 1);
-				if(!potionEffect.hasParticles()) {
+				if (!potionEffect.hasParticles()) {
 					sb.append(ConfigGet.MESSAGES_VERIFGUI_NOPARTICLE.getString());
 				}
 				sb.append(": &e");
@@ -186,18 +184,18 @@ public class VerifGuiItem {
 		final ItemStack[] armors = playerInventory.getArmorContents();
 		ArrayUtils.reverse(armors);
 		ItemStack[] array;
-		for(int length = (array = armors).length, k = 0; k < length; ++k) {
+		for (int length = (array = armors).length, k = 0; k < length; ++k) {
 			ItemStack armorItem = array[k];
-			if(armorItem == null) {
+			if (armorItem == null) {
 				armorItem = itemStackAir;
 			}
 			items.put(slot++, armorItem);
 		}
 
 		// OffHand if 1.9+
-		if(ServerVersion.V1_9.isEqualOrOlder()) {
+		if (ServerVersion.V1_9.isEqualOrOlder()) {
 			ItemStack itemInOffHand = playerInventory.getItemInOffHand();
-			if(itemInOffHand == null) {
+			if (itemInOffHand == null) {
 				itemInOffHand = itemStackAir;
 			}
 			items.put(VerifGuiSlot.OFFHAND.getSlot(), itemInOffHand);
@@ -207,18 +205,18 @@ public class VerifGuiItem {
 		int slotInv = VerifGuiSlot.INVENTORY.getSlot();
 		int slotHotbar = VerifGuiSlot.HOTBAR.getSlot();
 		ItemStack[] contents;
-		for(int length2 = (contents = playerInventory.getContents()).length, l = 0; l < length2; ++l) {
+		for (int length2 = (contents = playerInventory.getContents()).length, l = 0; l < length2; ++l) {
 			ItemStack itemStack = contents[l];
 			int slot1 = -1;
-			if(slotHotbar < VerifGuiSlot.HOTBAR.getSlot() + 9) {
+			if (slotHotbar < VerifGuiSlot.HOTBAR.getSlot() + 9) {
 				slot1 = slotHotbar++;
-			} else if(slotInv < VerifGuiSlot.HOTBAR.getSlot()) {
+			} else if (slotInv < VerifGuiSlot.HOTBAR.getSlot()) {
 				slot1 = slotInv++;
 			} else {
 				continue;
 			}
 
-			if(itemStack == null) {
+			if (itemStack == null) {
 				itemStack = itemStackAir;
 			}
 			items.put(slot1, itemStack);
@@ -227,7 +225,7 @@ public class VerifGuiItem {
 		// Holding slot
 		slot = VerifGuiSlot.HOLDING.getSlot();
 		final int heldSlot = playerInventory.getHeldItemSlot() + slot;
-		for(int i2 = slot; slot + 9 > i2; ++i2) {
+		for (int i2 = slot; slot + 9 > i2; ++i2) {
 			items.put(i2, itemStackAir);
 		}
 		items.put(heldSlot, new ItemCreator(Material.GHAST_TEAR).customName("&ePlayer Holding").getItemStack());
@@ -243,25 +241,25 @@ public class VerifGuiItem {
 		ChatColor chatColor2 = SpigotUtils.getIntervalChatColor(ping, 100, 200);
 		lore.add("");
 		lore.add(ConfigGet.MESSAGES_VERIFGUI_PINGFORMAT.getString().replaceAll("%color%", chatColor2.toString()).replaceAll("%ping%", String.valueOf(ping)));
-		if(ping == 0) {
+		if (ping == 0) {
 			ping = 1;
 		}
 		lore.add("");
 		lore.add(ConfigGet.MESSAGES_VERIFGUI_TPSITEMNAME.getString());
 		lore.add("");
-		for(int j = 0; j < tps.length; ++j) {
+		for (int j = 0; j < tps.length; ++j) {
 			final double tpsDouble = tps[j];
 			final int tpsInt = (int) Math.round(tpsDouble);
-			if(tpsInt >= 18) {
+			if (tpsInt >= 18) {
 				chatColor2 = ChatColor.GREEN;
-			} else if(tpsInt >= 16) {
+			} else if (tpsInt >= 16) {
 				chatColor2 = ChatColor.GOLD;
 			} else {
 				chatColor2 = ChatColor.RED;
 			}
 			String tpsFormat = ConfigGet.MESSAGES_VERIFGUI_TPSFORMAT.getString();
 			int time = 0;
-			switch(j) {
+			switch (j) {
 			case 0:
 				time = 1;
 				break;
@@ -291,7 +289,7 @@ public class VerifGuiItem {
 
 		final ConcurrentHashMap<String, String> replace = new ConcurrentHashMap<>();
 
-		if(player.isDead()) {
+		if (player.isDead()) {
 			replace.put("%heal%", SpigotUtils.color("&4Dead"));
 		} else {
 			final StringBuilder heal = new StringBuilder();
@@ -301,7 +299,7 @@ public class VerifGuiItem {
 		}
 
 		final String rank = HookHandler.getInstance().getGroup(player);
-		if(rank == null) {
+		if (rank == null) {
 			replace.put("%rank%", "");
 		} else {
 			replace.put("%rank%", rank);
@@ -315,9 +313,9 @@ public class VerifGuiItem {
 
 		replace.put("%last_played%", Utils.timestampToDateAndHour(player.getLastPlayed() / 1000L));
 
-		if(player.isInsideVehicle()) {
+		if (player.isInsideVehicle()) {
 			final Entity entity = player.getVehicle();
-			if(ServerVersion.V1_8.isEqualOrOlder()) {
+			if (ServerVersion.V1_8.isEqualOrOlder()) {
 				replace.put("%vehicule%", entity.getName());
 			}
 
@@ -327,13 +325,13 @@ public class VerifGuiItem {
 
 		final String guiName;
 		final GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
-		if(gui != null) {
+		if (gui != null) {
 			final GuiPage guiPage = gui.getGuiPage();
 			guiName = guiPage.getDescription();
 
 		} else {
 			final InventoryView openInventory = player.getOpenInventory();
-			if(openInventory != null && openInventory.getType() != InventoryType.CRAFTING && openInventory.getType() != InventoryType.CREATIVE) {
+			if (openInventory != null && openInventory.getType() != InventoryType.CRAFTING && openInventory.getType() != InventoryType.CREATIVE) {
 				guiName = Utils.capitalizeFirstLetter(openInventory.getType().name());
 			} else {
 				guiName = SpigotUtils.color("&c\u2716");
@@ -343,15 +341,15 @@ public class VerifGuiItem {
 
 		List<String> infos = ConfigGet.MESSAGES_VERIFGUI_INFO.getStringList();
 
-		for(int i = 0; infos.size() > i; i++) {
+		for (int i = 0; infos.size() > i; i++) {
 			String string = infos.get(i);
 
-			for(final Entry<String, String> entry : replace.entrySet()) {
+			for (final Entry<String, String> entry : replace.entrySet()) {
 				final String toBeReplaced = entry.getKey();
 				final String value = entry.getValue();
 
-				if(string.contains(toBeReplaced)) {
-					if(value.isEmpty()) {
+				if (string.contains(toBeReplaced)) {
+					if (value.isEmpty()) {
 						infos.remove(i--);
 						replace.remove(toBeReplaced);
 						break;
@@ -364,7 +362,7 @@ public class VerifGuiItem {
 
 		}
 
-		if(PlaceholderAPIHook.getInstance().isEnabled()) {
+		if (PlaceholderAPIHook.getInstance().isEnabled()) {
 			infos = PlaceholderAPI.setPlaceholders(player, infos);
 		}
 		itemCreator.lore(infos);

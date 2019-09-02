@@ -19,14 +19,14 @@ public class VanishHandler extends VanishAbstract {
 	public void disable(final Player player, final boolean showMessage) {
 
 		final VanishHook vanishHook = VanishHook.getInstance();
-		if(!vanishHook.isEnabled()) {
+		if (!vanishHook.isEnabled()) {
 			Bukkit.getOnlinePlayers().forEach(players -> players.showPlayer(player));
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.spigot().setCollidesWithEntities(true);
 			removeVanishMetadata(player);
 
 			final Essentials ess = EssentialsHook.getInstance().getEssentials();
-			if(ess != null) {
+			if (ess != null) {
 				final User user = ess.getUser(player);
 				user.setVanished(false);
 			}
@@ -34,7 +34,7 @@ public class VanishHandler extends VanishAbstract {
 			vanishHook.showPlayer(player);
 		}
 
-		if(showMessage) {
+		if (showMessage) {
 			player.sendMessage(ConfigGet.MESSAGES_VANISH_DISABLE.getString());
 			// player.sendMessage(SpigotUtils.color("&cMode invisible désactivé."));
 		}
@@ -44,14 +44,14 @@ public class VanishHandler extends VanishAbstract {
 	public void enable(final Player player, final boolean showMessage) {
 
 		final VanishHook vanishHook = VanishHook.getInstance();
-		if(!vanishHook.isEnabled()) {
+		if (!vanishHook.isEnabled()) {
 			Permission.ADMIN_SEEVANISHED.getOnlinePlayersOpositeStream().forEach(noAdmin -> noAdmin.hidePlayer(player));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999999, 0, false, false), true);
 			player.spigot().setCollidesWithEntities(false);
 			addVanishMetadata(player);
 
 			final EssentialsHook essHook = EssentialsHook.getInstance();
-			if(essHook.isEssEnabled()) {
+			if (essHook.isEssEnabled()) {
 				final User user = essHook.getEssentials().getUser(player);
 				user.setVanished(true);
 			}
@@ -59,7 +59,7 @@ public class VanishHandler extends VanishAbstract {
 			vanishHook.hidePlayer(player);
 		}
 
-		if(showMessage) {
+		if (showMessage) {
 			player.sendMessage(ConfigGet.MESSAGES_VANISH_ENABLE.getString());
 			// player.sendMessage(SpigotUtils.color("&aMode invisible activé."));
 		}

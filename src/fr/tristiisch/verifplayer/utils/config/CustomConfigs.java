@@ -28,7 +28,7 @@ public class CustomConfigs {
 
 		private void createFolderIfNotExist() {
 			final File folder = this.getFolder();
-			if(!folder.exists()) {
+			if (!folder.exists()) {
 				folder.mkdir();
 			}
 		}
@@ -46,7 +46,7 @@ public class CustomConfigs {
 		}
 
 		public String getFileName() {
-			if(this.equals(CustomConfig.MESSAGES)) {
+			if (this.equals(CustomConfig.MESSAGES)) {
 				return this.fileName.replace("%lang%", langague);
 			}
 			return this.fileName;
@@ -70,20 +70,20 @@ public class CustomConfigs {
 			try {
 				File configFile = this.getFile(fileName);
 				final InputStream resource = this.getResource(fileName);
-				if(!configFile.exists()) {
+				if (!configFile.exists()) {
 					configFile.createNewFile();
-					if(resource != null) {
+					if (resource != null) {
 						ByteStreams.copy(resource, new FileOutputStream(configFile));
 					} else {
 						plugin.sendMessage("Config \"" + fileName + "\" unknown.");
 					}
-				} else if(resource != null) {
+				} else if (resource != null) {
 
 					final YamlConfiguration configInFolder = YamlConfiguration.loadConfiguration(configFile);
 					final YamlConfiguration jarConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
-					if(jarConfig.getDouble("version") > configInFolder.getDouble("version")) {
+					if (jarConfig.getDouble("version") > configInFolder.getDouble("version")) {
 						final String newName = fileName + " V" + configInFolder.getDouble("version");
-						plugin.sendMessage("Your file '" + fileName + "' has been updated, your old configuration is now called '" + newName + "'.");
+						plugin.sendMessage("Your file '" + fileName + "' has been updated, I use now DEFAULT CONFIG. Your old configuration is now called '" + newName + ".");
 						configFile.renameTo(new File(this.getFolder(), newName));
 						configFile = new File(this.getFolder(), fileName);
 						configFile.createNewFile();
@@ -92,16 +92,16 @@ public class CustomConfigs {
 				}
 
 				this.config = YamlConfiguration.loadConfiguration(configFile);
-				if(this.equals(CustomConfig.DEFAULT)) {
+				if (this.equals(CustomConfig.DEFAULT)) {
 					final String lang = this.config.getString("settings.language");
-					if(lang != null && lang.isEmpty()) {
+					if (lang != null && lang.isEmpty()) {
 						plugin.sendMessage("Language in config.yml where empty, so we load English messages. ");
 					} else {
 						langague = lang;
 					}
 				}
 				plugin.getServer().getPluginManager().callEvent(new CustomConfigLoadEvent(this));
-			} catch(final IOException e) {
+			} catch (final IOException e) {
 				plugin.sendMessage("Unable to load config: " + fileName);
 				e.printStackTrace();
 			}
@@ -112,7 +112,7 @@ public class CustomConfigs {
 			final File configFile = this.getFile(fileName);
 			try {
 				this.config.save(configFile);
-			} catch(final IOException e) {
+			} catch (final IOException e) {
 				plugin.sendMessage("Unable to save config: " + fileName);
 				e.printStackTrace();
 			}
@@ -129,7 +129,7 @@ public class CustomConfigs {
 
 	public static double loadConfigs() {
 		final long time = System.nanoTime();
-		for(final CustomConfig config : CustomConfig.values()) {
+		for (final CustomConfig config : CustomConfig.values()) {
 			config.load();
 		}
 		return (System.nanoTime() - time) / 1000000000d;
@@ -137,7 +137,7 @@ public class CustomConfigs {
 
 	public static double saveConfigs() {
 		final long time = System.nanoTime();
-		for(final CustomConfig config : CustomConfig.values()) {
+		for (final CustomConfig config : CustomConfig.values()) {
 			config.save();
 		}
 		return (System.nanoTime() - time) / 1000000000d;

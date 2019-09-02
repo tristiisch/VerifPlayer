@@ -24,7 +24,7 @@ public class TaskHandler {
 	}
 
 	public void cancelAllTask() {
-		for(final int taskId : this.taskList.values()) {
+		for (final int taskId : this.taskList.values()) {
 			this.getScheduler().cancelTask(taskId);
 		}
 	}
@@ -34,7 +34,7 @@ public class TaskHandler {
 	}
 
 	public boolean cancelTask(final String taskName) {
-		if(this.taskExist(taskName)) {
+		if (this.taskExist(taskName)) {
 			final int taskId = this.getTaskId(taskName);
 			this.taskList.remove(taskName);
 			this.getScheduler().cancelTask(taskId);
@@ -44,7 +44,7 @@ public class TaskHandler {
 	}
 
 	public void checkIfExist(final String taskName) {
-		if(this.taskExist(taskName)) {
+		if (this.taskExist(taskName)) {
 			this.cancelTask(taskName);
 		}
 	}
@@ -55,9 +55,9 @@ public class TaskHandler {
 
 	public BukkitTask getTask(final int id) {
 		final BukkitTask task = null;
-		if(id > 0) {
-			for(final BukkitTask pendingTask : this.getScheduler().getPendingTasks()) {
-				if(pendingTask.getTaskId() == id) {
+		if (id > 0) {
+			for (final BukkitTask pendingTask : this.getScheduler().getPendingTasks()) {
+				if (pendingTask.getTaskId() == id) {
 					return task;
 				}
 			}
@@ -70,15 +70,15 @@ public class TaskHandler {
 	}
 
 	public int getTaskId(final String taskName) {
-		if(this.taskExist(taskName)) {
+		if (this.taskExist(taskName)) {
 			return this.taskList.get(taskName);
 		}
 		return 0;
 	}
 
 	public String getTaskName(final int id) {
-		for(final Map.Entry<String, Integer> entry : this.taskList.entrySet()) {
-			if(entry.getValue() == id) {
+		for (final Map.Entry<String, Integer> entry : this.taskList.entrySet()) {
+			if (entry.getValue() == id) {
 				return entry.getKey();
 			}
 		}
@@ -87,8 +87,9 @@ public class TaskHandler {
 
 	public String getTaskName(final String string) {
 		String taskName;
-		for(taskName = string + "_" + new Random().nextInt(99999); this.taskExist(taskName); taskName = string + "_" + new Random().nextInt(99999)) {
-		}
+		do {
+			taskName = string + "_" + new Random().nextInt(99999);
+		} while (this.taskExist(taskName));
 		return taskName;
 	}
 
@@ -113,7 +114,7 @@ public class TaskHandler {
 		final int id = bukkitTask.getTaskId();
 		this.addTask(taskName, id);
 		this.runTaskLater(() -> {
-			if(this.taskList.get(taskName) != null && this.taskList.get(taskName) == id) {
+			if (this.taskList.get(taskName) != null && this.taskList.get(taskName) == id) {
 				this.taskList.remove(taskName);
 			}
 		}, duration);

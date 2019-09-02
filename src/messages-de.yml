@@ -7,8 +7,8 @@ messages:
         usage: "&cUsage &7» &c/alertcps <on|off>"
         disabled: "&2VerifPlayer &7» &aSie werden keine CPS-Alarme mehr erhalten."
         enabled: "&2VerifPlayer &7» &aSie erhalten jetzt CPS-Warnungen."
-        already_disabled: "&2VerifPlayer &7» &cCps-Alarme sind bereits deaktiviert."
-        already_enabled: "&2VerifPlayer &7» &cCps-Alarme sind bereits aktiviert."
+        alreadydisabled: "&2VerifPlayer &7» &cCps-Alarme sind bereits deaktiviert."
+        alreadyenabled: "&2VerifPlayer &7» &cCps-Alarme sind bereits aktiviert."
     
     verif:
         usage: "&cUsage &7» &c/verif <player>"

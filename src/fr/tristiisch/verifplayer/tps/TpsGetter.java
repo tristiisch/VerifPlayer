@@ -16,12 +16,12 @@ public class TpsGetter {
 	private static Field recentTpsField;
 	static {
 		final Class<?> spigotServerClass = Reflection.getClass("org.bukkit.Server$Spigot");
-		if(spigotServerClass != null) {
+		if (spigotServerClass != null) {
 			usePaper = Reflection.makeMethod(spigotServerClass, "getTPS") != null;
 		}
 
 		final Class<?> minecraftServerClass = Reflection.getClass(ClassEnum.NMS, "MinecraftServer");
-		if(minecraftServerClass != null) {
+		if (minecraftServerClass != null) {
 			getServerMethod = Reflection.makeMethod(minecraftServerClass, "getServer");
 			recentTpsField = Reflection.makeField(minecraftServerClass, "recentTps");
 		}
@@ -35,9 +35,9 @@ public class TpsGetter {
 	}
 
 	public static String getColor(final double tps) {
-		if(tps >= 18) {
+		if (tps >= 18) {
 			return ChatColor.GREEN + String.valueOf(tps);
-		} else if(tps >= 16) {
+		} else if (tps >= 16) {
 			return ChatColor.GOLD + String.valueOf(tps);
 		} else {
 			return ChatColor.RED + String.valueOf(tps);
@@ -45,10 +45,10 @@ public class TpsGetter {
 	}
 
 	private static double[] getNMSRecentTps() {
-		if(getServerMethod == null || recentTpsField == null) {
+		if (getServerMethod == null || recentTpsField == null) {
 			try {
 				throw new Exception("Can't get TPS from NMS");
-			} catch(final Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -58,7 +58,7 @@ public class TpsGetter {
 	}
 
 	private static double[] getPaperRecentTps() {
-		if(!canGetWithPaper()) {
+		if (!canGetWithPaper()) {
 			throw new UnsupportedOperationException("Can't get TPS from Paper");
 		}
 		final Object server = Reflection.callMethod(getServerMethod, null);
@@ -69,12 +69,12 @@ public class TpsGetter {
 	private double[] tps;
 
 	public TpsGetter() {
-		if(canGetWithPaper()) {
+		if (canGetWithPaper()) {
 			this.tps = TpsGetter.getPaperRecentTps();
 		} else {
 			this.tps = TpsGetter.getNMSRecentTps();
 		}
-		for(int i = 0; this.tps.length > i; i++) {
+		for (int i = 0; this.tps.length > i; i++) {
 			this.tps[i] = Math.min(Math.round(this.tps[i] * 100.0) / 100.0, 20.0);
 		}
 	}
@@ -84,7 +84,7 @@ public class TpsGetter {
 	}
 
 	public double getDouble(final int time) {
-		switch(time) {
+		switch (time) {
 		case 1:
 			return this.tps[0];
 		case 5:

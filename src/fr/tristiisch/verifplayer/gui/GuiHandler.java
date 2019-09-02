@@ -12,23 +12,23 @@ import fr.tristiisch.verifplayer.gui.objects.GuiPage;
 
 public abstract class GuiHandler {
 
-	/*	protected static GuiHandler INSTANCE;
-
-		public static GuiHandler getInstance() {
-			return INSTANCE;
-		}*/
+	/*
+	 * protected static GuiHandler INSTANCE;
+	 * 
+	 * public static GuiHandler getInstance() { return INSTANCE; }
+	 */
 
 	private final Map<UUID, GuiCreator> gui = new HashMap<>();
 
-	/*	public GuiHandler() {
-			GuiHandler.INSTANCE = this;
-		}*/
+	/*
+	 * public GuiHandler() { GuiHandler.INSTANCE = this; }
+	 */
 
 	public void closeAll() {
 		this.gui.entrySet().forEach(entry -> {
 			final UUID uuid = entry.getKey();
 			final Player player = Bukkit.getPlayer(uuid);
-			if(player != null) {
+			if (player != null) {
 				player.closeInventory();
 			}
 		});

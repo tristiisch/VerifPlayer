@@ -12,7 +12,7 @@ public class ItemGlow extends EnchantmentWrapper {
 	private static Enchantment glow;
 
 	public static Enchantment getGlowEnchant() {
-		if(glow != null) {
+		if (glow != null) {
 			return glow;
 		}
 
@@ -20,14 +20,14 @@ public class ItemGlow extends EnchantmentWrapper {
 			final Field f = Enchantment.class.getDeclaredField("acceptingNew");
 			f.setAccessible(true);
 			f.set(null, true);
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 		glow = new ItemGlow(255);
 		try {
 			Enchantment.registerEnchantment(glow);
-		} catch(final IllegalArgumentException iae) {
+		} catch (final IllegalArgumentException iae) {
 		}
 		return glow;
 	}
@@ -46,9 +46,8 @@ public class ItemGlow extends EnchantmentWrapper {
 	}
 
 	/*
-		public ItemGlow(final String id) {
-			super(id);
-		}*/
+	 * public ItemGlow(final String id) { super(id); }
+	 */
 
 	@Override
 	public boolean canEnchantItem(final ItemStack item) {

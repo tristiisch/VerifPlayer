@@ -27,16 +27,16 @@ public class VanishHook {
 		this.enabledSuperVanish = pluginManager.isPluginEnabled("SuperVanish") || pluginManager.isPluginEnabled("PremiumVanish");
 
 		final VanishPlugin vanishNoPacket = (VanishPlugin) pluginManager.getPlugin("VanishNoPacket");
-		if(vanishNoPacket != null) {
+		if (vanishNoPacket != null) {
 			this.enabledVanishNoPacket = true;
 			this.vanishNoPacketManager = vanishNoPacket.getManager();
 		}
 	}
 
 	public void hidePlayer(final Player player) {
-		if(this.enabledSuperVanish) {
+		if (this.enabledSuperVanish) {
 			VanishAPI.hidePlayer(player);
-		} else if(this.enabledVanishNoPacket) {
+		} else if (this.enabledVanishNoPacket) {
 			this.vanishNoPacketManager.reveal(player, true, true);
 		}
 	}
@@ -46,9 +46,9 @@ public class VanishHook {
 	}
 
 	public void showPlayer(final Player player) {
-		if(this.enabledSuperVanish) {
+		if (this.enabledSuperVanish) {
 			VanishAPI.showPlayer(player);
-		} else if(this.enabledVanishNoPacket) {
+		} else if (this.enabledVanishNoPacket) {
 			this.vanishNoPacketManager.vanish(player, true, true);
 		}
 	}

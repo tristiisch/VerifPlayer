@@ -1,4 +1,4 @@
-config_version: 1.0
+version: 1.0
 settings:
     # Choose your language, by default only English (en), French (fr) and German (de) are available. 
     # To create your own language file (for example in Spanish), create a file named "messages-es.yml" and put "es" below.

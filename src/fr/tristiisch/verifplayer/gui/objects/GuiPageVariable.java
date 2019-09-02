@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import fr.tristiisch.verifplayer.hook.PlaceholderAPIHook;
 import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 public enum GuiPageVariable {
 
@@ -15,8 +15,7 @@ public enum GuiPageVariable {
 	CPS(PlayerInfo::getCurrentClicks),
 	CPS_HISTORY_AIR(PlayerInfo::getAirClicks),
 	CPS_HISTORY_ENTITY(PlayerInfo::getEntityClicks),
-	NUMBER_ALERT(PlayerInfo::getNumberAlert),
-	;
+	NUMBER_ALERT(PlayerInfo::getNumberAlert),;
 
 	final private Function<? super PlayerInfo, ?> mapper;
 
@@ -25,7 +24,8 @@ public enum GuiPageVariable {
 	}
 
 	public String changeString(final String s, final PlayerInfo playerInfo) {
-		PlaceholderAPI.setPlaceholders(playerInfo.getPlayer(), s);
+
+		PlaceholderAPIHook.getInstance().setPlaceholders(playerInfo.getPlayer(), s);
 		return s.replaceFirst(this.getRegex(), this.getStringResult(playerInfo));
 	}
 

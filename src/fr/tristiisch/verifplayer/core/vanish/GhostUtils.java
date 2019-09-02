@@ -15,7 +15,7 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import fr.tristiisch.verifplayer.VerifPlayer;
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 
 @SuppressWarnings("deprecation")
 public class GhostUtils {
@@ -32,7 +32,7 @@ public class GhostUtils {
 
 	static {
 		// In your onEnable function
-		ghostFactory = new GhostUtils(VerifPlayer.getInstance());
+		ghostFactory = new GhostUtils(VerifPlayerPlugin.getInstance());
 	}
 	private boolean closed;
 
@@ -53,12 +53,11 @@ public class GhostUtils {
 	 * Add the given player to this ghost manager. This ensures that it can see
 	 * ghosts, and later become one.
 	 *
-	 * @param player
-	 *            - the player to add to the ghost manager.
+	 * @param player - the player to add to the ghost manager.
 	 */
 	public void addPlayer(final Player player) {
 		this.validateState();
-		if(!this.ghostTeam.hasPlayer(player)) {
+		if (!this.ghostTeam.hasPlayer(player)) {
 			this.ghostTeam.addPlayer(player);
 			this.ghosts.add(player.getName());
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
@@ -69,15 +68,15 @@ public class GhostUtils {
 	 * Remove all existing player members and ghosts.
 	 */
 	public void clearMembers() {
-		if(this.ghostTeam != null) {
-			for(final OfflinePlayer player : this.getMembers()) {
+		if (this.ghostTeam != null) {
+			for (final OfflinePlayer player : this.getMembers()) {
 				this.ghostTeam.removePlayer(player);
 			}
 		}
 	}
 
 	public void close() {
-		if(!this.closed) {
+		if (!this.closed) {
 			this.task.cancel();
 			this.ghostTeam.unregister();
 			this.closed = true;
@@ -90,7 +89,7 @@ public class GhostUtils {
 		this.ghostTeam = board.getTeam(GHOST_TEAM_NAME);
 
 		// Create a new ghost team if needed
-		if(this.ghostTeam == null) {
+		if (this.ghostTeam == null) {
 			this.ghostTeam = board.registerNewTeam(GHOST_TEAM_NAME);
 		}
 		// Thanks to Rprrr for noticing a bug here
@@ -100,10 +99,10 @@ public class GhostUtils {
 
 	private void createTask(final Plugin plugin) {
 		this.task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-			for(final OfflinePlayer member : GhostUtils.this.getMembers()) {
+			for (final OfflinePlayer member : GhostUtils.this.getMembers()) {
 				final Player player = member.getPlayer();
 
-				if(player != null) {
+				if (player != null) {
 					// Update invisibility effect
 					GhostUtils.this.setGhost(player, GhostUtils.this.isGhost(player));
 				} else {
@@ -124,8 +123,8 @@ public class GhostUtils {
 		final Set<OfflinePlayer> players = new HashSet<>(this.ghostTeam.getPlayers());
 
 		// Remove all non-ghost players
-		for(final Iterator<OfflinePlayer> it = players.iterator(); it.hasNext();) {
-			if(!this.ghosts.contains(it.next().getName())) {
+		for (final Iterator<OfflinePlayer> it = players.iterator(); it.hasNext();) {
+			if (!this.ghosts.contains(it.next().getName())) {
 				it.remove();
 			}
 		}
@@ -146,8 +145,7 @@ public class GhostUtils {
 	 * Determine if the current player is tracked by this ghost manager, or is a
 	 * ghost.
 	 *
-	 * @param player
-	 *            - the player to check.
+	 * @param player - the player to check.
 	 * @return TRUE if it is, FALSE otherwise.
 	 */
 	public boolean hasPlayer(final Player player) {
@@ -163,8 +161,7 @@ public class GhostUtils {
 	 * Determine if the given player is tracked by this ghost manager and is a
 	 * ghost.
 	 *
-	 * @param player
-	 *            - the player to test.
+	 * @param player - the player to test.
 	 * @return TRUE if it is, FALSE otherwise.
 	 */
 	public boolean isGhost(final Player player) {
@@ -175,12 +172,11 @@ public class GhostUtils {
 	 * Remove the given player from the manager, turning it back into the living and
 	 * making it unable to see ghosts.
 	 *
-	 * @param player
-	 *            - the player to remove from the ghost manager.
+	 * @param player - the player to remove from the ghost manager.
 	 */
 	public void removePlayer(final Player player) {
 		this.validateState();
-		if(this.ghostTeam.removePlayer(player)) {
+		if (this.ghostTeam.removePlayer(player)) {
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 		}
 	}
@@ -188,28 +184,26 @@ public class GhostUtils {
 	/**
 	 * Set wheter or not a given player is a ghost.
 	 *
-	 * @param player
-	 *            - the player to set as a ghost.
-	 * @param isGhost
-	 *            - TRUE to make the given player into a ghost, FALSE otherwise.
+	 * @param player  - the player to set as a ghost.
+	 * @param isGhost - TRUE to make the given player into a ghost, FALSE otherwise.
 	 */
 	public void setGhost(final Player player, final boolean isGhost) {
 		// Make sure the player is tracked by this manager
-		if(!this.hasPlayer(player)) {
+		if (!this.hasPlayer(player)) {
 			this.addPlayer(player);
 		}
 
-		if(isGhost) {
+		if (isGhost) {
 			this.ghosts.add(player.getName());
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 999999, 0, false, false), true);
-		} else if(!isGhost) {
+		} else if (!isGhost) {
 			this.ghosts.remove(player.getName());
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 		}
 	}
 
 	private OfflinePlayer[] toArray(final Set<OfflinePlayer> players) {
-		if(players != null) {
+		if (players != null) {
 			return players.toArray(new OfflinePlayer[0]);
 		} else {
 			return EMPTY_PLAYERS;
@@ -217,7 +211,7 @@ public class GhostUtils {
 	}
 
 	private void validateState() {
-		if(this.closed) {
+		if (this.closed) {
 			throw new IllegalStateException("Ghost factory has closed. Cannot reuse instances.");
 		}
 	}

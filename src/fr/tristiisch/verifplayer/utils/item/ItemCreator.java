@@ -62,22 +62,22 @@ public class ItemCreator {
 	public ItemStack getItemStack() {
 		final ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
 		final ItemMeta itemMeta = itemStack.getItemMeta();
-		if(this.customName != null) {
+		if (this.customName != null) {
 			itemMeta.setDisplayName(SpigotUtils.color(this.customName));
 		}
 
-		if(this.lore != null) {
+		if (this.lore != null) {
 			itemMeta.setLore(SpigotUtils.color(this.lore));
 		}
 
-		if(this.enchantements != null) {
-			for(final ItemEnchant enchantement : this.enchantements) {
+		if (this.enchantements != null) {
+			for (final ItemEnchant enchantement : this.enchantements) {
 				enchantement.setEnchantToItemMeta(itemMeta);
 			}
 		}
 
-		if(this.flags != null) {
-			for(final ItemFlag flag : this.flags) {
+		if (this.flags != null) {
+			for (final ItemFlag flag : this.flags) {
 				itemMeta.addItemFlags(flag);
 			}
 		}
@@ -92,7 +92,7 @@ public class ItemCreator {
 		this.dataValue = 3;
 		final ItemStack itemStack = this.getItemStack();
 		final SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
-		if(ServerVersion.V1_12.isEqualOrOlder()) {
+		if (ServerVersion.V1_12.isEqualOrOlder()) {
 			skullmeta.setOwningPlayer(player);
 		} else {
 			skullmeta.setOwner(player.getName());
@@ -117,6 +117,11 @@ public class ItemCreator {
 
 	public ItemCreator size(final int size) {
 		this.size = size;
+		return this;
+	}
+
+	public ItemCreator attributeHide() {
+		this.flag(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_DESTROYS);
 		return this;
 	}
 }

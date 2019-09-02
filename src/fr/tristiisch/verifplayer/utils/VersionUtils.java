@@ -71,19 +71,18 @@ public class VersionUtils {
 
 	public VersionUtils(final VerifPlayer plugin) {
 		VersionUtils.INSTANCE = this;
-		if(this.version == null) {
+		if (this.version == null) {
 
 			plugin.sendMessage("§cUnable to detect the server version, some features will generate errors. Server Version: " + this.getServerPackageVersion());
 
-		} else if(this.maxVersion.isOlder()) {
+		} else if (this.maxVersion.isOlder()) {
 
 			final SpigotUpdater spigotUpdater = SpigotUpdater.getInstance();
 			spigotUpdater.setCompatibleServerVersion(false);
 
-			plugin.sendMessage("§cThe maximum server version planned is " + this.maxVersion
-					.getName() + ", so some features may not work. Maximum server version: " + this.maxVersion.getName());
+			plugin.sendMessage("§cThe maximum server version planned is " + this.maxVersion.getName() + ", so some features may not work. Maximum server version: " + this.maxVersion.getName());
 
-		} else if(this.minVersion.isYounger()) {
+		} else if (this.minVersion.isYounger()) {
 
 			final SpigotUpdater spigotUpdater = SpigotUpdater.getInstance();
 			spigotUpdater.setCompatibleServerVersion(false);

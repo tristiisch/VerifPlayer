@@ -13,7 +13,7 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Freeze {
 
-	private static final List<UUID> players = new ArrayList<>();
+	protected static final List<UUID> players = new ArrayList<>();
 
 	public static void freeze(final Player player) {
 		freeze(player, null);
@@ -22,18 +22,24 @@ public class Freeze {
 	public static void freeze(final Player player, String reason) {
 		player.setWalkSpeed(0);
 		final Location underPlayer = SpigotUtils.getFirstBlockUnderPlayer(player);
-		if(underPlayer != null) {
+		if (underPlayer != null) {
 			player.teleport(new Location(underPlayer.getWorld(), underPlayer.getX() + 0.5, underPlayer.getY() + 1, underPlayer.getZ() + 0.5));
 		} else {
-			//			player.teleport(EmeraldSpigot.getSpawn());
+			// player.teleport(EmeraldSpigot.getSpawn());
 		}
 		players.add(player.getUniqueId());
 
-		if(reason == null || reason.isEmpty()) {
+		if (reason == null || reason.isEmpty()) {
 			reason = ConfigGet.MESSAGES_FREEZE_SUBTITLE.getString();
 		} else {
 			reason = ConfigGet.MESSAGES_FREEZE_SUBTITLEREASON.getString() + reason;
 		}
+
+		// while(!player.isOnGround()) {
+		// Location location = player.getLocation();
+		// player.teleport(new Location(location.getWorld(), location.getX(),
+		// location.getY() - 0.25, location.getZ()));
+		// }
 
 		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_TITLE.getString(), reason, 0, 100000000, 0);
 	}

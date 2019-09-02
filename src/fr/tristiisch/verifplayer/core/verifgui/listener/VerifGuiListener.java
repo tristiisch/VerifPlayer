@@ -21,11 +21,11 @@ public class VerifGuiListener implements Listener {
 	@EventHandler
 	public void onGuiClose(final GuiCloseEvent event) {
 		final Player player = event.getPlayer();
-		if(event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
+		if (event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
 			final VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
 			verifGuiHandler.remove(player);
 			final PlayerContents playerContents = verifGuiHandler.removePlayersChecksInventoryContents(player.getUniqueId());
-			if(playerContents != null) {
+			if (playerContents != null) {
 				playerContents.returnHisInventory();
 			}
 		}
@@ -36,8 +36,8 @@ public class VerifGuiListener implements Listener {
 		final Player player = event.getPlayer();
 		final VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
 		final Set<UUID> playerViewers = verifGuiHandler.getViewers(player);
-		if(playerViewers != null) {
-			for(final UUID viewerUuid : playerViewers) {
+		if (playerViewers != null) {
+			for (final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
 				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));

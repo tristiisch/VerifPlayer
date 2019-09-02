@@ -34,11 +34,10 @@ public class SpigotUpdater {
 	public void checkForUpdates() {
 		try {
 			final String pluginVersion = this.plugin.getDescription().getVersion();
-			if(this.checkNeedUpdate()) {
+			if (this.checkNeedUpdate()) {
 
-				if(!this.compatibleServerVersion) {
-					this.plugin.sendMessage(
-							"§cYour version (" + pluginVersion + ") is NOT compatible with the server version, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
+				if (!this.compatibleServerVersion) {
+					this.plugin.sendMessage("§cYour version (" + pluginVersion + ") is NOT compatible with the server version, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
 				} else {
 					this.plugin.sendMessage("§6Your version (" + pluginVersion + ") is deprecated, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
 				}
@@ -46,9 +45,9 @@ public class SpigotUpdater {
 			} else {
 				this.plugin.sendMessage("§aYour version is up to date");
 			}
-		} catch(final UnknownHostException e) {
+		} catch (final UnknownHostException e) {
 			this.plugin.sendMessage("§6You are not connected to internet, update messages are ignored");
-		} catch(final IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

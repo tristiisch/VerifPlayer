@@ -20,8 +20,8 @@ public class VanishAbstract {
 	}
 
 	public boolean isVanished(final Player player) {
-		for(final MetadataValue meta : player.getMetadata("vanished")) {
-			if(meta.asBoolean()) {
+		for (final MetadataValue meta : player.getMetadata("vanished")) {
+			if (meta.asBoolean()) {
 				return true;
 			}
 		}

@@ -19,18 +19,28 @@ public class VerifSpecConfigListener implements Listener {
 	@EventHandler
 	public void onCustomConfigLoad(final CustomConfigLoadEvent event) {
 		final CustomConfig customConfig = event.getCustomConfig();
-		if(!customConfig.isSameConfig(CustomConfig.MESSAGES)) {
+		if (!customConfig.isSameConfig(CustomConfig.MESSAGES)) {
 			return;
 		}
 
 		final YamlConfiguration config = customConfig.getConfig();
-		for(final VerifSpecTool verifSpecItems : VerifSpecTool.values()) {
+		for (final VerifSpecTool verifSpecItems : VerifSpecTool.values()) {
 			final ItemCreator itemCreator = verifSpecItems.getItemCreator();
 			final ConfigurationSection configSection = config.getConfigurationSection("messages.verifspec." + verifSpecItems.getName());
 
+			if (configSection == null) {
+				VerifPlayerPlugin.getInstance().sendMessage("Tool '" + verifSpecItems.getName() + "' dosen't exist. You have to remove it from messages.yml");
+				continue;
+			}
+
 			final String materialName = configSection.getString("item");
-			final Material material = Material.getMaterial(materialName);
-			if(material == null) {
+			Material material = null;
+
+			if (materialName != null) {
+				material = Material.getMaterial(materialName);
+			}
+
+			if (material == null) {
 				VerifPlayerPlugin.getInstance().sendMessage("Material '" + materialName + "' not found. See https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html");
 				continue;
 			}
@@ -42,6 +52,11 @@ public class VerifSpecConfigListener implements Listener {
 			final List<String> lore = configSection.getStringList("lore");
 			itemCreator.lore(lore);
 
+			final boolean attribute = configSection.getBoolean("attributehide");
+			if (attribute) {
+				itemCreator.attributeHide();
+			}
+
 			final int slot = configSection.getInt("slot");
 			verifSpecItems.setSlot(slot);
 
@@ -51,5 +66,4 @@ public class VerifSpecConfigListener implements Listener {
 			VerifSpecTool.getTool(verifSpecItems.getName()).setItemCreator(itemCreator);
 		}
 	}
-
 }

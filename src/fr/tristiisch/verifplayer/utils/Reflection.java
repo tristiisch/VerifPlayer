@@ -50,11 +50,11 @@ public class Reflection {
 		void set(final Object p0, final Object p1);
 	}
 
-	/*	// Get a enum value
-	public static Enum getEnum(String enumClass, String enumValue)
-	{
-		return Enum.valueOf((Class<? extends Enum>) Reflection.getClass(enumClass), enumValue);
-	}*/
+	/*
+	 * // Get a enum value public static Enum getEnum(String enumClass, String
+	 * enumValue) { return Enum.valueOf((Class<? extends Enum>)
+	 * Reflection.getClass(enumClass), enumValue); }
+	 */
 
 	public interface MethodInvoker {
 
@@ -65,15 +65,15 @@ public class Reflection {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T callMethod(final Method method, final Object instance, final Object... paramaters) {
-		if(method == null) {
+		if (method == null) {
 			throw new RuntimeException("No such method");
 		}
 		method.setAccessible(true);
 		try {
 			return (T) method.invoke(instance, paramaters);
-		} catch(final InvocationTargetException ex) {
+		} catch (final InvocationTargetException ex) {
 			throw new RuntimeException(ex.getCause());
-		} catch(final Exception ex) {
+		} catch (final Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -82,7 +82,7 @@ public class Reflection {
 	public static Class<?> getArrayClass(final String classname, final int arraySize) {
 		try {
 			return Array.newInstance(getClass(classname), arraySize).getClass();
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 			return null;
 		}
@@ -94,9 +94,9 @@ public class Reflection {
 		final String fieldName = values[values.length - 1];
 		final Field[] fields = instance.getClass().getDeclaredFields();
 		final ArrayList<Field> fieldArrayList = new ArrayList<>();
-		for(final Field field : fields) {
-			if(field.getType().isArray()) {
-				if(field.getType().toString().contains(fieldName)) {
+		for (final Field field : fields) {
+			if (field.getType().isArray()) {
+				if (field.getType().toString().contains(fieldName)) {
 					field.setAccessible(true);
 					fieldArrayList.add(field);
 				}
@@ -111,7 +111,7 @@ public class Reflection {
 
 	public static Class<?> getClass(final String classname) {
 
-		if(classCache.containsKey(classname)) {
+		if (classCache.containsKey(classname)) {
 			return classCache.get(classname);
 		}
 
@@ -129,7 +129,7 @@ public class Reflection {
 	public static Class<?> getClassWithoutCache(final String classname) {
 		try {
 			return Class.forName(classname);
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 			return null;
 		}
@@ -142,7 +142,7 @@ public class Reflection {
 		try {
 			field = clazz.getDeclaredField(fieldName);
 			field.setAccessible(true);
-		} catch(final NoSuchFieldException e) {
+		} catch (final NoSuchFieldException e) {
 			e.printStackTrace();
 		}
 		return field;
@@ -152,8 +152,8 @@ public class Reflection {
 	public static ArrayList<Field> getFields(final Object instance, final Class<?> fieldType) throws Exception {
 		final Field[] fields = instance.getClass().getDeclaredFields();
 		final ArrayList<Field> fieldArrayList = new ArrayList<>();
-		for(final Field field : fields) {
-			if(field.getType() == fieldType) {
+		for (final Field field : fields) {
+			if (field.getType() == fieldType) {
 				field.setAccessible(true);
 				fieldArrayList.add(field);
 			}
@@ -167,7 +167,7 @@ public class Reflection {
 	public static <T> T getFieldValue(final Field field, final Object obj) {
 		try {
 			return (T) field.get(obj);
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -190,9 +190,9 @@ public class Reflection {
 
 	// Get the first field by her type
 	public static Field getFirstFieldByType(final Class<?> clazz, final Class<?> type) {
-		for(final Field field : clazz.getDeclaredFields()) {
+		for (final Field field : clazz.getDeclaredFields()) {
 			field.setAccessible(true);
-			if(field.getType() == type) {
+			if (field.getType() == type) {
 				return field;
 			}
 		}
@@ -225,7 +225,7 @@ public class Reflection {
 		try {
 			final Object nmsPlayer = Reflection.getNmsPlayer(p);
 			return Integer.valueOf(getFieldValue(nmsPlayer, "ping").toString());
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
@@ -239,20 +239,20 @@ public class Reflection {
 
 	public static MethodInvoker getTypedMethod(final Class<?> clazz, final String methodName, final Class<?> returnType, final Class<?>... params) {
 		Method[] declaredMethods;
-		for(int length = (declaredMethods = clazz.getDeclaredMethods()).length, i = 0; i < length; ++i) {
+		for (int length = (declaredMethods = clazz.getDeclaredMethods()).length, i = 0; i < length; ++i) {
 			final Method method = declaredMethods[i];
-			if((methodName == null || method.getName().equals(methodName)) && returnType == null || method.getReturnType().equals(returnType) && Arrays.equals(method.getParameterTypes(), params)) {
+			if ((methodName == null || method.getName().equals(methodName)) && returnType == null || method.getReturnType().equals(returnType) && Arrays.equals(method.getParameterTypes(), params)) {
 				method.setAccessible(true);
 				return (target, arguments) -> {
 					try {
 						return method.invoke(target, arguments);
-					} catch(final Exception e) {
+					} catch (final Exception e) {
 						throw new RuntimeException("Cannot invoke method " + method, e);
 					}
 				};
 			}
 		}
-		if(clazz.getSuperclass() != null) {
+		if (clazz.getSuperclass() != null) {
 			return getMethod(clazz.getSuperclass(), methodName, params);
 		}
 		throw new IllegalStateException(String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
@@ -261,9 +261,9 @@ public class Reflection {
 	public static Field makeField(final Class<?> clazz, final String name) {
 		try {
 			return clazz.getDeclaredField(name);
-		} catch(final NoSuchFieldException ex) {
+		} catch (final NoSuchFieldException ex) {
 			return null;
-		} catch(final Exception ex) {
+		} catch (final Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -271,9 +271,9 @@ public class Reflection {
 	public static Method makeMethod(final Class<?> clazz, final String methodName, final Class<?>... paramaters) {
 		try {
 			return clazz.getDeclaredMethod(methodName, paramaters);
-		} catch(final NoSuchMethodException ex) {
+		} catch (final NoSuchMethodException ex) {
 			return null;
-		} catch(final Exception ex) {
+		} catch (final Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -287,14 +287,14 @@ public class Reflection {
 
 	// Send packet to a list of player
 	public static void sendPacket(final Collection<? extends Player> players, final Object packet) {
-		if(packet == null) {
+		if (packet == null) {
 			return;
 		}
 		try {
-			for(final Player p : players) {
+			for (final Player p : players) {
 				sendPacket(getPlayerConnection(p), packet);
 			}
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 		}
 	}
@@ -322,7 +322,7 @@ public class Reflection {
 			maxUsesField.setAccessible(true);
 			maxUsesField.set(obj, value);
 			maxUsesField.setAccessible(!maxUsesField.isAccessible());
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			Bukkit.getLogger().severe("Reflection failed for changeField " + obj.getClass().getName() + " field > " + field + " value > " + value);
 			Bukkit.getServer().shutdown();
@@ -334,7 +334,7 @@ public class Reflection {
 		field.setAccessible(true);
 		try {
 			field.set(instance, value);
-		} catch(final IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -345,7 +345,7 @@ public class Reflection {
 			final Field f = instance.getClass().getDeclaredField(field);
 			f.setAccessible(true);
 			f.set(instance, value);
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 		}
 	}

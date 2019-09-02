@@ -29,5 +29,4 @@ public enum ItemArmor {
 		return Arrays.stream(this.material).map(material -> new ItemStack(material)).collect(Collectors.toList());
 	}
 
-
 }

@@ -29,7 +29,7 @@ public class FastClickRunnable extends BukkitRunnable {
 	}
 
 	public static void startIfNotRunning() {
-		if(isRunning()) {
+		if (isRunning()) {
 			return;
 		}
 		start();
@@ -41,14 +41,14 @@ public class FastClickRunnable extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for(final PlayerInfo playerInfo : VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get()) {
+		for (final PlayerInfo playerInfo : VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get()) {
 			final Player player = playerInfo.getPlayer();
 			final int ping = Reflection.getPing(player);
 
 			final double tps = new TpsGetter().getDouble();
 			final int maxCps = ConfigGet.SETTINGS_MAXCPS.getInt();
 
-			while(playerInfo.getAirClicks().size() >= ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt()) {
+			while (playerInfo.getAirClicks().size() >= ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt()) {
 				playerInfo.getAirClicks().remove(0);
 				playerInfo.getEntityClicks().remove(0);
 			}
@@ -56,28 +56,25 @@ public class FastClickRunnable extends BukkitRunnable {
 			playerInfo.getAirClicks().add(playerInfo.getClickAir());
 			playerInfo.getEntityClicks().add(playerInfo.getClickEntity());
 			final int click = playerInfo.getClickAir() + playerInfo.getClickEntity();
-			if(click > playerInfo.getMaxCPS()) {
+			if (click > playerInfo.getMaxCPS()) {
 				playerInfo.setMaxCPS(click);
 			}
 
-			if(click > maxCps) {
+			if (click > maxCps) {
 				int lagAlertCPS = (int) ((20.0 - tps) * 2.0);
 				lagAlertCPS += ping / 50;
-				if(click > maxCps + lagAlertCPS) {
+				if (click > maxCps + lagAlertCPS) {
 					playerInfo.addAlert();
 					final long timestamp = Utils.getCurrentTimeinSeconds();
 					playerInfo.addAlertHistory(timestamp, click);
 
-					if(playerInfo.getLastAlert() + ConfigGet.SETTINGS_TIMEBETWEENALERTS.getInt() < timestamp) {
+					if (playerInfo.getLastAlert() + ConfigGet.SETTINGS_TIMEBETWEENALERTS.getInt() < timestamp) {
 						playerInfo.setLastAlert(timestamp);
-						final String msg = ConfigGet.MESSAGES_VERIF_SENDALERT.getString()
-								.replace("%player%", player.getName())
-								.replace("%cps%", String.valueOf(click))
-								.replace("%ping%", String.valueOf(ping))
-								.replace("%tps%", String.valueOf(tps));
+						final String msg = ConfigGet.MESSAGES_VERIF_SENDALERT.getString().replace("%player%", player.getName()).replace("%cps%", String.valueOf(click)).replace("%ping%", String.valueOf(ping)).replace("%tps%",
+								String.valueOf(tps));
 
-						for(final Player players : Bukkit.getOnlinePlayers()) {
-							if(Permission.MODERATOR_RECEIVEALERT.hasPermission(players) && !player.equals(players.getUniqueId())) {
+						for (final Player players : Bukkit.getOnlinePlayers()) {
+							if (Permission.MODERATOR_RECEIVEALERT.hasPermission(players) && !player.getUniqueId().equals(players.getUniqueId())) {
 								players.sendMessage(msg);
 							}
 						}
@@ -86,7 +83,8 @@ public class FastClickRunnable extends BukkitRunnable {
 			}
 			playerInfo.resetAirClick();
 			playerInfo.resetEntityClick();
-			// VerifPlayerPlugin.getInstance().getPlayerInfoHandler().set(player, playerInfo);
+			// VerifPlayerPlugin.getInstance().getPlayerInfoHandler().set(player,
+			// playerInfo);
 		}
 		VerifGuiRunnable.run();
 	}

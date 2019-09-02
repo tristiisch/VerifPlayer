@@ -7,14 +7,14 @@ import java.util.stream.IntStream;
 
 import fr.tristiisch.verifplayer.playerinfo.PlayerInfo;
 
-public /*abstract*/ class GuiPage implements Cloneable {
+public /* abstract */ class GuiPage implements Cloneable {
 
 	private final String id;
 	private final String title;
 	private final String description;
 	private final int rowSize;
 
-	private Map<GuiPageVariable, PlayerInfo> variables;
+	private Map<GuiPageVariable, PlayerInfo> variables = null;
 
 	public GuiPage(final String title, final String description, final int rowSize) {
 		this.id = title.toLowerCase();
@@ -28,14 +28,16 @@ public /*abstract*/ class GuiPage implements Cloneable {
 		this.title = title;
 		this.description = description;
 		this.rowSize = rowSize;
-		this.variables = IntStream.range(0, variables.length).boxed().collect(Collectors.toMap(i -> variables[i], i -> null));
+		if (variables != null) {
+			this.variables = IntStream.range(0, variables.length - 1).boxed().collect(Collectors.toMap(i -> variables[i], i -> null));
+		}
 	}
 
 	@Override
 	public GuiPage clone() {
 		try {
 			return (GuiPage) super.clone();
-		} catch(final CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -69,27 +71,28 @@ public /*abstract*/ class GuiPage implements Cloneable {
 		return this.id.equals(guiPage.id);
 	}
 
-	/*public void replaceTitleVariable(final GuiPageVariable guiPageVariable, final String replacement) {
-		this.title = this.replaceVariable(this.title, guiPageVariable, replacement);
-	}
-
-		public String replaceVariable(final String s, final GuiPageVariable guiPageVariable) {
-			return this.replaceVariable(s, guiPageVariable, guiPageVariable.getResult());
-		}
-
-		private String replaceVariable(String s, final GuiPageVariable guiPageVariable, final String replacement) {
-			if(this.variables.contains(guiPageVariable)) {
-				s = s.replaceAll(guiPageVariable.getRegex(), replacement);
-				return s;
-			} else {
-				VerifPlayerPlugin.getInstance().getLogger().log(Level.WARNING, "DEV ERROR: The page called '" + this.getTitle() + "' does not use a variable " + guiPageVariable.getName() + "!");
-				return null;
-			}
-		}*/
+	/*
+	 * public void replaceTitleVariable(final GuiPageVariable guiPageVariable, final
+	 * String replacement) { this.title = this.replaceVariable(this.title,
+	 * guiPageVariable, replacement); }
+	 * 
+	 * public String replaceVariable(final String s, final GuiPageVariable
+	 * guiPageVariable) { return this.replaceVariable(s, guiPageVariable,
+	 * guiPageVariable.getResult()); }
+	 * 
+	 * private String replaceVariable(String s, final GuiPageVariable
+	 * guiPageVariable, final String replacement) {
+	 * if(this.variables.contains(guiPageVariable)) { s =
+	 * s.replaceAll(guiPageVariable.getRegex(), replacement); return s; } else {
+	 * VerifPlayerPlugin.getInstance().getLogger().log(Level.WARNING,
+	 * "DEV ERROR: The page called '" + this.getTitle() +
+	 * "' does not use a variable " + guiPageVariable.getName() + "!"); return null;
+	 * } }
+	 */
 
 	private String remplaceVariables(String s) {
 
-		for(final Entry<GuiPageVariable, PlayerInfo> entry : this.variables.entrySet()) {
+		for (final Entry<GuiPageVariable, PlayerInfo> entry : this.variables.entrySet()) {
 			final GuiPageVariable variable = entry.getKey();
 			final PlayerInfo playerInfo = entry.getValue();
 			s = variable.changeString(s, playerInfo);
@@ -98,9 +101,10 @@ public /*abstract*/ class GuiPage implements Cloneable {
 	}
 
 	public void setVariable(final GuiPageVariable variable, final PlayerInfo playerInfo) {
-		if(!this.variables.containsKey(variable)) {
-			new Exception("There is no GuiPageVariable." + variable.toString() + " set in the GuiPage " + this.title).printStackTrace();
-		}
+		// if(!this.variables.containsKey(variable)) {
+		// new Exception("There is no GuiPageVariable." + variable.toString() + " set in
+		// the GuiPage " + this.title).printStackTrace();
+		// }
 		this.variables.put(variable, playerInfo);
 	}
 }

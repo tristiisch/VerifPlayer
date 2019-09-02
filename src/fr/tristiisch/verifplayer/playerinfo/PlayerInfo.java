@@ -18,6 +18,11 @@ public class PlayerInfo extends PlayerInfoHook {
 	private int alert = 0;
 	private long lastAlert = 0L;
 
+	/**
+	 * private boolean freezed; private boolean alertEnabled; private boolean
+	 * verifSpecEnabled;
+	 **/
+
 	private final List<Integer> clicksAir = new ArrayList<>();
 
 	private final List<Integer> clicksEntity = new ArrayList<>();
@@ -74,7 +79,7 @@ public class PlayerInfo extends PlayerInfoHook {
 
 	public int getCurrentClicks() {
 		final int i = this.clicksAir.size();
-		if(i == 0) {
+		if (i == 0) {
 			return 0;
 		}
 		return this.clicksAir.get(i - 1) + this.clicksEntity.get(i - 1);

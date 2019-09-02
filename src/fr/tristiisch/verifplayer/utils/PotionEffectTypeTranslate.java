@@ -28,19 +28,19 @@ public enum PotionEffectTypeTranslate {
 	HEALTH_BOOST(),
 	ABSORPTION(),
 	SATURATION();
-	
+
 	String path;
-	
+
 	private PotionEffectTypeTranslate(String path) {
 		this.path = path;
-	}	
-	
+	}
+
 	private PotionEffectTypeTranslate() {
 		this.path = new StringBuilder("potion.").append(this.toString().toLowerCase().replace("_", "")).toString();
 	}
-	
+
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 
 	public TranslatableComponent getTranslate() {

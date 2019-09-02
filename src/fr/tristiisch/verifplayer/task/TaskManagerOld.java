@@ -20,7 +20,7 @@ public class TaskManagerOld {
 	}
 
 	public static void cancelAllTask() {
-		for(final int taskId : TaskManagerOld.taskList.values()) {
+		for (final int taskId : TaskManagerOld.taskList.values()) {
 			TaskManagerOld.scheduler.cancelTask(taskId);
 		}
 	}
@@ -30,7 +30,7 @@ public class TaskManagerOld {
 	}
 
 	public static boolean cancelTaskByName(final String taskName) {
-		if(taskExist(taskName)) {
+		if (taskExist(taskName)) {
 			final int taskId = getTaskId(taskName);
 			TaskManagerOld.taskList.remove(taskName);
 			TaskManagerOld.scheduler.cancelTask(taskId);
@@ -40,7 +40,7 @@ public class TaskManagerOld {
 	}
 
 	public static void checkIfExist(final String taskName) {
-		if(taskExist(taskName)) {
+		if (taskExist(taskName)) {
 			cancelTaskByName(taskName);
 		}
 	}
@@ -51,9 +51,9 @@ public class TaskManagerOld {
 
 	public static BukkitTask getTask(final int id) {
 		final BukkitTask task = null;
-		if(id > 0) {
-			for(final BukkitTask pendingTask : TaskManagerOld.scheduler.getPendingTasks()) {
-				if(pendingTask.getTaskId() == id) {
+		if (id > 0) {
+			for (final BukkitTask pendingTask : TaskManagerOld.scheduler.getPendingTasks()) {
+				if (pendingTask.getTaskId() == id) {
 					return task;
 				}
 			}
@@ -66,7 +66,7 @@ public class TaskManagerOld {
 	}
 
 	public static int getTaskId(final String taskName) {
-		if(taskExist(taskName)) {
+		if (taskExist(taskName)) {
 			return TaskManagerOld.taskList.get(taskName);
 		}
 		return 0;
@@ -74,14 +74,14 @@ public class TaskManagerOld {
 
 	public static String getTaskName(final String string) {
 		String taskName;
-		for(taskName = string + "_" + new Random().nextInt(99999); taskExist(taskName); taskName = string + "_" + new Random().nextInt(99999)) {
+		for (taskName = string + "_" + new Random().nextInt(99999); taskExist(taskName); taskName = string + "_" + new Random().nextInt(99999)) {
 		}
 		return taskName;
 	}
 
 	public static String getTaskNameById(final int id) {
-		for(final Map.Entry<String, Integer> entry : TaskManagerOld.taskList.entrySet()) {
-			if(entry.getValue() == id) {
+		for (final Map.Entry<String, Integer> entry : TaskManagerOld.taskList.entrySet()) {
+			if (entry.getValue() == id) {
 				return entry.getKey();
 			}
 		}
@@ -109,7 +109,7 @@ public class TaskManagerOld {
 		final int id = bukkitTask.getTaskId();
 		addTask(taskName, id);
 		runTaskLater(() -> {
-			if(TaskManagerOld.taskList.get(taskName) != null && TaskManagerOld.taskList.get(taskName) == id) {
+			if (TaskManagerOld.taskList.get(taskName) != null && TaskManagerOld.taskList.get(taskName) == id) {
 				TaskManagerOld.taskList.remove(taskName);
 			}
 		}, duration);

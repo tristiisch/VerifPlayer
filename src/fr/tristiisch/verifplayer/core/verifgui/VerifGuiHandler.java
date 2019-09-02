@@ -17,9 +17,9 @@ import fr.tristiisch.verifplayer.utils.PlayerContents;
 
 public class VerifGuiHandler extends GuiHandler {
 	/*
-		public static VerifGuiHandler getInstance() {
-			return (VerifGuiHandler) GuiHandler.INSTANCE;
-		}*/
+	 * public static VerifGuiHandler getInstance() { return (VerifGuiHandler)
+	 * GuiHandler.INSTANCE; }
+	 */
 
 	private final HashMap<UUID, Set<UUID>> playersBeingChecked = new HashMap<>();
 	private final HashMap<UUID, PlayerContents> playersChecksInventoryContents = new HashMap<>();
@@ -58,9 +58,9 @@ public class VerifGuiHandler extends GuiHandler {
 		guiCreator.setItems(VerifGuiItem.getAllItems(target));
 		this.set(viewer, guiCreator, target);
 
-		//				final PlayerContents playerContents = new PlayerContents(viewer);
-		//				playersChecksInventoryContents.put(viewer.getUniqueId(), playerContents);
-		//				playerContents.clearInventory(viewer);
+		// final PlayerContents playerContents = new PlayerContents(viewer);
+		// playersChecksInventoryContents.put(viewer.getUniqueId(), playerContents);
+		// playerContents.clearInventory(viewer);
 
 		guiCreator.openGui(viewer);
 	}
@@ -68,12 +68,12 @@ public class VerifGuiHandler extends GuiHandler {
 	@Override
 	public GuiCreator remove(final Player viewer) {
 		final Map.Entry<UUID, Set<UUID>> entryPlayerBeingCheck = this.getByViewer(viewer.getUniqueId());
-		if(entryPlayerBeingCheck == null) {
+		if (entryPlayerBeingCheck == null) {
 			return null;
 		}
 		final Set<UUID> viewers = entryPlayerBeingCheck.getValue();
 		viewers.remove(viewer.getUniqueId());
-		if(viewers.isEmpty()) {
+		if (viewers.isEmpty()) {
 			this.playersBeingChecked.remove(entryPlayerBeingCheck.getKey());
 		}
 		return super.remove(viewer);
@@ -84,9 +84,9 @@ public class VerifGuiHandler extends GuiHandler {
 	}
 
 	public GuiCreator set(final Player viewer, final GuiCreator guiCreator, final Player playerBeigCheck) {
-		if(guiCreator.getGuiPage().isSamePage(VerifGuiPage.HOME)) {
+		if (guiCreator.getGuiPage().isSamePage(VerifGuiPage.HOME)) {
 			final UUID uuidPlayerBeingChecked = playerBeigCheck.getUniqueId();
-			if(this.playersBeingChecked.containsKey(uuidPlayerBeingChecked)) {
+			if (this.playersBeingChecked.containsKey(uuidPlayerBeingChecked)) {
 				this.playersBeingChecked.get(uuidPlayerBeingChecked).add(viewer.getUniqueId());
 			} else {
 				final Set<UUID> viewersUuid = new HashSet<>();

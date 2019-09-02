@@ -28,9 +28,9 @@ public class SpigotUtils {
 
 	public static List<Location> getBlockAround(final Location location, final int raduis) {
 		final List<Location> locations = new ArrayList<>();
-		for(int x = raduis; x >= -raduis; x--) {
-			for(int y = raduis; y >= -raduis; y--) {
-				for(int z = raduis; z >= -raduis; z--) {
+		for (int x = raduis; x >= -raduis; x--) {
+			for (int y = raduis; y >= -raduis; y--) {
+				for (int z = raduis; z >= -raduis; z--) {
 					locations.add(location.getBlock().getRelative(x, y, z).getLocation());
 				}
 			}
@@ -41,35 +41,35 @@ public class SpigotUtils {
 	public static Location getFirstBlockUnderPlayer(final Player player) {
 		Location location = player.getLocation();
 		do {
-			if(location.getBlockY() == 0) {
+			if (location.getBlockY() == 0) {
 				return null;
 			}
 			location = new Location(location.getWorld(), location.getBlockX(), location.getBlockY() - 1, location.getBlockZ());
-		} while(location.getBlock().getType() == Material.AIR);
+		} while (!location.getBlock().getType().isOccluding());
 		return location;
 	}
 
 	public static ChatColor getIntervalChatColor(final int i, final int min, final int max) {
-		if(i == 0) {
+		if (i == 0) {
 			return ChatColor.GRAY;
 		}
-		if(i < min) {
+		if (i < min) {
 			return ChatColor.GREEN;
 		}
-		if(i < max) {
+		if (i < max) {
 			return ChatColor.GOLD;
 		}
 		return ChatColor.RED;
 	}
 
 	public static short getIntervalGlassPaneColor(final int i, final int min, final int max) {
-		if(i == 0) {
+		if (i == 0) {
 			return 0;
 		}
-		if(i < min) {
+		if (i < min) {
 			return 5;
 		}
-		if(i < max) {
+		if (i < max) {
 			return 1;
 		}
 		return 14;
@@ -77,10 +77,10 @@ public class SpigotUtils {
 
 	public static Player getNearestPlayer(final Player checkNear) {
 		Player nearest = null;
-		for(final Player p : checkNear.getWorld().getPlayers()) {
-			if(nearest == null) {
+		for (final Player p : checkNear.getWorld().getPlayers()) {
+			if (nearest == null) {
 				nearest = p;
-			} else if(p.getLocation().distance(checkNear.getLocation()) < nearest.getLocation().distance(checkNear.getLocation())) {
+			} else if (p.getLocation().distance(checkNear.getLocation()) < nearest.getLocation().distance(checkNear.getLocation())) {
 				nearest = p;
 			}
 		}
@@ -91,14 +91,14 @@ public class SpigotUtils {
 		final Inventory inventory2 = Bukkit.createInventory(null, inventory.getSize());
 		inventory2.setContents(inventory.getContents());
 		int amount1 = 0;
-		for(final ItemStack item : inventory2.getContents()) {
-			if(item != null) {
+		for (final ItemStack item : inventory2.getContents()) {
+			if (item != null) {
 				amount1 += item.getAmount();
 			}
 		}
 
 		int amount2 = 0;
-		for(final ItemStack item : items) {
+		for (final ItemStack item : items) {
 			amount2 += item.getAmount();
 		}
 
@@ -106,13 +106,13 @@ public class SpigotUtils {
 		inventory2.addItem(items);
 
 		int amount4 = 0;
-		for(final ItemStack item : inventory2.getContents()) {
-			if(item != null) {
+		for (final ItemStack item : inventory2.getContents()) {
+			if (item != null) {
 				amount4 += item.getAmount();
 			}
 		}
 
-		if(amount4 == amount3) {
+		if (amount4 == amount3) {
 			return true;
 		}
 
@@ -142,8 +142,7 @@ public class SpigotUtils {
 
 	public static boolean playerisIn(final Player player, final Location location) {
 		final Location playerLocation = player.getLocation();
-		return playerLocation.getBlockX() == location.getBlockX() && (playerLocation.getBlockY() == location.getBlockY() || playerLocation.getBlockY() + 1 == location.getBlockY()) && playerLocation
-				.getBlockZ() == location.getBlockZ();
+		return playerLocation.getBlockX() == location.getBlockX() && (playerLocation.getBlockY() == location.getBlockY() || playerLocation.getBlockY() + 1 == location.getBlockY()) && playerLocation.getBlockZ() == location.getBlockZ();
 	}
 
 }

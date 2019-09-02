@@ -18,11 +18,11 @@ import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem.VerifGuiSlot;
 public class VerifGuiRunnable {
 
 	public static void run() {
-		for(final Entry<UUID, Set<UUID>> entry : VerifPlayerPlugin.getInstance().getVerifGuiHandler().getPlayersBeingChecked().entrySet()) {
+		for (final Entry<UUID, Set<UUID>> entry : VerifPlayerPlugin.getInstance().getVerifGuiHandler().getPlayersBeingChecked().entrySet()) {
 			final UUID uuid = entry.getKey();
 			final Set<UUID> viewers = entry.getValue();
 			final Player player = Bukkit.getPlayer(uuid);
-			if(player == null) {
+			if (player == null) {
 				return;
 			}
 			final Map<Integer, ItemStack> items = new HashMap<>();
@@ -36,21 +36,23 @@ public class VerifGuiRunnable {
 			// Ping + Tps
 			items.put(VerifGuiSlot.PING_AND_TPS.getSlot(), VerifGuiItem.getPingAndTps(player));
 
-			for(final UUID viewersUuid : viewers) {
+			for (final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
 				final InventoryView inventory = viewer.getOpenInventory();
-				for(final Map.Entry<Integer, ItemStack> entryItems : items.entrySet()) {
+				for (final Map.Entry<Integer, ItemStack> entryItems : items.entrySet()) {
 					final ItemStack entryItem = entryItems.getValue();
 					final Integer entrySlot = entryItems.getKey();
 					final ItemStack actuelItem = inventory.getItem(entrySlot);
-					if(entryItem == null) {
+					if (entryItem == null) {
 
 						inventory.setItem(entrySlot, null);
-					} else if(!entryItem.isSimilar(actuelItem)) {
+					} else if (!entryItem.isSimilar(actuelItem)) {
 
-						/*					if(actuelItem.hasItemMeta() && entrySlot == VerifGuiSlot.SKULL.getSlot() && entryItem.getItemMeta().getLore().equals(actuelItem.getItemMeta().getLore())) {
-												continue;
-											}*/
+						/*
+						 * if(actuelItem.hasItemMeta() && entrySlot == VerifGuiSlot.SKULL.getSlot() &&
+						 * entryItem.getItemMeta().getLore().equals(actuelItem.getItemMeta().getLore()))
+						 * { continue; }
+						 */
 
 						inventory.setItem(entrySlot, entryItem);
 					}

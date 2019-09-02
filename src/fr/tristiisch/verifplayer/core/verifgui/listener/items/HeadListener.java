@@ -28,23 +28,23 @@ public class HeadListener implements Listener {
 
 	public static void updateHead(final Player player) {
 		final Set<UUID> viewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
-		if(viewers == null) {
+		if (viewers == null) {
 			return;
 		}
 
 		VerifPlayerPlugin.getInstance().getTaskHandler().runTask(() -> {
 			final ItemStack newItem = VerifGuiItem.getSkull(player);
 			final int skullSlot = VerifGuiSlot.SKULL.getSlot();
-			for(final UUID viewersUuid : viewers) {
+			for (final UUID viewersUuid : viewers) {
 				final Player viewer = Bukkit.getPlayer(viewersUuid);
 				final InventoryView inventory = viewer.getOpenInventory();
 
 				final ItemStack actuelItem = inventory.getItem(skullSlot);
 
-				if(newItem.isSimilar(actuelItem)) {
+				if (newItem.isSimilar(actuelItem)) {
 					return;
 				}
-				if(actuelItem.getType().equals(newItem.getType())) {
+				if (actuelItem.getType().equals(newItem.getType())) {
 					final ItemMeta itemMeta = actuelItem.getItemMeta();
 					itemMeta.setLore(newItem.getItemMeta().getLore());
 					actuelItem.setItemMeta(itemMeta);
@@ -58,7 +58,7 @@ public class HeadListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
@@ -67,7 +67,7 @@ public class HeadListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityRegainHealth(final EntityRegainHealthEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
@@ -76,7 +76,7 @@ public class HeadListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event) {
-		if(!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
@@ -104,18 +104,19 @@ public class HeadListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerExpChange(final PlayerExpChangeEvent event) {
 		final Player player = event.getPlayer();
-		//				final int amount = event.getAmount();
-		//				final float exp = player.getExp();
-		//				final float expToLevel = player.getExpToLevel();
-		//				final int level = player.getLevel();
+		// final int amount = event.getAmount();
+		// final float exp = player.getExp();
+		// final float expToLevel = player.getExpToLevel();
+		// final int level = player.getLevel();
 		//
-		//				System.out.println("Amount: " + amount + " exp: " + exp + " expToLevel: " + expToLevel + " level: " + level);
+		// System.out.println("Amount: " + amount + " exp: " + exp + " expToLevel: " +
+		// expToLevel + " level: " + level);
 		HeadListener.updateHead(player);
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleEnter(final VehicleEnterEvent event) {
-		if(!(event.getEntered() instanceof Player)) {
+		if (!(event.getEntered() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getEntered();
@@ -124,7 +125,7 @@ public class HeadListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleExit(final VehicleExitEvent event) {
-		if(!(event.getExited() instanceof Player)) {
+		if (!(event.getExited() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getExited();

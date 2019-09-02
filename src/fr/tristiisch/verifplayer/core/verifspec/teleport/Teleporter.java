@@ -24,17 +24,16 @@ public class Teleporter {
 		final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
 		final List<Player> allTargets = Bukkit.getOnlinePlayers().stream()
-				.filter(playerOnline -> !playerOnline.getUniqueId().equals(player.getUniqueId()) && !VerifSpec.isIn(playerOnline) && !VerifPlayerPlugin.getInstance().getVanishHandler()
-						.isVanished(playerOnline))
+				.filter(playerOnline -> !playerOnline.getUniqueId().equals(player.getUniqueId()) && !VerifSpec.isIn(playerOnline) && !VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(playerOnline))
 				.sorted(new SortByDistance(spawn)).collect(Collectors.toList());
 
-		if(allTargets == null || allTargets.isEmpty()) {
+		if (allTargets == null || allTargets.isEmpty()) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TELEPORTERMSG_NOPLAYERS.getString());
 			return;
 		}
 
 		final Player target = allTargets.stream().filter(t -> !alreadyTeleportedPlayers.contains(t)).findFirst().orElse(null);
-		if(target == null) {
+		if (target == null) {
 			playerInfo.clearAlreadyTeleportedPlayers();
 			tp(player, playerInfo);
 			return;

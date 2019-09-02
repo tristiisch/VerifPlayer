@@ -1,4 +1,4 @@
-version: 1.1
+version: 1.9
 messages:
     cantconsole: "&cCan not use this command with the console"
     noperm: "&cYou haven't got the permission"
@@ -7,8 +7,9 @@ messages:
         usage: "&cUsage &7» &c/alertcps <on|off>"
         disabled: "&2VerifPlayer &7» &aYou will no longer receive CPS alerts."
         enabled: "&2VerifPlayer &7» &aYou now receive CPS alerts."
-        already_disabled: "&2VerifPlayer &7» &cCps alerts are already disabled."
-        already_enabled: "&2VerifPlayer &7» &cCps alerts are already enabled."
+        alreadydisabled: "&2VerifPlayer &7» &cCps alerts are already disabled."
+        alreadyenabled: "&2VerifPlayer &7» &cCps alerts are already enabled."
+        nopermtoreceivealerts: "&2VerifPlayer &7» &cYou can't receive alert because you didn't have permission."
     
     verif:
         usage: "&cUsage &7» &c/verif <player>"
@@ -56,6 +57,8 @@ messages:
       disable: "&2VerifPlayer &7» &cVerifSpec disabled."
       shouldbeonground: "&2VerifPlayer &7» &cYou should be on the ground to use this command."
       distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
+      toolspeed: "&2VerifPlayer &7» %color%Your speed is now set to %speed%."
+      toolspeednormal: "&2VerifPlayer &7» &aYour speed is now normal."
       teleportermsg:
         noplayers: "&2VerifPlayer &7» &cThere are no players."
         succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
@@ -65,6 +68,7 @@ messages:
          item: COMPASS
          # slot from 0 to 8
          slot: 0
+         attributehide: true
          name: "&2Teleporter"
          lore:
            - ""
@@ -73,6 +77,7 @@ messages:
          enable: true
          item: BLAZE_ROD
          slot: 1
+         attributehide: true
          name: "&2Freeze Stick"
          lore:
            - ""
@@ -81,6 +86,7 @@ messages:
          enable: true
          item: STICK
          slot: 2
+         attributehide: true
          name: "&2Knockback Stick"
          lore:
            - ""
@@ -89,6 +95,7 @@ messages:
          enable: true
          item: CHEST
          slot: 3
+         attributehide: true
          name: "&2Verificator"
          lore:
            - ""
@@ -97,31 +104,29 @@ messages:
          enable: true
          item: MINECART
          slot: 4
+         attributehide: true
          name: "&2Shuttle"
          lore:
            - ""
            - "&7Teleport where you aim"
-      slow:
-         enable: true
-         item: FIREWORK_CHARGE
-         slot: 5
-         name: "&2Slow down"
-         lore:
-           - ""
-           - "&7Slows down your speed"
-      fast:
+      speed:
          enable: true
          item: LEATHER_BOOTS
-         slot: 6
-         name: "&2Accelerates"
+         slot: 5
+         attributehide: true
+         name: "&2Speed"
          lore:
            - ""
-           - "&7Increases your speed"
+           - "&a[&7Right Click&a] &7Speed &a+"
+           - "&c[&7Left Click&c] &7Speed &c-"
+           - "&6[&7Drop Click&6] &7Speed &6Normal"
+      fast:
       # Exit gui item
       quit:
          enable: true
          item: BARRIER
          slot: 35
+         attributehide: true
          name: "&cExit"
          lore: null
 
@@ -142,7 +147,7 @@ messages:
       
     vanish:
       enable: "&2VerifPlayer &7» &aVanish enabled."
-      diable: "&2VerifPlayer &7» &cVanish disabled."
+      disable: "&2VerifPlayer &7» &cVanish disabled."
 
       
     time:

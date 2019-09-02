@@ -13,7 +13,7 @@ public class VanishListener1_11 implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		final Player player = event.getPlayer();
-		if(VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
+		if (VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player)) {
 			event.setCancelled(true);
 		}
 	}

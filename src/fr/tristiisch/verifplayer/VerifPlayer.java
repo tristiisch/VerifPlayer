@@ -2,7 +2,8 @@ package fr.tristiisch.verifplayer;
 
 import org.bukkit.plugin.PluginManager;
 
-import fr.tristiisch.verifplayer.core.command.AlertCpsCommand;
+import fr.tristiisch.verifplayer.core.alert.AlertCpsCommand;
+import fr.tristiisch.verifplayer.core.alert.AlertCpsListener;
 import fr.tristiisch.verifplayer.core.command.VerifCommand;
 import fr.tristiisch.verifplayer.core.command.VerifPlayerCommand;
 import fr.tristiisch.verifplayer.core.freeze.FreezeCommand;
@@ -59,11 +60,12 @@ public class VerifPlayer extends VerifPlayerPlugin {
 		this.getCommand("freeze").setExecutor(new FreezeCommand());
 
 		final VanishHook vanishHook = VanishHook.getInstance();
-		if(!vanishHook.isEnabled()) {
+		if (!vanishHook.isEnabled()) {
 			this.getCommand("vanish").setExecutor(new VanishCommand());
 			pluginManager.registerEvents(new VanishListener(), this);
 		}
 
+		pluginManager.registerEvents(new AlertCpsListener(), this);
 		pluginManager.registerEvents(new VerifPlayerListener(), this);
 		pluginManager.registerEvents(new GuiListener(), this);
 		pluginManager.registerEvents(new PlayerClicksListener(), this);
@@ -74,14 +76,14 @@ public class VerifPlayer extends VerifPlayerPlugin {
 		pluginManager.registerEvents(new FreezeListener(), this);
 		pluginManager.registerEvents(new VerifSpecToolsListener(), this);
 		pluginManager.registerEvents(new VerifSpecRestrictListener(), this);
-		if(ServerVersion.V1_12.isEqualOrOlder()) {
-			if(!vanishHook.isEnabled()) {
+		if (ServerVersion.V1_12.isEqualOrOlder()) {
+			if (!vanishHook.isEnabled()) {
 				pluginManager.registerEvents(new VanishListener1_12(), this);
 			}
 			pluginManager.registerEvents(new InventoryListener1_12(), this);
 		} else {
 
-			if(!vanishHook.isEnabled()) {
+			if (!vanishHook.isEnabled()) {
 				pluginManager.registerEvents(new VanishListener1_11(), this);
 			}
 			pluginManager.registerEvents(new InventoryListener1_11(), this);

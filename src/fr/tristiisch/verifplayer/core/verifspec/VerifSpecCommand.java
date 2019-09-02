@@ -13,25 +13,26 @@ public class VerifSpecCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String arg, final String[] args) {
-		if(!(sender instanceof Player)) {
+		if (!(sender instanceof Player)) {
 			sender.sendMessage(ConfigGet.MESSAGES_CANTCONSOLE.getString());
 			return true;
 		}
 		final Player player = (Player) sender;
-		if(!Permission.MODERATOR_COMMAND_VERIFSPEC.hasPermission(sender)) {
+		if (!Permission.MODERATOR_COMMAND_VERIFSPEC.hasPermission(sender)) {
 			player.sendMessage(ConfigGet.MESSAGES_NOPERM.getString());
 			return true;
 		}
 
-		if(VerifSpec.isIn(player)) {
+		if (VerifSpec.isIn(player)) {
 			VerifSpec.disable(player);
 			return true;
 		}
 
 		final GameMode gamemode = player.getGameMode();
-		if((gamemode.equals(GameMode.SURVIVAL) || gamemode.equals(GameMode.ADVENTURE)) && !player.isOnGround()) {
+		if ((gamemode.equals(GameMode.SURVIVAL) || gamemode.equals(GameMode.ADVENTURE)) && !player.isOnGround()) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_SHOULDBEONGROUND.getString());
-			// SpigotUtils.color("&2EmeraldMC &7» &cVous devez être au sol pour utiliser cette commande.")
+			// SpigotUtils.color("&2EmeraldMC &7» &cVous devez être au sol pour utiliser
+			// cette commande.")
 			return true;
 		}
 

@@ -8,6 +8,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.utils.PlayerContents;
@@ -18,17 +20,25 @@ public class VerifSpec {
 	private static Set<UUID> players = new HashSet<>();
 
 	public static void disable(final Player player) {
-		if(player.getGameMode() != GameMode.CREATIVE) {
+		if (player.getGameMode() != GameMode.CREATIVE) {
 			player.setAllowFlight(false);
 		}
 
 		final PlayerContents playerContents = PlayerContents.fromDisk(player);
-		if(player.isOnline()) {
+		if (player.isOnline()) {
 			playerContents.returnHisInventory();
-		} else {
 		}
 
 		VerifPlayerPlugin.getInstance().getVanishHandler().disable(player, false);
+
+		PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SPEED);
+		if (potionEffect == null) {
+			potionEffect = player.getPotionEffect(PotionEffectType.SLOW);
+		}
+
+		if (potionEffect != null) {
+			player.removePotionEffect(potionEffect.getType());
+		}
 
 		remove(player);
 		// player.sendMessage(SpigotUtils.color("&cMode staff désactivé"));
@@ -45,10 +55,11 @@ public class VerifSpec {
 		VerifPlayerPlugin.getInstance().getVanishHandler().enable(player, false);
 		setVerifSpecItems(player);
 
-		//player.setCompassTarget(EmeraldSpigot.getSpawn());
+		// player.setCompassTarget(EmeraldSpigot.getSpawn());
 
 		player.setAllowFlight(true);
 		// player.sendMessage(SpigotUtils.color("&aMode staff activé"));
+
 		player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_ENABLE.getString());
 	}
 
@@ -68,8 +79,8 @@ public class VerifSpec {
 
 	protected static void setVerifSpecItems(final Player player) {
 		final PlayerInventory playerInventory = player.getInventory();
-		for(final VerifSpecTool verifSpecItem : VerifSpecTool.values()) {
-			if(verifSpecItem.isEnable()) {
+		for (final VerifSpecTool verifSpecItem : VerifSpecTool.values()) {
+			if (verifSpecItem.isEnable()) {
 				playerInventory.setItem(verifSpecItem.getSlot(), verifSpecItem.getItemStack());
 			}
 		}

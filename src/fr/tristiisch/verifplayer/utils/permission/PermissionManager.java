@@ -21,27 +21,27 @@ public class PermissionManager {
 		PermissionManager.pluginName = plugin.getName();
 		final String configName = "permission";
 		final String fileName = new StringBuilder(configName).append(".yml").toString();
-		if(!plugin.getDataFolder().exists()) {
+		if (!plugin.getDataFolder().exists()) {
 			plugin.getDataFolder().mkdir();
 		}
 		final File configFile = new File(plugin.getDataFolder(), fileName);
-		if(configFile.exists()) {
+		if (configFile.exists()) {
 			configFile.delete();
 		}
 		try {
 			configFile.createNewFile();
 			final InputStream inputStream = plugin.getResource(fileName);
-			if(inputStream != null) {
+			if (inputStream != null) {
 				ByteStreams.copy(inputStream, new FileOutputStream(configFile));
 			}
 
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			VerifPlayerPlugin.getInstance().sendMessage("Unable to create file " + fileName);
 			e.printStackTrace();
 		}
 
 		final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-		for(final Permission perm : Permission.values()) {
+		for (final Permission perm : Permission.values()) {
 			final ConfigurationSection section = config.createSection("permissions." + perm.getId().replaceAll("//.", "	\\u002E"));
 
 			section.set("description", perm.getDescription());
@@ -49,7 +49,7 @@ public class PermissionManager {
 		}
 		try {
 			config.save(configFile);
-		} catch(final IOException e) {
+		} catch (final IOException e) {
 			VerifPlayerPlugin.getInstance().sendMessage("Unable to save file " + fileName);
 			e.printStackTrace();
 		}

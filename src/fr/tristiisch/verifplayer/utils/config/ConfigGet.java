@@ -10,12 +10,12 @@ import fr.tristiisch.verifplayer.utils.config.CustomConfigs.CustomConfig;
 
 public enum ConfigGet {
 
-	MESSAGES_VERSION,
-	MESSAGES_ALERTCPS_ALREADY_DISABLED,
-	MESSAGES_ALERTCPS_ALREADY_ENABLED,
+	MESSAGES_ALERTCPS_ALREADYDISABLED,
+	MESSAGES_ALERTCPS_ALREADYENABLED,
 	MESSAGES_ALERTCPS_DISABLED,
 	MESSAGES_ALERTCPS_ENABLED,
 	MESSAGES_ALERTCPS_USAGE,
+	MESSAGES_ALERTCPS_NOPERMTORECEIVEALERTS,
 	MESSAGES_CANTCONSOLE,
 	MESSAGES_NOPERM,
 	MESSAGES_VERIF_ISNOTCONNECTED,
@@ -64,7 +64,7 @@ public enum ConfigGet {
 	MESSAGES_FREEZE_PLAYERNOTCONNECTED,
 	MESSAGES_FREEZE_PLAYERUNFREEZE,
 	MESSAGES_FREEZE_PLAYERFREEZE,
-	MESSAGES_FREEZE_PLAYERFREEZREASON,
+	MESSAGES_FREEZE_PLAYERFREEZEREASON,
 	MESSAGES_FREEZE_USAGE,
 	MESSAGES_FREEZE_NOLONGERFREEZETITLE,
 	MESSAGES_FREEZE_NOLONGERFREEZESUBTITLE,
@@ -78,22 +78,44 @@ public enum ConfigGet {
 	MESSAGES_VERIFSPEC_ENABLE,
 	MESSAGES_VERIFSPEC_SHOULDBEONGROUND,
 	MESSAGES_VERIFSPEC_DISTANCETOOFAR,
-	;
+	MESSAGES_VERIFSPEC_TOOLSPEED,
+	MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL,;
+
+	CustomConfig customConfig;
 
 	static {
-		for(final ConfigGet configGet : ConfigGet.values()) {
+		for (final ConfigGet configGet : ConfigGet.values()) {
+
+			if (configGet.toString().startsWith("MESSAGES")) {
+				configGet.setCustomConfig(CustomConfig.MESSAGES);
+			} else {
+				configGet.setCustomConfig(CustomConfig.DEFAULT);
+			}
+
 			final YamlConfiguration config = configGet.getConfig();
-			if(config.get(configGet.getPath()) == null) {
-				VerifPlayerPlugin.getInstance().sendMessage("The value in config '" + configGet.getPath() + "' is null.");
+
+			if (config.get(configGet.getPath(), null) == null) {
+				VerifPlayerPlugin.getInstance().sendMessage("The value in config '" + configGet.getCustomConfig().getFileName() + "' '" + configGet.getPath() + "' is null.");
 			}
 		}
 	}
 
+	private void setCustomConfig(CustomConfig customConfig) {
+		this.customConfig = customConfig;
+	}
+
+	public CustomConfig getCustomConfig() {
+		// if(this.toString().startsWith("MESSAGES")) {
+		// customConfig = CustomConfig.MESSAGES;
+		// return CustomConfig.MESSAGES;
+		// }
+		// customConfig = CustomConfig.DEFAULT;
+		// return CustomConfig.DEFAULT;
+		return this.customConfig;
+	}
+
 	public YamlConfiguration getConfig() {
-		if(this.toString().startsWith("MESSAGES")) {
-			return CustomConfig.MESSAGES.getConfig();
-		}
-		return CustomConfig.DEFAULT.getConfig();
+		return this.getCustomConfig().getConfig();
 	}
 
 	public double getDouble() {

@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.tristiisch.verifplayer.VerifPlayerPlugin;
+
 public enum Permission {
 
 	MODERATOR_COMMAND_VERIF("Use /verif <player>"),
@@ -19,8 +21,7 @@ public enum Permission {
 	MODERATOR_RECEIVEFREEZEDISCONNECTED,
 	ADMIN_SEEVANISHED,
 	ADMIN_CANTVERIF,
-	ADMIN_COMMAND_RELOAD,
-	;
+	ADMIN_COMMAND_RELOAD,;
 
 	public static boolean isAuthor(final Player player) {
 		return player.getUniqueId().toString().equals("ca0a1663-1696-4d62-b93f-281965522a76");
@@ -69,6 +70,6 @@ public enum Permission {
 
 	public void sendMessageToOnlinePlayers(final String message) {
 		this.getOnlinePlayersStream().forEach(p -> p.sendMessage(message));
-		;
+		VerifPlayerPlugin.getInstance().sendMessage(message);
 	}
 }

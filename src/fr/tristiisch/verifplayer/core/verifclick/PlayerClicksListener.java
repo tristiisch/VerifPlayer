@@ -19,7 +19,7 @@ public class PlayerClicksListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
-		if(!(event.getDamager() instanceof Player)) {
+		if (!(event.getDamager() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getDamager();
@@ -27,23 +27,23 @@ public class PlayerClicksListener implements Listener {
 		playerInfo.addEntityClick();
 		final Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
 
-		if(blockTarget.getType() == Material.AIR) {
+		if (blockTarget.getType() == Material.AIR) {
 			playerInfo.removeAirClick();
 		}
-		if(playerInfo.getClickEntity() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
+		if (playerInfo.getClickEntity() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if(event.getAction() != Action.LEFT_CLICK_AIR) {
+		if (event.getAction() != Action.LEFT_CLICK_AIR) {
 			return;
 		}
 		final Player player = event.getPlayer();
 		final PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
 		playerInfo.addAirClick();
-		if(playerInfo.getClickAir() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
+		if (playerInfo.getClickAir() > ConfigGet.SETTINGS_MAXCPS.getInt()) {
 			event.setCancelled(true);
 		}
 	}

@@ -14,33 +14,38 @@ public class VerifCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String arg, final String[] args) {
-		if(!(sender instanceof Player)) {
+		if (!(sender instanceof Player)) {
 			sender.sendMessage(ConfigGet.MESSAGES_CANTCONSOLE.getString());
 			return true;
 		}
 		final Player player = (Player) sender;
-		if(!Permission.MODERATOR_COMMAND_VERIF.hasPermission(sender)) {
+		if (!Permission.MODERATOR_COMMAND_VERIF.hasPermission(sender)) {
 			player.sendMessage(ConfigGet.MESSAGES_NOPERM.getString());
 			return true;
 		}
 
-		if(args.length == 0) {
+		if (!Permission.MODERATOR_RECEIVEALERT.hasPermission(sender)) {
+			player.sendMessage(ConfigGet.MESSAGES_ALERTCPS_NOPERMTORECEIVEALERTS.getString());
+			return true;
+		}
+
+		if (args.length == 0) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_USAGE.getString());
 			return true;
 		}
 
 		final Player target = Bukkit.getPlayer(args[0]);
-		if(target == null) {
+		if (target == null) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_ISNOTCONNECTED.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
 
-		if(Permission.ADMIN_CANTVERIF.hasPermission(target) && !Permission.ADMIN_CANTVERIF.hasPermission(player)) {
+		if (Permission.ADMIN_CANTVERIF.hasPermission(target) && !Permission.ADMIN_CANTVERIF.hasPermission(player)) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_CANTVERIFADMIN.getString().replaceAll("%player%", args[0]));
 			return true;
 		}
 
-		if(target.getUniqueId().equals(player.getUniqueId()) && !Permission.ADMIN_CANTVERIF.hasPermission(sender)) {
+		if (target.getUniqueId().equals(player.getUniqueId()) && !Permission.ADMIN_CANTVERIF.hasPermission(sender)) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_CANTVERIFYOURSELF.getString().replaceAll("%player%", args[0]));
 			return true;
 		}

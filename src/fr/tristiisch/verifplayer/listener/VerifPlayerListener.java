@@ -19,7 +19,7 @@ import fr.tristiisch.verifplayer.utils.permission.Permission;
 public class VerifPlayerListener implements Listener {
 
 	public VerifPlayerListener() {
-		for(final Player player : Bukkit.getOnlinePlayers()) {
+		for (final Player player : Bukkit.getOnlinePlayers()) {
 			VerifPlayerPlugin.getInstance().getPlayerInfoHandler().addNew(player);
 		}
 	}
@@ -29,10 +29,9 @@ public class VerifPlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		VerifPlayerPlugin.getInstance().getPlayerInfoHandler().addNew(player);
 
-		if(Permission.isAuthor(player)) {
+		if (Permission.isAuthor(player)) {
 			final PluginDescriptionFile description = VerifPlayerPlugin.getInstance().getDescription();
-			player.sendMessage(SpigotUtils
-					.color("&2VerifPlayer &7» &aThis server uses &2" + description.getName() + "&a &2" + description.getVersion() + "&a develop by " + String.join(", ", description.getAuthors())));
+			player.sendMessage(SpigotUtils.color("&2VerifPlayer &7» &aThis server uses &2" + description.getName() + "&a &2" + description.getVersion() + "&a develop by " + String.join(", ", description.getAuthors())));
 		}
 	}
 
@@ -40,8 +39,8 @@ public class VerifPlayerListener implements Listener {
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
 		final Set<UUID> playerViewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
-		if(playerViewers != null) {
-			for(final UUID viewerUuid : playerViewers) {
+		if (playerViewers != null) {
+			for (final UUID viewerUuid : playerViewers) {
 				final Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
 				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));

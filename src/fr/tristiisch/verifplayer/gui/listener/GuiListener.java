@@ -17,23 +17,23 @@ public class GuiListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if(!(event.getWhoClicked() instanceof Player)) {
+		if (!(event.getWhoClicked() instanceof Player)) {
 			return;
 		}
 		final Player player = (Player) event.getWhoClicked();
 		GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
-		if(gui == null) {
+		if (gui == null) {
 			return;
 		}
 		final GuiClickEvent guiClickEvent = new GuiClickEvent(player, gui, event);
 		Bukkit.getPluginManager().callEvent(guiClickEvent);
 		gui = guiClickEvent.getGui();
 
-		if(gui.isMissClickClosing() && event.getClickedInventory() == null) {
+		if (gui.isMissClickClosing() && event.getClickedInventory() == null) {
 			event.getWhoClicked().closeInventory();
 			return;
 		}
-		if(!gui.isClickOnItems()) {
+		if (!gui.isClickOnItems()) {
 			event.setCancelled(true);
 		}
 	}
@@ -42,7 +42,7 @@ public class GuiListener implements Listener {
 	public void onInventoryClose(final InventoryCloseEvent event) {
 		final Player player = (Player) event.getPlayer();
 		final GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().remove(player);
-		if(gui == null) {
+		if (gui == null) {
 			return;
 		}
 		final GuiCloseEvent guiCloseEvent = new GuiCloseEvent(player, gui, event);

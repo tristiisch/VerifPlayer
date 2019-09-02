@@ -26,19 +26,19 @@ public class DirectoryWatcher {
 			final WatchKey watchKey = watcher.take();
 			// get list of events as they occur
 			final List<WatchEvent<?>> events = watchKey.pollEvents();
-			//iterate over events
-			for(final WatchEvent<?> event : events) {
-				//check if the event refers to a new file created
-				if(event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-					//print file name which is newly created
+			// iterate over events
+			for (final WatchEvent<?> event : events) {
+				// check if the event refers to a new file created
+				if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+					// print file name which is newly created
 					System.out.println("Created: " + event.context().toString());
 				}
 
 				System.out.println(event.kind() + ": " + event.context().toString());
 			}
-		} catch(final IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch(final InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
