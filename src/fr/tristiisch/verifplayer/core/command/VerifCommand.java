@@ -13,19 +13,14 @@ import fr.tristiisch.verifplayer.utils.permission.Permission;
 public class VerifCommand implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String arg, final String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String arg, String[] args) {
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(ConfigGet.MESSAGES_CANTCONSOLE.getString());
 			return true;
 		}
-		final Player player = (Player) sender;
+		Player player = (Player) sender;
 		if (!Permission.MODERATOR_COMMAND_VERIF.hasPermission(sender)) {
 			player.sendMessage(ConfigGet.MESSAGES_NOPERM.getString());
-			return true;
-		}
-
-		if (!Permission.MODERATOR_RECEIVEALERT.hasPermission(sender)) {
-			player.sendMessage(ConfigGet.MESSAGES_ALERTCPS_NOPERMTORECEIVEALERTS.getString());
 			return true;
 		}
 
@@ -34,7 +29,7 @@ public class VerifCommand implements CommandExecutor {
 			return true;
 		}
 
-		final Player target = Bukkit.getPlayer(args[0]);
+		Player target = Bukkit.getPlayer(args[0]);
 		if (target == null) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIF_ISNOTCONNECTED.getString().replaceAll("%player%", args[0]));
 			return true;

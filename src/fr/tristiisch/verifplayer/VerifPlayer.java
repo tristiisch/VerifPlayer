@@ -89,7 +89,6 @@ public class VerifPlayer extends VerifPlayerPlugin {
 			pluginManager.registerEvents(new InventoryListener1_11(), this);
 		}
 		new Metrics(this);
-		// DirectoryWatcher.start(this);
 		this.sendMessage("§2" + this.getDescription().getName() + "§a by Tristiisch (" + this.getDescription().getVersion() + ") is activated.");
 	}
 }

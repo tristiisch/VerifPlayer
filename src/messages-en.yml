@@ -149,7 +149,6 @@ messages:
       enable: "&2VerifPlayer &7» &aVanish enabled."
       disable: "&2VerifPlayer &7» &cVanish disabled."
 
-      
     time:
        year: "year"
        years: "years"

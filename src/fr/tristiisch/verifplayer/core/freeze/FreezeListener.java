@@ -1,42 +1,38 @@
 package fr.tristiisch.verifplayer.core.freeze;
 
-import java.util.List;
-import java.util.UUID;
-
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
 public class FreezeListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
-	public void onEntityDamage(final EntityDamageByEntityEvent event) {
+	public void onEntityDamage(EntityDamageByEntityEvent event) {
 		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}
-		final Player victim = (Player) event.getEntity();
+		Player victim = (Player) event.getEntity();
 		if (Freeze.isFreeze(victim)) {
 
 			if (event.getDamager() instanceof Player) {
-				final Player attacker = (Player) event.getDamager();
+				Player attacker = (Player) event.getDamager();
 				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERISFREEZE.getString().replace("%player%", victim.getName()));
 			}
 			event.setCancelled(true);
 		}
 		if (event.getDamager() instanceof Player) {
 
-			final Player attacker = (Player) event.getDamager();
+			Player attacker = (Player) event.getDamager();
 			if (Freeze.isFreeze(attacker)) {
 				event.setCancelled(true);
 			}
@@ -45,8 +41,8 @@ public class FreezeListener implements Listener {
 
 	// TODO 1.9 compa + other event (like tchat)
 
-	@EventHandler
-	public void onPlayerChat(final AsyncPlayerChatEvent event) {
+	/**@EventHandler
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		List<UUID> playersFreeze = Freeze.players;
 		if (playersFreeze.isEmpty()) {
 			return;
@@ -60,56 +56,53 @@ public class FreezeListener implements Listener {
 
 		event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r%s"));
 		event.getRecipients().removeIf(p -> !Permission.MODERATOR_COMMAND_FREEZE.hasPermission(p));
-	}
+	}*/
 
 	@EventHandler(ignoreCancelled = true)
-	public void onEntityPickupItem(final EntityPickupItemEvent event) {
-		if (event.getEntity() instanceof Player) {
-			final Player player = (Player) event.getEntity();
-			if (Freeze.isFreeze(player)) {
-				event.setCancelled(true);
-			}
-		}
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerDropItem(final PlayerDropItemEvent event) {
-		final Player player = event.getPlayer();
+	public void onEntityPickupItem(PlayerPickupItemEvent event) {
+		Player player = event.getPlayer();
 		if (Freeze.isFreeze(player)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onPlayerToggleSneak(final PlayerToggleSneakEvent event) {
-		final Player player = event.getPlayer();
+	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		Player player = event.getPlayer();
 		if (Freeze.isFreeze(player)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerMoveEvent(final PlayerMoveEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-		final Player player = event.getPlayer();
+	public void onPlayerMove(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
 		if (!Freeze.isFreeze(player)) {
 			return;
 		}
-		// TODO 1.8/1.7 comptability
-		// player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 0);
-		player.teleport(event.getFrom());
+		Location location = event.getFrom();
+		Location locationTo = event.getTo();
+		if (location.getX() != locationTo.getX() || location.getZ() != locationTo.getZ() || location.getY() != locationTo.getY()) {
+			player.teleport(location);
+		}
 	}
 
 	@EventHandler
-	public void onPlayerQuitEvent(final PlayerQuitEvent event) {
-		final Player player = event.getPlayer();
+	public void onPlayerQuitEvent(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
 		if (!Freeze.isFreeze(player)) {
 			return;
 		}
 		Freeze.unfreeze(player);
 
 		Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString().replace("%player%", player.getName()));
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+		Player player = event.getPlayer();
+		if (Freeze.isFreeze(player)) {
+			event.setCancelled(true);
+		}
 	}
 }

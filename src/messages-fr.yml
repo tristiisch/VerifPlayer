@@ -9,6 +9,7 @@ messages:
         enabled: "&2VerifPlayer &7» &aVous recevrez désormais les alertes CPS."
         alreadydisabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà désactivé."
         alreadyenabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà activé."
+        nopermtoreceivealerts: "&2VerifPlayer &7» &cYou can't receive alert because you didn't have permission."
     
     verif:
         usage: "&cUsage &7» &c/verif <player>"
@@ -50,7 +51,104 @@ messages:
 
         tpsitemname: "&6TPS"
         tpsformat: "&7%time%min: %color%%tps%"
-        
+    
+    verifspec:
+      enable: "&2VerifPlayer &7» &aVerifSpec enabled." 
+      disable: "&2VerifPlayer &7» &cVerifSpec disabled."
+      shouldbeonground: "&2VerifPlayer &7» &cYou should be on the ground to use this command."
+      distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
+      toolspeed: "&2VerifPlayer &7» %color%Your speed is now set to %speed%."
+      toolspeednormal: "&2VerifPlayer &7» &aYour speed is now normal."
+      teleportermsg:
+        noplayers: "&2VerifPlayer &7» &cThere are no players."
+        succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
+      teleporter:
+         enable: true
+         # item list: https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html
+         item: COMPASS
+         # slot from 0 to 8
+         slot: 0
+         attributehide: true
+         name: "&2Teleporter"
+         lore:
+           - ""
+           - "&7Random teleportation to players"
+      freeze:
+         enable: true
+         item: BLAZE_ROD
+         slot: 1
+         attributehide: true
+         name: "&2Freeze Stick"
+         lore:
+           - ""
+           - "&7Freeze the player you're aiming at"
+      knockback:
+         enable: true
+         item: STICK
+         slot: 2
+         attributehide: true
+         name: "&2Knockback Stick"
+         lore:
+           - ""
+           - "&7Test the knockback of the player you're aiming at"
+      verif:
+         enable: true
+         item: CHEST
+         slot: 3
+         attributehide: true
+         name: "&2Verificator"
+         lore:
+           - ""
+           - "&7Open VerifPlayer Gui for the player you're aiming at"
+      shuttle:
+         enable: true
+         item: MINECART
+         slot: 4
+         attributehide: true
+         name: "&2Shuttle"
+         lore:
+           - ""
+           - "&7Teleport where you aim"
+      speed:
+         enable: true
+         item: LEATHER_BOOTS
+         slot: 5
+         attributehide: true
+         name: "&2Speed"
+         lore:
+           - ""
+           - "&a[&7Right Click&a] &7Speed &a+"
+           - "&c[&7Left Click&c] &7Speed &c-"
+           - "&6[&7Drop Click&6] &7Speed &6Normal"
+      fast:
+      # Exit gui item
+      quit:
+         enable: true
+         item: BARRIER
+         slot: 35
+         attributehide: true
+         name: "&cExit"
+         lore: null
+
+    freeze:
+      usage: "&cUsage &7» &c/freeze <player> [reason]"
+      playerfreeze: "&2VerifPlayer &7» &aYou have frozen &2%player%&a."
+      playerfreezereason: "&2VerifPlayer &7» &aYou have frozen &2%player%&a for &2%reason%."
+      playerunfreeze: "&2VerifPlayer &7» &cYou have unfrozen &4%player%&c."
+      title: "&cYou have been frozen"
+      subtitle: "&4Follow the instructions of moderator"
+      subtitlereason: "&4Reason : &c"
+      nolongerfreezetitle: "&aYou are no longer frozen"
+      nolongerfreezesubtitle: ""
+      playernotconnected: "&2VerifPlayer &7» &cThe player &4%player%&c is not connected."
+      playerdisconnectwhilefreeze: "&2VerifPlayer &7» &cThe player &4%player%&c disconnected while frozen."
+      # While someone want to attack a frozen player
+      playerisfreeze: "&cDon't hurt him, he is frozen !"
+      
+    vanish:
+      enable: "&2VerifPlayer &7» &aVanish enabled."
+      disable: "&2VerifPlayer &7» &cVanish disabled."
+    
     time:
        year: "an"
        years: "ans"

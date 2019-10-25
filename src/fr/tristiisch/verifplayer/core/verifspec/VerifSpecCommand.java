@@ -31,8 +31,6 @@ public class VerifSpecCommand implements CommandExecutor {
 		final GameMode gamemode = player.getGameMode();
 		if ((gamemode.equals(GameMode.SURVIVAL) || gamemode.equals(GameMode.ADVENTURE)) && !player.isOnGround()) {
 			player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_SHOULDBEONGROUND.getString());
-			// SpigotUtils.color("&2EmeraldMC &7» &cVous devez être au sol pour utiliser
-			// cette commande.")
 			return true;
 		}
 

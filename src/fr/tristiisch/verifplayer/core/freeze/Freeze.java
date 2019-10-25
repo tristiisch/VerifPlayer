@@ -13,19 +13,17 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class Freeze {
 
-	protected static final List<UUID> players = new ArrayList<>();
+	protected static List<UUID> players = new ArrayList<>();
 
-	public static void freeze(final Player player) {
+	public static void freeze(Player player) {
 		freeze(player, null);
 	}
 
-	public static void freeze(final Player player, String reason) {
+	public static void freeze(Player player, String reason) {
 		player.setWalkSpeed(0);
-		final Location underPlayer = SpigotUtils.getFirstBlockUnderPlayer(player);
+		Location underPlayer = SpigotUtils.getFirstBlockUnderPlayer(player);
 		if (underPlayer != null) {
 			player.teleport(new Location(underPlayer.getWorld(), underPlayer.getX() + 0.5, underPlayer.getY() + 1, underPlayer.getZ() + 0.5));
-		} else {
-			// player.teleport(EmeraldSpigot.getSpawn());
 		}
 		players.add(player.getUniqueId());
 
@@ -35,20 +33,14 @@ public class Freeze {
 			reason = ConfigGet.MESSAGES_FREEZE_SUBTITLEREASON.getString() + reason;
 		}
 
-		// while(!player.isOnGround()) {
-		// Location location = player.getLocation();
-		// player.teleport(new Location(location.getWorld(), location.getX(),
-		// location.getY() - 0.25, location.getZ()));
-		// }
-
 		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_TITLE.getString(), reason, 0, 100000000, 0);
 	}
 
-	public static boolean isFreeze(final Player player) {
+	public static boolean isFreeze(Player player) {
 		return players.contains(player.getUniqueId());
 	}
 
-	public static void unfreeze(final Player player) {
+	public static void unfreeze(Player player) {
 		player.setWalkSpeed(0.2f);
 		players.remove(player.getUniqueId());
 		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZETITLE.getString(), ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZESUBTITLE.getString());

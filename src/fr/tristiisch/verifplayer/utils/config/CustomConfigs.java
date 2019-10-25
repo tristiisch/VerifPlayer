@@ -74,8 +74,6 @@ public class CustomConfigs {
 					configFile.createNewFile();
 					if (resource != null) {
 						ByteStreams.copy(resource, new FileOutputStream(configFile));
-					} else {
-						plugin.sendMessage("Config \"" + fileName + "\" unknown.");
 					}
 				} else if (resource != null) {
 

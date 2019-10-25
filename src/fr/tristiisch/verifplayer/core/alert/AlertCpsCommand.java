@@ -23,6 +23,11 @@ public class AlertCpsCommand implements CommandExecutor {
 			return true;
 		}
 
+		if (!Permission.MODERATOR_RECEIVEALERT.hasPermission(sender)) {
+			player.sendMessage(ConfigGet.MESSAGES_ALERTCPS_NOPERMTORECEIVEALERTS.getString());
+			return true;
+		}
+
 		if (args.length == 0) {
 			if (Alert.alertsEnabled(player)) {
 				player.sendMessage(ConfigGet.MESSAGES_ALERTCPS_DISABLED.getString());

@@ -8,7 +8,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
@@ -31,17 +30,10 @@ public class VerifSpec {
 
 		VerifPlayerPlugin.getInstance().getVanishHandler().disable(player, false);
 
-		PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SPEED);
-		if (potionEffect == null) {
-			potionEffect = player.getPotionEffect(PotionEffectType.SLOW);
-		}
-
-		if (potionEffect != null) {
-			player.removePotionEffect(potionEffect.getType());
-		}
+		player.removePotionEffect(PotionEffectType.SPEED);
+		player.removePotionEffect(PotionEffectType.SLOW);
 
 		remove(player);
-		// player.sendMessage(SpigotUtils.color("&cMode staff désactivé"));
 		player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_DISABLE.getString());
 	}
 
@@ -55,10 +47,7 @@ public class VerifSpec {
 		VerifPlayerPlugin.getInstance().getVanishHandler().enable(player, false);
 		setVerifSpecItems(player);
 
-		// player.setCompassTarget(EmeraldSpigot.getSpawn());
-
 		player.setAllowFlight(true);
-		// player.sendMessage(SpigotUtils.color("&aMode staff activé"));
 
 		player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_ENABLE.getString());
 	}
