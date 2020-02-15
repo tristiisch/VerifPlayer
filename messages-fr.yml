@@ -1,4 +1,4 @@
-version: 1.0
+version: 1.9
 messages:
     cantconsole: "&cImpossible d'utilisé cette commande avec la console"
     noperm: "&cVous n'avez pas la permission"
@@ -53,15 +53,15 @@ messages:
         tpsformat: "&7%time%min: %color%%tps%"
     
     verifspec:
-      enable: "&2VerifPlayer &7» &aVerifSpec enabled." 
-      disable: "&2VerifPlayer &7» &cVerifSpec disabled."
-      shouldbeonground: "&2VerifPlayer &7» &cYou should be on the ground to use this command."
-      distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
-      toolspeed: "&2VerifPlayer &7» %color%Your speed is now set to %speed%."
-      toolspeednormal: "&2VerifPlayer &7» &aYour speed is now normal."
+      enable: "&2VerifPlayer &7» &aVerifSpec activer." 
+      disable: "&2VerifPlayer &7» &cVerifSpec désactiver."
+      shouldbeonground: "&2VerifPlayer &7» &cTu dois être au sol pour activer cette commande."
+      distancetoofar: "&2VerifPlayer &7» &cLa distance est trop loin"
+      toolspeed: "&2VerifPlayer &7» %color%Ta vitesse est à %speed%."
+      toolspeednormal: "&2VerifPlayer &7» &aTa vitesse est remise à 0."
       teleportermsg:
-        noplayers: "&2VerifPlayer &7» &cThere are no players."
-        succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
+        noplayers: "&2VerifPlayer &7» &cIl n'y a pas de joueurs."
+        succes: "&2VerifPlayer &7» &aTu as été téléporter à &2%player%&a."
       teleporter:
          enable: true
          # item list: https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html
@@ -69,57 +69,57 @@ messages:
          # slot from 0 to 8
          slot: 0
          attributehide: true
-         name: "&2Teleporter"
+         name: "&2Teleporteur"
          lore:
            - ""
-           - "&7Random teleportation to players"
+           - "&7Téléportation aléatoire aux joueurs"
       freeze:
          enable: true
          item: BLAZE_ROD
          slot: 1
          attributehide: true
-         name: "&2Freeze Stick"
+         name: "&2Baton de Freeze"
          lore:
            - ""
-           - "&7Freeze the player you're aiming at"
+           - "&7Freeze le joueur que tu vise"
       knockback:
          enable: true
          item: STICK
          slot: 2
          attributehide: true
-         name: "&2Knockback Stick"
+         name: "&2Baton de Recul"
          lore:
            - ""
-           - "&7Test the knockback of the player you're aiming at"
+           - "&7Teste le recul des joueurs"
       verif:
          enable: true
          item: CHEST
          slot: 3
          attributehide: true
-         name: "&2Verificator"
+         name: "&2Verificateur"
          lore:
            - ""
-           - "&7Open VerifPlayer Gui for the player you're aiming at"
+           - "&7Ouvre l'interface VerifPlayer du joueur que tu vise"
       shuttle:
          enable: true
          item: MINECART
          slot: 4
          attributehide: true
-         name: "&2Shuttle"
+         name: "&2Navette"
          lore:
            - ""
-           - "&7Teleport where you aim"
+           - "&7Téléporte là où tu vise"
       speed:
          enable: true
          item: LEATHER_BOOTS
          slot: 5
          attributehide: true
-         name: "&2Speed"
+         name: "&2Vitesse"
          lore:
            - ""
-           - "&a[&7Right Click&a] &7Speed &a+"
-           - "&c[&7Left Click&c] &7Speed &c-"
-           - "&6[&7Drop Click&6] &7Speed &6Normal"
+           - "&a[&7Right Click&a] &7Vitesse &a+"
+           - "&c[&7Left Click&c] &7Vitesse &c-"
+           - "&6[&7Drop Click&6] &7Vitesse &6Normale"
       fast:
       # Exit gui item
       quit:
@@ -132,22 +132,22 @@ messages:
 
     freeze:
       usage: "&cUsage &7» &c/freeze <player> [reason]"
-      playerfreeze: "&2VerifPlayer &7» &aYou have frozen &2%player%&a."
-      playerfreezereason: "&2VerifPlayer &7» &aYou have frozen &2%player%&a for &2%reason%."
-      playerunfreeze: "&2VerifPlayer &7» &cYou have unfrozen &4%player%&c."
-      title: "&cYou have been frozen"
-      subtitle: "&4Follow the instructions of moderator"
-      subtitlereason: "&4Reason : &c"
-      nolongerfreezetitle: "&aYou are no longer frozen"
+      playerfreeze: "&2VerifPlayer &7» &aTu as freeze  &2%player%&a."
+      playerfreezereason: "&2VerifPlayer &7» &aTu as freeze &2%player%&a pour &2%reason%."
+      playerunfreeze: "&2VerifPlayer &7» &cTu as défreeze &4%player%&c."
+      title: "&cTu as été défreeze"
+      subtitle: "&4Suit les instruction des modérateurs"
+      subtitlereason: "&4Raison : &c"
+      nolongerfreezetitle: "&aTu n'est plus freeze."
       nolongerfreezesubtitle: ""
-      playernotconnected: "&2VerifPlayer &7» &cThe player &4%player%&c is not connected."
-      playerdisconnectwhilefreeze: "&2VerifPlayer &7» &cThe player &4%player%&c disconnected while frozen."
+      playernotconnected: "&2VerifPlayer &7» &cLe joueur &4%player%&c n'est pas connecté."
+      playerdisconnectwhilefreeze: "&2VerifPlayer &7» &cLe joueur &4%player%&c s'est déconnecté en étant freeze."
       # While someone want to attack a frozen player
-      playerisfreeze: "&cDon't hurt him, he is frozen !"
+      playerisfreeze: "&cNe l'attaque pas, il est freeze !"
       
     vanish:
-      enable: "&2VerifPlayer &7» &aVanish enabled."
-      disable: "&2VerifPlayer &7» &cVanish disabled."
+      enable: "&2VerifPlayer &7» &aVanish activer."
+      disable: "&2VerifPlayer &7» &cVanish désactiver."
     
     time:
        year: "an"

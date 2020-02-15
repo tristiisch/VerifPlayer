@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,15 +18,15 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 
 public class PlayerClicksListener implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player)) {
 			return;
 		}
-		Player player = (Player) event.getDamager();
-		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
+		Player attacker = (Player) event.getDamager();
+		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(attacker);
 		playerInfo.addEntityClick();
-		Block blockTarget = player.getTargetBlock((Set<Material>) null, 6);
+		Block blockTarget = attacker.getTargetBlock((Set<Material>) null, 6);
 
 		if (blockTarget.getType() == Material.AIR) {
 			playerInfo.removeAirClick();
@@ -35,7 +36,7 @@ public class PlayerClicksListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() != Action.LEFT_CLICK_AIR) {
 			return;

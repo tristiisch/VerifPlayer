@@ -81,7 +81,6 @@ public class VerifPlayer extends VerifPlayerPlugin {
 			}
 			pluginManager.registerEvents(new InventoryListener1_12(), this);
 		} else {
-
 			if (!vanishHook.isEnabled()) {
 				pluginManager.registerEvents(new VanishListener1_11(), this);
 			}

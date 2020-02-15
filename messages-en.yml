@@ -25,7 +25,7 @@ messages:
         # You can use Placeholder
         info:
           - ""
-          - "&7Groupe: &e%rank%"
+          - "&7Group: &e%rank%"
           - "&7Heal: &e%heal%&c\u2764"
           - "&7Food: &e%food%"
           - "&7XP Level: &e%xp_level%"

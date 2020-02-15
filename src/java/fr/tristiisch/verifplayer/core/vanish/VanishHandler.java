@@ -29,6 +29,8 @@ public class VanishHandler extends VanishAbstract {
 			if (ess != null) {
 				User user = ess.getUser(player);
 				user.setVanished(false);
+			} else {
+				Bukkit.getOnlinePlayers().stream().forEach(p -> p.showPlayer(player));
 			}
 		} else {
 			vanishHook.showPlayer(player);
@@ -54,6 +56,8 @@ public class VanishHandler extends VanishAbstract {
 			if (essHook.isEssEnabled()) {
 				User user = essHook.getEssentials().getUser(player);
 				user.setVanished(true);
+			} else {
+				Bukkit.getOnlinePlayers().stream().forEach(p -> p.hidePlayer(player));
 			}
 		} else {
 			vanishHook.hidePlayer(player);
