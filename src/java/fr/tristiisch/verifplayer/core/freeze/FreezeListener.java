@@ -1,16 +1,20 @@
 package fr.tristiisch.verifplayer.core.freeze;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 import fr.tristiisch.verifplayer.utils.permission.Permission;
 
@@ -39,31 +43,19 @@ public class FreezeListener implements Listener {
 		}
 	}
 
-	// TODO 1.9 compa + other event (like tchat)
-
-	/**@EventHandler
+	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		List<UUID> playersFreeze = Freeze.players;
 		if (playersFreeze.isEmpty()) {
 			return;
 		}
-
 		Player player = event.getPlayer();
-		if (!Freeze.isFreeze(player)) {
-			event.getRecipients().removeIf(p -> playersFreeze.contains(p.getUniqueId()));
+		if (!Freeze.isFreeze(player) && !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(player)) {
+			event.getRecipients().removeIf(p -> p.getUniqueId() != player.getUniqueId() && playersFreeze.contains(p.getUniqueId()));
 			return;
 		}
-
-		event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r%s"));
-		event.getRecipients().removeIf(p -> !Permission.MODERATOR_COMMAND_FREEZE.hasPermission(p));
-	}*/
-
-	@EventHandler(ignoreCancelled = true)
-	public void onEntityPickupItem(PlayerPickupItemEvent event) {
-		Player player = event.getPlayer();
-		if (Freeze.isFreeze(player)) {
-			event.setCancelled(true);
-		}
+		event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r") + "%s");
+		event.getRecipients().removeIf(p -> p.getUniqueId() != player.getUniqueId() && !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(p));
 	}
 
 	@EventHandler(ignoreCancelled = true)

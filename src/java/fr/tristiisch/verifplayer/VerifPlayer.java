@@ -8,6 +8,8 @@ import fr.tristiisch.verifplayer.core.command.VerifCommand;
 import fr.tristiisch.verifplayer.core.command.VerifPlayerCommand;
 import fr.tristiisch.verifplayer.core.freeze.FreezeCommand;
 import fr.tristiisch.verifplayer.core.freeze.FreezeListener;
+import fr.tristiisch.verifplayer.core.freeze.FreezeListener1_11;
+import fr.tristiisch.verifplayer.core.freeze.FreezeListener1_12;
 import fr.tristiisch.verifplayer.core.vanish.commands.VanishCommand;
 import fr.tristiisch.verifplayer.core.vanish.listeners.VanishListener;
 import fr.tristiisch.verifplayer.core.vanish.listeners.VanishListener1_11;
@@ -76,11 +78,13 @@ public class VerifPlayer extends VerifPlayerPlugin {
 
 		VanishHook vanishHook = VanishHook.getInstance();
 		if (ServerVersion.V1_12.isEqualOrOlder()) {
+			pluginManager.registerEvents(new FreezeListener1_12(), this);
 			if (!vanishHook.isEnabled()) {
 				pluginManager.registerEvents(new VanishListener1_12(), this);
 			}
 			pluginManager.registerEvents(new InventoryListener1_12(), this);
 		} else {
+			pluginManager.registerEvents(new FreezeListener1_11(), this);
 			if (!vanishHook.isEnabled()) {
 				pluginManager.registerEvents(new VanishListener1_11(), this);
 			}

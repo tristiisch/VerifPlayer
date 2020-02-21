@@ -551,7 +551,7 @@ public class Metrics {
 		}
 		this.addCustomChart(new Metrics.SimplePie("language", () -> {
 			String langague2L = CustomConfigs.getLangague();
-			String langagueName = new Locale("", langague2L).getDisplayCountry();
+			String langagueName = new Locale(langague2L).getDisplayCountry();
 			if (!langagueName.isEmpty()) {
 				return langagueName;
 			}
