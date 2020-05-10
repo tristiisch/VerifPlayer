@@ -1,0 +1,27 @@
+name: VerifPlayer
+main: fr.tristiisch.verifplayer.VerifPlayer
+author: Tristiisch
+version: 2.5
+description: "The best plugin to destroy autoclick and macro inventory"
+website: "https://goo.gl/nKwUuo"
+soft-depend: [Essentials, GroupManager, PermissionsEx, LuckPerms, PlaceholderAPI, SuperVanish, PremiumVanish]
+
+commands:
+    verifplayer:
+      description: "Allows to reload the configuration with /verifplayer reload"
+      permission: verifplayer.admin.command.verifplayer
+    alertcps:
+      description: "Enables/disables CPS alerts"
+      permission: verifplayer.moderator.command.alertcps
+    verif:
+      description: "Allows to see the inventory, CPS... of a player"
+      permission: verifplayer.moderator.command.verif
+    verifspec:
+      description: "Allows to verif"
+      permission: verifplayer.moderator.command.verifspec
+    verifvanish:
+      description: "Becomes invisible"
+      permission: verifplayer.moderator.command.vanish
+    freeze:
+      description: "Freeze bad people"
+      permission: verifplayer.moderator.command.freeze
