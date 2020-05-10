@@ -26,42 +26,42 @@ public class ItemCreator {
 	public ItemCreator() {
 	}
 
-	public ItemCreator(final Material material) {
+	public ItemCreator(Material material) {
 		this.material = material;
 	}
 
-	public ItemCreator customName(final String customName) {
+	public ItemCreator customName(String customName) {
 		this.customName = customName;
 		return this;
 	}
 
-	public ItemCreator dataValue(final short dataValue) {
+	public ItemCreator dataValue(short dataValue) {
 		this.dataValue = dataValue;
 		return this;
 	}
 
-	public ItemCreator enchantement(final ItemEnchant enchantement) {
+	public ItemCreator enchantement(ItemEnchant enchantement) {
 		return this.enchantements(Arrays.asList(enchantement));
 	}
 
-	public ItemCreator enchantements(final List<ItemEnchant> enchantements) {
+	public ItemCreator enchantements(List<ItemEnchant> enchantements) {
 		this.enchantements = enchantements;
 		return this;
 	}
 
-	public ItemCreator flag(final ItemFlag... flags) {
+	public ItemCreator flag(ItemFlag... flags) {
 		this.flags = Arrays.asList(flags);
 		return this;
 	}
 
-	public ItemCreator flag(final List<ItemFlag> flags) {
+	public ItemCreator flag(List<ItemFlag> flags) {
 		this.flags = flags;
 		return this;
 	}
 
 	public ItemStack getItemStack() {
-		final ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
-		final ItemMeta itemMeta = itemStack.getItemMeta();
+		ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
+		ItemMeta itemMeta = itemStack.getItemMeta();
 		if (this.customName != null) {
 			itemMeta.setDisplayName(SpigotUtils.color(this.customName));
 		}
@@ -71,13 +71,13 @@ public class ItemCreator {
 		}
 
 		if (this.enchantements != null) {
-			for (final ItemEnchant enchantement : this.enchantements) {
+			for (ItemEnchant enchantement : this.enchantements) {
 				enchantement.setEnchantToItemMeta(itemMeta);
 			}
 		}
 
 		if (this.flags != null) {
-			for (final ItemFlag flag : this.flags) {
+			for (ItemFlag flag : this.flags) {
 				itemMeta.addItemFlags(flag);
 			}
 		}
@@ -87,11 +87,10 @@ public class ItemCreator {
 	}
 
 	@SuppressWarnings("deprecation")
-	public ItemStack getPlayerHead(final Player player) {
-		this.material = Material.SKULL_ITEM;
-		this.dataValue = 3;
-		final ItemStack itemStack = this.getItemStack();
-		final SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
+	public ItemStack getPlayerHead(Player player) {
+		this.material = Material.PLAYER_HEAD;
+		ItemStack itemStack = this.getItemStack();
+		SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
 		if (ServerVersion.V1_12.isEqualOrOlder()) {
 			skullmeta.setOwningPlayer(player);
 		} else {
@@ -101,21 +100,21 @@ public class ItemCreator {
 		return itemStack;
 	}
 
-	public ItemCreator lore(final List<String> lore) {
+	public ItemCreator lore(List<String> lore) {
 		this.lore = lore;
 		return this;
 	}
 
-	public ItemCreator lore(final String... lore) {
+	public ItemCreator lore(String... lore) {
 		return this.lore(Arrays.asList(lore));
 	}
 
-	public ItemCreator material(final Material material) {
+	public ItemCreator material(Material material) {
 		this.material = material;
 		return this;
 	}
 
-	public ItemCreator size(final int size) {
+	public ItemCreator size(int size) {
 		this.size = size;
 		return this;
 	}

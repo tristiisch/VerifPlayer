@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.tristiisch.verifplayer.utils.SpigotUtils;
 import fr.tristiisch.verifplayer.utils.Title;
@@ -25,6 +27,7 @@ public class Freeze {
 		if (underPlayer != null) {
 			player.teleport(new Location(underPlayer.getWorld(), underPlayer.getX() + 0.5, underPlayer.getY() + 1, underPlayer.getZ() + 0.5));
 		}
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128, false, false));
 		players.add(player.getUniqueId());
 
 		if (reason == null || reason.isEmpty()) {
@@ -42,6 +45,7 @@ public class Freeze {
 
 	public static void unfreeze(Player player) {
 		player.setWalkSpeed(0.2f);
+		player.removePotionEffect(PotionEffectType.JUMP);
 		players.remove(player.getUniqueId());
 		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZETITLE.getString(), ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZESUBTITLE.getString());
 	}

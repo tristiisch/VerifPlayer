@@ -49,9 +49,9 @@ public class VerifGuiItem {
 		HOTBAR(4 * 9),
 		HOLDING(5 * 9);
 
-		private final int slot;
+		private int slot;
 
-		private VerifGuiSlot(final int slot) {
+		private VerifGuiSlot(int slot) {
 			this.slot = slot;
 		}
 
@@ -61,8 +61,8 @@ public class VerifGuiItem {
 
 	}
 
-	public static Map<Integer, ItemStack> getAllItems(final Player player) {
-		final Map<Integer, ItemStack> items = new HashMap<>();
+	public static Map<Integer, ItemStack> getAllItems(Player player) {
+		Map<Integer, ItemStack> items = new HashMap<>();
 
 		// Head
 		items.put(VerifGuiSlot.SKULL.getSlot(), VerifGuiItem.getSkull(player));
@@ -82,12 +82,12 @@ public class VerifGuiItem {
 		return items;
 	}
 
-	public static ItemStack getCps(final Player player) {
-		final List<String> lore = new ArrayList<>();
-		final PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
+	public static ItemStack getCps(Player player) {
+		List<String> lore = new ArrayList<>();
+		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
 
 		int currentClick = playerInfo.getCurrentClicks();
-		final short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(currentClick, 10, 18);
+		short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(currentClick, 10, 18);
 		lore.add("");
 
 		String nbAlert;
@@ -104,10 +104,10 @@ public class VerifGuiItem {
 		lore.add(cpsMax);
 		lore.add("");
 		for (int i = playerInfo.getAirClicks().size() - 1; i >= 0; --i) {
-			final int clickAir = playerInfo.getAirClicks().get(i);
-			final int clickEntity = playerInfo.getEntityClicks().get(i);
-			final int clickGlobal = clickAir + clickEntity;
-			final ChatColor chatColor = SpigotUtils.getIntervalChatColor(clickGlobal, 10, 18);
+			int clickAir = playerInfo.getAirClicks().get(i);
+			int clickEntity = playerInfo.getEntityClicks().get(i);
+			int clickGlobal = clickAir + clickEntity;
+			ChatColor chatColor = SpigotUtils.getIntervalChatColor(clickGlobal, 10, 18);
 			String string = ConfigGet.MESSAGES_VERIFGUI_CPSFORMAT.getString();
 			string = string.replace("%color%", chatColor.toString());
 			string = string.replace("%cpsAir%", String.valueOf(clickAir));
@@ -119,12 +119,12 @@ public class VerifGuiItem {
 			lore.add("");
 		} while (ConfigGet.SETTINGS_SIZEHISTORYCPS.getInt() + 4 > lore.size());
 
-		final Map<Long, Integer> alertHistory = playerInfo.getAlertHistory();
+		Map<Long, Integer> alertHistory = playerInfo.getAlertHistory();
 		if (!alertHistory.isEmpty()) {
 
-			for (final Entry<Long, Integer> entry2 : alertHistory.entrySet()) {
-				final long time = entry2.getKey();
-				final int click = entry2.getValue();;
+			for (Entry<Long, Integer> entry2 : alertHistory.entrySet()) {
+				long time = entry2.getKey();
+				int click = entry2.getValue();;
 				String string = ConfigGet.MESSAGES_VERIFGUI_CPSALERTFORMAT.getString();
 
 				string = string.replace("%cps%", String.valueOf(click));
@@ -137,15 +137,15 @@ public class VerifGuiItem {
 		if (currentClick == 0) {
 			currentClick = 1;
 		}
-		final ChatColor[] colors = ChatColor.values();
-		final ChatColor ramdomColor = ChatColor.values()[new Random().nextInt(colors.length)];
-		return new ItemCreator(Material.STAINED_GLASS_PANE).size(currentClick).dataValue(glassPaneColor).customName(ramdomColor + ConfigGet.MESSAGES_VERIFGUI_CPSITEMNAME.getString()).lore(lore).getItemStack();
+		ChatColor[] colors = ChatColor.values();
+		ChatColor ramdomColor = ChatColor.values()[new Random().nextInt(colors.length)];
+		return new ItemCreator(Material.BLACK_STAINED_GLASS_PANE).size(currentClick).dataValue(glassPaneColor).customName(ramdomColor + ConfigGet.MESSAGES_VERIFGUI_CPSITEMNAME.getString()).lore(lore).getItemStack();
 	}
 
-	public static ItemStack getEffects(final Player player) {
-		final List<String> lore = new ArrayList<>();
+	public static ItemStack getEffects(Player player) {
+		List<String> lore = new ArrayList<>();
 		lore.add("");
-		final Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
+		Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
 		int effectSize = potionEffects.size();
 		String name = ConfigGet.MESSAGES_VERIFGUI_EFFECT.getString();
 		Material material;
@@ -156,8 +156,8 @@ public class VerifGuiItem {
 		} else {
 			name = String.valueOf(name) + "s";
 			material = Material.POTION;
-			for (final PotionEffect potionEffect : potionEffects) {
-				final StringBuilder sb = new StringBuilder();
+			for (PotionEffect potionEffect : potionEffects) {
+				StringBuilder sb = new StringBuilder();
 				sb.append("&7");
 				sb.append(Utils.capitalizeFirstLetter(potionEffect.getType().getName().replace("_", " ")));
 				sb.append(" ");
@@ -174,14 +174,14 @@ public class VerifGuiItem {
 		return new ItemCreator(material).size(effectSize).customName(name).lore(lore).flag(ItemFlag.HIDE_POTION_EFFECTS).getItemStack();
 	}
 
-	public static ConcurrentHashMap<Integer, ItemStack> getInventory(final PlayerInventory playerInventory) {
-		final ConcurrentHashMap<Integer, ItemStack> items = new ConcurrentHashMap<>();
+	public static ConcurrentHashMap<Integer, ItemStack> getInventory(PlayerInventory playerInventory) {
+		ConcurrentHashMap<Integer, ItemStack> items = new ConcurrentHashMap<>();
 
-		final ItemStack itemStackAir = new ItemCreator(Material.AIR).getItemStack();
+		ItemStack itemStackAir = new ItemCreator(Material.AIR).getItemStack();
 
 		// Armor
 		int slot = VerifGuiSlot.ARMOR.getSlot();
-		final ItemStack[] armors = playerInventory.getArmorContents();
+		ItemStack[] armors = playerInventory.getArmorContents();
 		ArrayUtils.reverse(armors);
 		ItemStack[] array;
 		for (int length = (array = armors).length, k = 0; k < length; ++k) {
@@ -224,7 +224,7 @@ public class VerifGuiItem {
 
 		// Holding slot
 		slot = VerifGuiSlot.HOLDING.getSlot();
-		final int heldSlot = playerInventory.getHeldItemSlot() + slot;
+		int heldSlot = playerInventory.getHeldItemSlot() + slot;
 		for (int i2 = slot; slot + 9 > i2; ++i2) {
 			items.put(i2, itemStackAir);
 		}
@@ -233,11 +233,11 @@ public class VerifGuiItem {
 		return items;
 	}
 
-	public static ItemStack getPingAndTps(final Player player) {
-		final double[] tps = new TpsGetter().getDoubleArray();
-		final List<String> lore = new ArrayList<>();
+	public static ItemStack getPingAndTps(Player player) {
+		double[] tps = new TpsGetter().getDoubleArray();
+		List<String> lore = new ArrayList<>();
 		int ping = Reflection.getPing(player);
-		final short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(ping, 100, 200);
+		short glassPaneColor = SpigotUtils.getIntervalGlassPaneColor(ping, 100, 200);
 		ChatColor chatColor2 = SpigotUtils.getIntervalChatColor(ping, 100, 200);
 		lore.add("");
 		lore.add(ConfigGet.MESSAGES_VERIFGUI_PINGFORMAT.getString().replaceAll("%color%", chatColor2.toString()).replaceAll("%ping%", String.valueOf(ping)));
@@ -248,8 +248,8 @@ public class VerifGuiItem {
 		lore.add(ConfigGet.MESSAGES_VERIFGUI_TPSITEMNAME.getString());
 		lore.add("");
 		for (int j = 0; j < tps.length; ++j) {
-			final double tpsDouble = tps[j];
-			final int tpsInt = (int) Math.round(tpsDouble);
+			double tpsDouble = tps[j];
+			int tpsInt = (int) Math.round(tpsDouble);
 			if (tpsInt >= 18) {
 				chatColor2 = ChatColor.GREEN;
 			} else if (tpsInt >= 16) {
@@ -281,24 +281,24 @@ public class VerifGuiItem {
 			tpsFormat = tpsFormat.replace("%tps%", String.valueOf(tpsDouble));
 			lore.add(tpsFormat);
 		}
-		return new ItemCreator(Material.STAINED_GLASS_PANE).size(ping).dataValue(glassPaneColor).customName(ConfigGet.MESSAGES_VERIFGUI_PINGITEMNAME.getString()).lore(lore).getItemStack();
+		return new ItemCreator(Material.WHITE_STAINED_GLASS_PANE).size(ping).dataValue(glassPaneColor).customName(ConfigGet.MESSAGES_VERIFGUI_PINGITEMNAME.getString()).lore(lore).getItemStack();
 	}
 
-	public static ItemStack getSkull(final Player player) {
-		final ItemCreator itemCreator = new ItemCreator().customName("§6" + player.getName());
+	public static ItemStack getSkull(Player player) {
+		ItemCreator itemCreator = new ItemCreator().customName("§6" + player.getName());
 
-		final ConcurrentHashMap<String, String> replace = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, String> replace = new ConcurrentHashMap<>();
 
 		if (player.isDead()) {
 			replace.put("%heal%", SpigotUtils.color("&4Dead"));
 		} else {
-			final StringBuilder heal = new StringBuilder();
+			StringBuilder heal = new StringBuilder();
 			heal.append(String.valueOf(Math.round(player.getHealth()) / 2.0f).replaceFirst("\\.0*$", ""));
 			heal.append(" ");
 			replace.put("%heal%", heal.toString());
 		}
 
-		final String rank = HookHandler.getInstance().getGroup(player);
+		String rank = HookHandler.getInstance().getGroup(player);
 		if (rank == null) {
 			replace.put("%rank%", "");
 		} else {
@@ -314,7 +314,7 @@ public class VerifGuiItem {
 		replace.put("%last_played%", Utils.timestampToDateAndHour(player.getLastPlayed() / 1000L));
 
 		if (player.isInsideVehicle()) {
-			final Entity entity = player.getVehicle();
+			Entity entity = player.getVehicle();
 			if (ServerVersion.V1_8.isEqualOrOlder()) {
 				replace.put("%vehicule%", entity.getName());
 			}
@@ -323,14 +323,14 @@ public class VerifGuiItem {
 			replace.put("%vehicule%", SpigotUtils.color("&c\u2716"));
 		}
 
-		final String guiName;
-		final GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
+		String guiName;
+		GuiCreator gui = VerifPlayerPlugin.getInstance().getVerifGuiHandler().get(player);
 		if (gui != null) {
-			final GuiPage guiPage = gui.getGuiPage();
+			GuiPage guiPage = gui.getGuiPage();
 			guiName = guiPage.getDescription();
 
 		} else {
-			final InventoryView openInventory = player.getOpenInventory();
+			InventoryView openInventory = player.getOpenInventory();
 			if (openInventory != null && openInventory.getType() != InventoryType.CRAFTING && openInventory.getType() != InventoryType.CREATIVE) {
 				guiName = Utils.capitalizeFirstLetter(openInventory.getType().name());
 			} else {
@@ -344,9 +344,9 @@ public class VerifGuiItem {
 		for (int i = 0; infos.size() > i; i++) {
 			String string = infos.get(i);
 
-			for (final Entry<String, String> entry : replace.entrySet()) {
-				final String toBeReplaced = entry.getKey();
-				final String value = entry.getValue();
+			for (Entry<String, String> entry : replace.entrySet()) {
+				String toBeReplaced = entry.getKey();
+				String value = entry.getValue();
 
 				if (string.contains(toBeReplaced)) {
 					if (value.isEmpty()) {

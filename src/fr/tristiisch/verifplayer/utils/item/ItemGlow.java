@@ -2,60 +2,51 @@ package fr.tristiisch.verifplayer.utils.item;
 
 import java.lang.reflect.Field;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemGlow extends EnchantmentWrapper {
+import fr.tristiisch.verifplayer.VerifPlayer;
+import fr.tristiisch.verifplayer.utils.VersionUtils.ServerVersion;
 
+public class ItemGlow extends Enchantment {
+	
 	private static Enchantment glow;
 
-	public static Enchantment getGlowEnchant() {
-		if (glow != null) {
-			return glow;
-		}
-
+	{
 		try {
-			final Field f = Enchantment.class.getDeclaredField("acceptingNew");
+			Field f = Enchantment.class.getDeclaredField("acceptingNew");
 			f.setAccessible(true);
 			f.set(null, true);
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		glow = new ItemGlow(255);
+ 
+		if (ServerVersion.V1_13.isEqualOrOlder()) {
+			glow = new ItemGlow(new NamespacedKey(VerifPlayer.getInstance(), VerifPlayer.class.getName()));
+		}
 		try {
 			Enchantment.registerEnchantment(glow);
-		} catch (final IllegalArgumentException iae) {
+		} catch (IllegalArgumentException iae) {
 		}
-		return glow;
 	}
 
 	public static ItemEnchant getItemGlowEnchant() {
-		return new ItemEnchant(getGlowEnchant());
+		return new ItemEnchant(glow);
 	}
-
-	public static boolean isGlow(final ItemStack item) {
-		return item.getEnchantments().containsKey(glow);
-	}
-
-	// TODO 1.13 comptatiblity
-	public ItemGlow(final int id) {
+	
+	public ItemGlow(NamespacedKey id) {
 		super(id);
 	}
 
-	/*
-	 * public ItemGlow(final String id) { super(id); }
-	 */
-
 	@Override
-	public boolean canEnchantItem(final ItemStack item) {
+	public boolean canEnchantItem(ItemStack item) {
 		return true;
 	}
 
 	@Override
-	public boolean conflictsWith(final Enchantment other) {
+	public boolean conflictsWith(Enchantment other) {
 		return false;
 	}
 
@@ -77,5 +68,15 @@ public class ItemGlow extends EnchantmentWrapper {
 	@Override
 	public int getStartLevel() {
 		return 1;
+	}
+
+	@Override
+	public boolean isCursed() {
+		return false;
+	}
+
+	@Override
+	public boolean isTreasure() {
+		return false;
 	}
 }

@@ -75,7 +75,7 @@ public class VanishListener implements Listener {
 			return;
 		}
 
-		if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.SOIL) {
+		if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.FARMLAND) {
 			event.setCancelled(true);
 		} else if (!player.isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			final Block block = event.getClickedBlock();

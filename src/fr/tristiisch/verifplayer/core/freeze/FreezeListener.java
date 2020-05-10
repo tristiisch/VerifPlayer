@@ -26,7 +26,8 @@ public class FreezeListener implements Listener {
 
 			if (event.getDamager() instanceof Player) {
 				Player attacker = (Player) event.getDamager();
-				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERISFREEZE.getString().replace("%player%", victim.getName()));
+				attacker.sendMessage(
+						ConfigGet.MESSAGES_FREEZE_PLAYERISFREEZE.getString().replace("%player%", victim.getName()));
 			}
 			event.setCancelled(true);
 		}
@@ -41,22 +42,19 @@ public class FreezeListener implements Listener {
 
 	// TODO 1.9 compa + other event (like tchat)
 
-	/**@EventHandler
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		List<UUID> playersFreeze = Freeze.players;
-		if (playersFreeze.isEmpty()) {
-			return;
-		}
-
-		Player player = event.getPlayer();
-		if (!Freeze.isFreeze(player)) {
-			event.getRecipients().removeIf(p -> playersFreeze.contains(p.getUniqueId()));
-			return;
-		}
-
-		event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r%s"));
-		event.getRecipients().removeIf(p -> !Permission.MODERATOR_COMMAND_FREEZE.hasPermission(p));
-	}*/
+	/**
+	 * @EventHandler public void onPlayerChat(AsyncPlayerChatEvent event) {
+	 *               List<UUID> playersFreeze = Freeze.players; if
+	 *               (playersFreeze.isEmpty()) { return; }
+	 * 
+	 *               Player player = event.getPlayer(); if
+	 *               (!Freeze.isFreeze(player)) { event.getRecipients().removeIf(p
+	 *               -> playersFreeze.contains(p.getUniqueId())); return; }
+	 * 
+	 *               event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r%s"));
+	 *               event.getRecipients().removeIf(p ->
+	 *               !Permission.MODERATOR_COMMAND_FREEZE.hasPermission(p)); }
+	 */
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityPickupItem(PlayerPickupItemEvent event) {
@@ -82,7 +80,8 @@ public class FreezeListener implements Listener {
 		}
 		Location location = event.getFrom();
 		Location locationTo = event.getTo();
-		if (location.getX() != locationTo.getX() || location.getZ() != locationTo.getZ() || location.getY() != locationTo.getY()) {
+		if (location.getX() != locationTo.getX() || location.getZ() != locationTo.getZ()
+				|| location.getY() != locationTo.getY()) {
 			player.teleport(location);
 		}
 	}
@@ -95,7 +94,9 @@ public class FreezeListener implements Listener {
 		}
 		Freeze.unfreeze(player);
 
-		Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString().replace("%player%", player.getName()));
+		Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED
+				.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString()
+						.replace("%player%", player.getName()));
 	}
 
 	@EventHandler(ignoreCancelled = true)

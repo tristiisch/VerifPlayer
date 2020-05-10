@@ -10,11 +10,11 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,7 +49,7 @@ public class NBTEditor {
 			NBTClasses.put(Float.class, Reflection.getClassWithoutCache(ClassEnum.NMS, "NBTTagFloat"));
 			NBTClasses.put(Class.forName("[B"), Reflection.getClassWithoutCache(ClassEnum.NMS, "NBTTagByteArray"));
 			NBTClasses.put(Class.forName("[I"), Reflection.getClassWithoutCache(ClassEnum.NMS, "NBTTagIntArray"));
-		} catch (final ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
@@ -80,19 +80,19 @@ public class NBTEditor {
 			methodCache.put("getWorldHandle", getNMSClass("CraftWorld").getMethod("getHandle"));
 
 			methodCache.put("setGameProfile", getNMSClass("TileEntitySkull").getMethod("setGameProfile", GameProfile.class));
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
 			methodCache.put("getTileTag", getNMSClass("TileEntity").getMethod("save", getNMSClass("NBTTagCompound")));
-		} catch (final NoSuchMethodException exception) {
+		} catch (NoSuchMethodException exception) {
 			try {
 				methodCache.put("getTileTag", getNMSClass("TileEntity").getMethod("b", getNMSClass("NBTTagCompound")));
-			} catch (final Exception exception2) {
+			} catch (Exception exception2) {
 				exception2.printStackTrace();
 			}
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 
@@ -109,18 +109,18 @@ public class NBTEditor {
 			constructorCache.put(getNBTTag(Class.forName("[I")), getNBTTag(Class.forName("[I")).getConstructor(Class.forName("[I")));
 
 			constructorCache.put(getNMSClass("BlockPosition"), getNMSClass("BlockPosition").getConstructor(int.class, int.class, int.class));
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		NBTTagFieldCache = new HashMap<>();
 		try {
-			for (final Class<?> clazz : NBTClasses.values()) {
-				final Field data = clazz.getDeclaredField("data");
+			for (Class<?> clazz : NBTClasses.values()) {
+				Field data = clazz.getDeclaredField("data");
 				data.setAccessible(true);
 				NBTTagFieldCache.put(clazz, data);
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -129,7 +129,7 @@ public class NBTEditor {
 			NBTListData.setAccessible(true);
 			NBTCompoundMap = getNMSClass("NBTTagCompound").getDeclaredField("map");
 			NBTCompoundMap.setAccessible(true);
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -144,24 +144,24 @@ public class NBTEditor {
 	 * @return The item represented by the keys, and an integer if it is showing how
 	 *         long a list is.
 	 */
-	public static Object getBlockTag(final Block block, final Object... keys) {
+	public static Object getBlockTag(Block block, Object... keys) {
 		try {
 			if (!getNMSClass("CraftBlockState").isInstance(block.getState())) {
 				return null;
 			}
 
-			final Object tileEntity = getMethod("getTileEntity").invoke(block.getState());
+			Object tileEntity = getMethod("getTileEntity").invoke(block.getState());
 
-			final Object tag = getMethod("getTileTag").invoke(tileEntity, getNMSClass("NBTTagCompound").newInstance());
+			Object tag = getMethod("getTileTag").invoke(tileEntity, getNMSClass("NBTTagCompound").newInstance());
 
 			return getTag(tag, keys);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;
 		}
 	}
 
-	public static Constructor<?> getConstructor(final Class<?> clazz) {
+	public static Constructor<?> getConstructor(Class<?> clazz) {
 		return constructorCache.containsKey(clazz) ? constructorCache.get(clazz) : null;
 	}
 
@@ -175,29 +175,29 @@ public class NBTEditor {
 	 * @return The item represented by the keys, and an integer if it is showing how
 	 *         long a list is.
 	 */
-	public static Object getEntityTag(final Entity entity, final Object... keys) {
+	public static Object getEntityTag(Entity entity, Object... keys) {
 		try {
-			final Object NMSEntity = getMethod("getEntityHandle").invoke(entity);
+			Object NMSEntity = getMethod("getEntityHandle").invoke(entity);
 
-			final Object tag = getNMSClass("NBTTagCompound").newInstance();
+			Object tag = getNMSClass("NBTTagCompound").newInstance();
 
 			getMethod("getEntityTag").invoke(NMSEntity, tag);
 
 			return getTag(tag, keys);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;
 		}
 	}
 
-	public final static ItemStack getHead(final String skinURL) {
-		final ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+	public static ItemStack getHead(String skinURL) {
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1);
 		if (skinURL == null || skinURL.isEmpty()) {
 			return head;
 		}
-		final ItemMeta headMeta = head.getItemMeta();
-		final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-		final byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{\"url\":\"%s\"}}}", skinURL).getBytes());
+		ItemMeta headMeta = head.getItemMeta();
+		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+		byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{\"url\":\"%s\"}}}", skinURL).getBytes());
 		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
 		Field profileField = null;
 		try {
@@ -225,7 +225,7 @@ public class NBTEditor {
 	 * @return The item represented by the keys, and an integer if it is showing how
 	 *         long a list is.
 	 */
-	public static Object getItemTag(final ItemStack item, final Object... keys) {
+	public static Object getItemTag(ItemStack item, Object... keys) {
 		try {
 			Object stack = null;
 			stack = getMethod("asNMSCopy").invoke(null, item);
@@ -239,15 +239,15 @@ public class NBTEditor {
 			}
 
 			return getTag(tag, keys);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;
 		}
 	}
 
-	public static String getMatch(final String string, final String regex) {
-		final Pattern pattern = Pattern.compile(regex);
-		final Matcher matcher = pattern.matcher(string);
+	public static String getMatch(String string, String regex) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(string);
 		if (matcher.find()) {
 			return matcher.group(1);
 		} else {
@@ -255,48 +255,48 @@ public class NBTEditor {
 		}
 	}
 
-	public static Method getMethod(final String name) {
+	public static Method getMethod(String name) {
 		return methodCache.containsKey(name) ? methodCache.get(name) : null;
 	}
 
-	public static Class<?> getNBTTag(final Class<?> primitiveType) {
+	public static Class<?> getNBTTag(Class<?> primitiveType) {
 		if (NBTClasses.containsKey(primitiveType)) {
 			return NBTClasses.get(primitiveType);
 		}
 		return primitiveType;
 	}
 
-	public static Object getNBTVar(final Object object) {
+	public static Object getNBTVar(Object object) {
 		if (object == null) {
 			return null;
 		}
-		final Class<?> clazz = object.getClass();
+		Class<?> clazz = object.getClass();
 		try {
 			if (NBTTagFieldCache.containsKey(clazz)) {
 				return NBTTagFieldCache.get(clazz).get(object);
 			}
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 		return null;
 	}
 
-	public static Class<?> getNMSClass(final String name) {
+	public static Class<?> getNMSClass(String name) {
 		return Reflection.getClass(ClassEnum.NMS, name);
 	}
 
-	public static Class<?> getPrimitiveClass(final Class<?> clazz) {
+	public static Class<?> getPrimitiveClass(Class<?> clazz) {
 		return Primitives.unwrap(clazz);
 	}
 
-	private static Object getTag(final Object tag, final Object... keys) throws Exception {
+	private static Object getTag(Object tag, Object... keys) throws Exception {
 		if (keys.length == 0) {
 			return getTags(tag);
 		}
 
 		Object notCompound = tag;
 
-		for (final Object key : keys) {
+		for (Object key : keys) {
 			if (notCompound == null) {
 				return null;
 			}
@@ -321,22 +321,22 @@ public class NBTEditor {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Object getTags(final Object tag) {
-		final HashMap<Object, Object> tags = new HashMap<>();
+	private static Object getTags(Object tag) {
+		HashMap<Object, Object> tags = new HashMap<>();
 		try {
 			if (getNMSClass("NBTTagCompound").isInstance(tag)) {
-				final Map<String, Object> tagCompound = (Map<String, Object>) NBTCompoundMap.get(tag);
-				for (final String key : tagCompound.keySet()) {
-					final Object value = tagCompound.get(key);
+				Map<String, Object> tagCompound = (Map<String, Object>) NBTCompoundMap.get(tag);
+				for (String key : tagCompound.keySet()) {
+					Object value = tagCompound.get(key);
 					if (getNMSClass("NBTTagEnd").isInstance(value)) {
 						continue;
 					}
 					tags.put(key, getTag(value));
 				}
 			} else if (getNMSClass("NBTTagList").isInstance(tag)) {
-				final List<Object> tagList = (List<Object>) NBTListData.get(tag);
+				List<Object> tagList = (List<Object>) NBTListData.get(tag);
 				for (int index = 0; index < tagList.size(); index++) {
-					final Object value = tagList.get(index);
+					Object value = tagList.get(index);
 					if (getNMSClass("NBTTagEnd").isInstance(value)) {
 						continue;
 					}
@@ -346,14 +346,14 @@ public class NBTEditor {
 				return getNBTVar(tag);
 			}
 			return tags;
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return tags;
 		}
 	}
 
-	public final static String getTexture(final ItemStack head) {
-		final ItemMeta meta = head.getItemMeta();
+	public static String getTexture(ItemStack head) {
+		ItemMeta meta = head.getItemMeta();
 		Field profileField = null;
 		try {
 			profileField = meta.getClass().getDeclaredField("profile");
@@ -362,14 +362,14 @@ public class NBTEditor {
 		}
 		profileField.setAccessible(true);
 		try {
-			final GameProfile profile = (GameProfile) profileField.get(meta);
+			GameProfile profile = (GameProfile) profileField.get(meta);
 			if (profile == null) {
 				return null;
 			}
 
-			for (final Property prop : profile.getProperties().values()) {
+			for (Property prop : profile.getProperties().values()) {
 				if (prop.getName().equals("textures")) {
-					final String texture = new String(Base64.decodeBase64(prop.getValue()));
+					String texture = new String(Base64.decodeBase64(prop.getValue()));
 					return getMatch(texture, "\\{\"url\":\"(.*?)\"\\}");
 				}
 			}
@@ -389,22 +389,22 @@ public class NBTEditor {
 	 * @param value The value to set
 	 * @return A new ItemStack with the updated NBT tags
 	 */
-	public static void setBlockTag(final Block block, final Object value, final Object... keys) {
+	public static void setBlockTag(Block block, Object value, Object... keys) {
 		try {
-			final Location location = block.getLocation();
+			Location location = block.getLocation();
 
-			final Object blockPosition = getConstructor(getNMSClass("BlockPosition")).newInstance(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+			Object blockPosition = getConstructor(getNMSClass("BlockPosition")).newInstance(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-			final Object nmsWorld = getMethod("getWorldHandle").invoke(location.getWorld());
+			Object nmsWorld = getMethod("getWorldHandle").invoke(location.getWorld());
 
-			final Object tileEntity = getMethod("getTileEntity").invoke(nmsWorld, blockPosition);
+			Object tileEntity = getMethod("getTileEntity").invoke(nmsWorld, blockPosition);
 
-			final Object tag = getMethod("getTileTag").invoke(tileEntity, getNMSClass("NBTTagCompound").newInstance());
+			Object tag = getMethod("getTileTag").invoke(tileEntity, getNMSClass("NBTTagCompound").newInstance());
 
 			setTag(tag, value, keys);
 
 			getMethod("setTileTag").invoke(tileEntity, tag);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return;
 		}
@@ -419,18 +419,18 @@ public class NBTEditor {
 	 * @param value The value to set
 	 * @return A new ItemStack with the updated NBT tags
 	 */
-	public static void setEntityTag(final Entity entity, final Object value, final Object... keys) {
+	public static void setEntityTag(Entity entity, Object value, Object... keys) {
 		try {
-			final Object NMSEntity = getMethod("getEntityHandle").invoke(entity);
+			Object NMSEntity = getMethod("getEntityHandle").invoke(entity);
 
-			final Object tag = getNMSClass("NBTTagCompound").newInstance();
+			Object tag = getNMSClass("NBTTagCompound").newInstance();
 
 			getMethod("getEntityTag").invoke(NMSEntity, tag);
 
 			setTag(tag, value, keys);
 
 			getMethod("setEntityTag").invoke(NMSEntity, tag);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return;
 		}
@@ -445,9 +445,9 @@ public class NBTEditor {
 	 * @param value The value to set
 	 * @return A new ItemStack with the updated NBT tags
 	 */
-	public static ItemStack setItemTag(final ItemStack item, final Object value, final Object... keys) {
+	public static ItemStack setItemTag(ItemStack item, Object value, Object... keys) {
 		try {
-			final Object stack = getMethod("asNMSCopy").invoke(null, item);
+			Object stack = getMethod("asNMSCopy").invoke(null, item);
 
 			Object tag = null;
 
@@ -460,37 +460,37 @@ public class NBTEditor {
 			setTag(tag, value, keys);
 			getMethod("setTag").invoke(stack, tag);
 			return (ItemStack) getMethod("asBukkitCopy").invoke(null, stack);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;
 		}
 	}
 
-	public static void setSkullTexture(final Block block, final String texture) {
-		final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+	public static void setSkullTexture(Block block, String texture) {
+		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		profile.getProperties().put("textures", new com.mojang.authlib.properties.Property("textures", new String(Base64.encodeBase64(String.format("{textures:{SKIN:{\"url\":\"%s\"}}}", texture).getBytes()))));
 
 		try {
-			final Location location = block.getLocation();
+			Location location = block.getLocation();
 
-			final Object blockPosition = getConstructor(getNMSClass("BlockPosition")).newInstance(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+			Object blockPosition = getConstructor(getNMSClass("BlockPosition")).newInstance(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-			final Object nmsWorld = getMethod("getWorldHandle").invoke(location.getWorld());
+			Object nmsWorld = getMethod("getWorldHandle").invoke(location.getWorld());
 
-			final Object tileEntity = getMethod("getTileEntity").invoke(nmsWorld, blockPosition);
+			Object tileEntity = getMethod("getTileEntity").invoke(nmsWorld, blockPosition);
 
 			getMethod("setGameProfile").invoke(tileEntity, profile);
-		} catch (final Exception exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 	}
 
-	private static void setTag(final Object tag, final Object value, final Object... keys) throws Exception {
-		final Object notCompound = getConstructor(getNBTTag(value.getClass())).newInstance(value);
+	private static void setTag(Object tag, Object value, Object... keys) throws Exception {
+		Object notCompound = getConstructor(getNBTTag(value.getClass())).newInstance(value);
 
 		Object compound = tag;
 		for (int index = 0; index < keys.length; index++) {
-			final Object key = keys[index];
+			Object key = keys[index];
 			if (index + 1 == keys.length) {
 				if (key == null) {
 					getMethod("add").invoke(compound, notCompound);
@@ -501,7 +501,7 @@ public class NBTEditor {
 				}
 				break;
 			}
-			final Object oldCompound = compound;
+			Object oldCompound = compound;
 			if (key instanceof Integer) {
 				compound = ((List<?>) NBTListData.get(compound)).get((int) key);
 			} else if (key != null) {

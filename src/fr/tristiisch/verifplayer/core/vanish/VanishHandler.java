@@ -16,18 +16,18 @@ import fr.tristiisch.verifplayer.utils.permission.Permission;
 public class VanishHandler extends VanishAbstract {
 
 	@SuppressWarnings("deprecation")
-	public void disable(final Player player, final boolean showMessage) {
+	public void disable(Player player, boolean showMessage) {
 
-		final VanishHook vanishHook = VanishHook.getInstance();
+		VanishHook vanishHook = VanishHook.getInstance();
 		if (!vanishHook.isEnabled()) {
 			Bukkit.getOnlinePlayers().forEach(players -> players.showPlayer(player));
 			player.removePotionEffect(PotionEffectType.INVISIBILITY);
 			player.spigot().setCollidesWithEntities(true);
 			removeVanishMetadata(player);
 
-			final Essentials ess = EssentialsHook.getInstance().getEssentials();
+			Essentials ess = EssentialsHook.getInstance().getEssentials();
 			if (ess != null) {
-				final User user = ess.getUser(player);
+				User user = ess.getUser(player);
 				user.setVanished(false);
 			}
 		} else {
@@ -41,18 +41,18 @@ public class VanishHandler extends VanishAbstract {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void enable(final Player player, final boolean showMessage) {
+	public void enable(Player player, boolean showMessage) {
 
-		final VanishHook vanishHook = VanishHook.getInstance();
+		VanishHook vanishHook = VanishHook.getInstance();
 		if (!vanishHook.isEnabled()) {
 			Permission.ADMIN_SEEVANISHED.getOnlinePlayersOpositeStream().forEach(noAdmin -> noAdmin.hidePlayer(player));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999999, 0, false, false), true);
 			player.spigot().setCollidesWithEntities(false);
 			addVanishMetadata(player);
 
-			final EssentialsHook essHook = EssentialsHook.getInstance();
+			EssentialsHook essHook = EssentialsHook.getInstance();
 			if (essHook.isEssEnabled()) {
-				final User user = essHook.getEssentials().getUser(player);
+				User user = essHook.getEssentials().getUser(player);
 				user.setVanished(true);
 			}
 		} else {

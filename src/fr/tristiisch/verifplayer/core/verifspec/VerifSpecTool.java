@@ -16,7 +16,7 @@ public enum VerifSpecTool {
 	KNOCKBACK(2, new ItemCreator(Material.STICK).enchantement(new ItemEnchant(Enchantment.KNOCKBACK, 2))),
 	VERIF(3, new ItemCreator(Material.CHEST)),
 	SHUTTLE(4, new ItemCreator(Material.MINECART)),
-	SPEED(5, new ItemCreator(Material.FIREWORK_CHARGE)),
+	SPEED(5, new ItemCreator(Material.FIREWORK_STAR)),
 	// FAST(6, new ItemCreator(Material.LEATHER_BOOTS)),
 	// JUMP(7, new ItemCreator(Material.FIREWORK)),
 	QUIT(35, new ItemCreator(Material.BARRIER)),;

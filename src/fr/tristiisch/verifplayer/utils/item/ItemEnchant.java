@@ -10,19 +10,19 @@ public class ItemEnchant {
 	private boolean unsafe;
 	private int level;
 
-	public ItemEnchant(final Enchantment enchantment) {
+	public ItemEnchant(Enchantment enchantment) {
 		this.enchantment = enchantment;
 		this.level = 1;
 		this.unsafe = false;
 	}
 
-	public ItemEnchant(final Enchantment enchantment, final int level) {
+	public ItemEnchant(Enchantment enchantment, int level) {
 		this.enchantment = enchantment;
 		this.level = level;
 		this.unsafe = false;
 	}
 
-	public ItemEnchant(final Enchantment enchantment, final int level, final boolean unsafe) {
+	public ItemEnchant(Enchantment enchantment, int level, boolean unsafe) {
 		this.enchantment = enchantment;
 		this.level = level;
 		this.unsafe = unsafe;
@@ -40,26 +40,26 @@ public class ItemEnchant {
 		return this.unsafe;
 	}
 
-	public void setEnchantment(final Enchantment enchantment) {
+	public void setEnchantment(Enchantment enchantment) {
 		this.enchantment = enchantment;
 	}
 
-	public ItemStack setEnchantToItem(final ItemStack itemStack) {
-		final ItemMeta itemMeta = itemStack.getItemMeta();
+	public ItemStack setEnchantToItem(ItemStack itemStack) {
+		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemStack.setItemMeta(this.setEnchantToItemMeta(itemMeta));
 		return itemStack;
 	}
 
-	public ItemMeta setEnchantToItemMeta(final ItemMeta itemMeta) {
+	public ItemMeta setEnchantToItemMeta(ItemMeta itemMeta) {
 		itemMeta.addEnchant(this.getEnchantment(), this.getLevel(), this.isUnsafe());
 		return itemMeta;
 	}
 
-	public void setLevel(final int level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 
-	public void setUnsafe(final boolean unsafe) {
+	public void setUnsafe(boolean unsafe) {
 		this.unsafe = unsafe;
 	}
 }
