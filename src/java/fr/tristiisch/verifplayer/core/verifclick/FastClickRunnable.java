@@ -29,9 +29,8 @@ public class FastClickRunnable extends BukkitRunnable {
 	}
 
 	public static void startIfNotRunning() {
-		if (isRunning()) {
+		if (isRunning())
 			return;
-		}
 		start();
 	}
 
@@ -56,9 +55,8 @@ public class FastClickRunnable extends BukkitRunnable {
 			playerInfo.getAirClicks().add(playerInfo.getClickAir());
 			playerInfo.getEntityClicks().add(playerInfo.getClickEntity());
 			int click = playerInfo.getClickAir() + playerInfo.getClickEntity();
-			if (click > playerInfo.getMaxCPS()) {
+			if (click > playerInfo.getMaxCPS())
 				playerInfo.setMaxCPS(click);
-			}
 
 			if (click > maxCps) {
 				int lagAlertCPS = (int) ((20.0 - tps) * 2.0);
@@ -73,11 +71,9 @@ public class FastClickRunnable extends BukkitRunnable {
 						String msg = ConfigGet.MESSAGES_VERIF_SENDALERT.getString().replace("%player%", player.getName()).replace("%cps%", String.valueOf(click)).replace("%ping%", String.valueOf(ping)).replace("%tps%",
 								String.valueOf(tps));
 
-						for (Player players : Bukkit.getOnlinePlayers()) {
-							if (Permission.MODERATOR_RECEIVEALERT.hasPermission(players) && !player.getUniqueId().equals(players.getUniqueId())) {
+						for (Player players : Bukkit.getOnlinePlayers())
+							if (Permission.MODERATOR_RECEIVEALERT.hasPermission(players) && (!player.getUniqueId().equals(players.getUniqueId()) || Permission.ADMIN_RECEIVEALERT.hasPermission(players)))
 								players.sendMessage(msg);
-							}
-						}
 					}
 				}
 			}

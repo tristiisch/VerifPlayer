@@ -1,6 +1,8 @@
 package fr.tristiisch.verifplayer.core.freeze;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -22,9 +24,8 @@ public class FreezeListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player))
 			return;
-		}
 		Player victim = (Player) event.getEntity();
 		if (Freeze.isFreeze(victim)) {
 
@@ -37,64 +38,63 @@ public class FreezeListener implements Listener {
 		if (event.getDamager() instanceof Player) {
 
 			Player attacker = (Player) event.getDamager();
-			if (Freeze.isFreeze(attacker)) {
+			if (Freeze.isFreeze(attacker))
 				event.setCancelled(true);
-			}
 		}
 	}
 
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		List<UUID> playersFreeze = Freeze.players;
-		if (playersFreeze.isEmpty()) {
+		Map<UUID, List<Player>> playersFreeze = Freeze.players;
+		if (playersFreeze.isEmpty())
 			return;
-		}
 		Player player = event.getPlayer();
-		if (!Freeze.isFreeze(player) && !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(player)) {
-			event.getRecipients().removeIf(p -> p.getUniqueId() != player.getUniqueId() && playersFreeze.contains(p.getUniqueId()));
-			return;
+		boolean isFrozen = playersFreeze.containsKey(player.getUniqueId());
+		if (isFrozen) {
+			event.getRecipients().removeIf(p -> !p.getUniqueId().equals(player.getUniqueId()) && (!playersFreeze.get(player.getUniqueId()).contains(p) || !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(p)));
+			event.setFormat(SpigotUtils.color("&aFreeze &7» %s &r") + "%s");
+		} else if (Permission.MODERATOR_SEEFREEZEMSG.hasPermission(player)) {
+			Entry<UUID, List<Player>> entry = playersFreeze.entrySet().stream().filter(e -> e.getValue().contains(player)).findFirst().orElse(null);
+			event.getRecipients().removeIf(p -> !p.getUniqueId().equals(entry.getKey()) && (!entry.getValue().contains(p) || !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(p)));
+			event.setFormat(SpigotUtils.color("&4Freeze &7» %s &r") + "%s");
 		}
-		event.setFormat(SpigotUtils.color("&2Freeze &7» %s &r") + "%s");
-		event.getRecipients().removeIf(p -> p.getUniqueId() != player.getUniqueId() && !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(p));
+		//		if (!isFrozen || !Permission.MODERATOR_SEEFREEZEMSG.hasPermission(player)) {
+		//			event.getRecipients().removeIf(p -> p.getUniqueId() != player.getUniqueId() && playersFreeze.contains(p.getUniqueId()));
+		//			return;
+		//		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-		if (Freeze.isFreeze(player)) {
+		if (Freeze.isFreeze(player))
 			event.setCancelled(true);
-		}
 	}
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
-		if (!Freeze.isFreeze(player)) {
+		if (!Freeze.isFreeze(player))
 			return;
-		}
 		Location location = event.getFrom();
 		Location locationTo = event.getTo();
-		if (location.getX() != locationTo.getX() || location.getZ() != locationTo.getZ() || location.getY() != locationTo.getY()) {
+		if (location.getX() != locationTo.getX() || location.getZ() != locationTo.getZ() || location.getY() != locationTo.getY())
 			player.teleport(location);
-		}
 	}
 
 	@EventHandler
 	public void onPlayerQuitEvent(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		if (!Freeze.isFreeze(player)) {
+		if (!Freeze.isFreeze(player))
 			return;
-		}
 		Freeze.unfreeze(player);
-
 		Permission.MODERATOR_RECEIVEFREEZEDISCONNECTED.sendMessageToOnlinePlayers(ConfigGet.MESSAGES_FREEZE_PLAYERDISCONNECTWHILEFREEZE.getString().replace("%player%", player.getName()));
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
 		Player player = event.getPlayer();
-		if (Freeze.isFreeze(player)) {
+		if (Freeze.isFreeze(player))
 			event.setCancelled(true);
-		}
 	}
 }

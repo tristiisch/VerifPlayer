@@ -24,7 +24,6 @@ public class PlayerInfo extends PlayerInfoHook {
 	 **/
 
 	private List<Integer> clicksAir = new ArrayList<>();
-
 	private List<Integer> clicksEntity = new ArrayList<>();
 	private Map<Long, Integer> alertHistory = new HashMap<>();
 	private List<UUID> alreadyTeleportedPlayers = new ArrayList<>();
@@ -34,79 +33,78 @@ public class PlayerInfo extends PlayerInfoHook {
 	}
 
 	public void addAirClick() {
-		++this.clickAir;
+		++clickAir;
 	}
 
 	public void addAlert() {
-		++this.alert;
+		++alert;
 	}
 
 	public void addAlertHistory(long time, int value) {
-		this.alertHistory.put(time, value);
+		alertHistory.put(time, value);
 	}
 
 	public void addEntityClick() {
-		++this.clickEntity;
+		++clickEntity;
 	}
 
 	public void clearAlreadyTeleportedPlayers() {
-		this.alreadyTeleportedPlayers.clear();
+		alreadyTeleportedPlayers.clear();
 	}
 
 	public List<Integer> getAirClicks() {
-		return this.clicksAir;
+		return clicksAir;
 	}
 
 	public Map<Long, Integer> getAlertHistory() {
-		return this.alertHistory;
+		return alertHistory;
 	}
 
 	public int getNumberAlert() {
-		return this.alert;
+		return alert;
 	}
 
 	public List<Player> getAlreadyTeleportedPlayers() {
-		return this.alreadyTeleportedPlayers.stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(player -> player != null).collect(Collectors.toList());
+		return alreadyTeleportedPlayers.stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(player -> player != null).collect(Collectors.toList());
 	}
 
 	public int getClickAir() {
-		return this.clickAir;
+		return clickAir;
 	}
 
 	public int getClickEntity() {
-		return this.clickEntity;
+		return clickEntity;
 	}
 
 	public int getCurrentClicks() {
-		int i = this.clicksAir.size();
-		if (i == 0) {
+		int i = clicksAir.size();
+		if (i == 0)
 			return 0;
-		}
-		return this.clicksAir.get(i - 1) + this.clicksEntity.get(i - 1);
+		return clicksAir.get(i - 1) + clicksEntity.get(i - 1);
 	}
 
 	public List<Integer> getEntityClicks() {
-		return this.clicksEntity;
+		return clicksEntity;
 	}
 
 	public long getLastAlert() {
-		return this.lastAlert;
+		return lastAlert;
 	}
 
 	public int getMaxCPS() {
-		return this.maxCPS;
+		return maxCPS;
 	}
 
 	public void removeAirClick() {
-		--this.clickAir;
+		--clickAir;
 	}
 
 	public void resetAirClick() {
-		this.clickAir = 0;
+		clickAir = 0;
 	}
 
 	public void resetEntityClick() {
-		this.clickEntity = 0;
+		clickEntity = 0;
 	}
 
 	public void setAlreadyTeleportedPlayers(List<Player> alreadyTeleportedPlayers) {

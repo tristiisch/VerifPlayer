@@ -71,11 +71,10 @@ public class NBTEditor {
 			methodCache.put("getEntityTag", getNMSClass("Entity").getMethod("c", getNMSClass("NBTTagCompound")));
 			methodCache.put("setEntityTag", getNMSClass("Entity").getMethod("f", getNMSClass("NBTTagCompound")));
 
-			if (version.contains("1_12")) {
+			if (version.contains("1_12"))
 				methodCache.put("setTileTag", getNMSClass("TileEntity").getMethod("load", getNMSClass("NBTTagCompound")));
-			} else {
+			else
 				methodCache.put("setTileTag", getNMSClass("TileEntity").getMethod("a", getNMSClass("NBTTagCompound")));
-			}
 			methodCache.put("getTileEntity", getNMSClass("World").getMethod("getTileEntity", getNMSClass("BlockPosition")));
 			methodCache.put("getWorldHandle", getNMSClass("CraftWorld").getMethod("getHandle"));
 
@@ -146,9 +145,8 @@ public class NBTEditor {
 	 */
 	public static Object getBlockTag(Block block, Object... keys) {
 		try {
-			if (!getNMSClass("CraftBlockState").isInstance(block.getState())) {
+			if (!getNMSClass("CraftBlockState").isInstance(block.getState()))
 				return null;
-			}
 
 			Object tileEntity = getMethod("getTileEntity").invoke(block.getState());
 
@@ -191,10 +189,9 @@ public class NBTEditor {
 	}
 
 	public static ItemStack getHead(String skinURL) {
-		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-		if (skinURL == null || skinURL.isEmpty()) {
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+		if (skinURL == null || skinURL.isEmpty())
 			return head;
-		}
 		ItemMeta headMeta = head.getItemMeta();
 		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{\"url\":\"%s\"}}}", skinURL).getBytes());
@@ -232,11 +229,10 @@ public class NBTEditor {
 
 			Object tag = null;
 
-			if (getMethod("hasTag").invoke(stack).equals(true)) {
+			if (getMethod("hasTag").invoke(stack).equals(true))
 				tag = getMethod("getTag").invoke(stack);
-			} else {
+			else
 				tag = getNMSClass("NBTTagCompound").newInstance();
-			}
 
 			return getTag(tag, keys);
 		} catch (Exception exception) {
@@ -248,11 +244,10 @@ public class NBTEditor {
 	public static String getMatch(String string, String regex) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(string);
-		if (matcher.find()) {
+		if (matcher.find())
 			return matcher.group(1);
-		} else {
+		else
 			return null;
-		}
 	}
 
 	public static Method getMethod(String name) {
@@ -260,21 +255,18 @@ public class NBTEditor {
 	}
 
 	public static Class<?> getNBTTag(Class<?> primitiveType) {
-		if (NBTClasses.containsKey(primitiveType)) {
+		if (NBTClasses.containsKey(primitiveType))
 			return NBTClasses.get(primitiveType);
-		}
 		return primitiveType;
 	}
 
 	public static Object getNBTVar(Object object) {
-		if (object == null) {
+		if (object == null)
 			return null;
-		}
 		Class<?> clazz = object.getClass();
 		try {
-			if (NBTTagFieldCache.containsKey(clazz)) {
+			if (NBTTagFieldCache.containsKey(clazz))
 				return NBTTagFieldCache.get(clazz).get(object);
-			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -290,34 +282,29 @@ public class NBTEditor {
 	}
 
 	private static Object getTag(Object tag, Object... keys) throws Exception {
-		if (keys.length == 0) {
+		if (keys.length == 0)
 			return getTags(tag);
-		}
 
 		Object notCompound = tag;
 
 		for (Object key : keys) {
-			if (notCompound == null) {
+			if (notCompound == null)
 				return null;
-			}
-			if (getNMSClass("NBTTagCompound").isInstance(notCompound)) {
+			if (getNMSClass("NBTTagCompound").isInstance(notCompound))
 				notCompound = getMethod("get").invoke(notCompound, (String) key);
-			} else if (getNMSClass("NBTTagList").isInstance(notCompound)) {
+			else if (getNMSClass("NBTTagList").isInstance(notCompound))
 				notCompound = ((List<?>) NBTListData.get(notCompound)).get((int) key);
-			} else {
+			else
 				return getNBTVar(notCompound);
-			}
 		}
-		if (notCompound == null) {
+		if (notCompound == null)
 			return null;
-		}
-		if (getNMSClass("NBTTagList").isInstance(notCompound)) {
+		if (getNMSClass("NBTTagList").isInstance(notCompound))
 			return getTags(notCompound);
-		} else if (getNMSClass("NBTTagCompound").isInstance(notCompound)) {
+		else if (getNMSClass("NBTTagCompound").isInstance(notCompound))
 			return getTags(notCompound);
-		} else {
+		else
 			return getNBTVar(notCompound);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -328,23 +315,20 @@ public class NBTEditor {
 				Map<String, Object> tagCompound = (Map<String, Object>) NBTCompoundMap.get(tag);
 				for (String key : tagCompound.keySet()) {
 					Object value = tagCompound.get(key);
-					if (getNMSClass("NBTTagEnd").isInstance(value)) {
+					if (getNMSClass("NBTTagEnd").isInstance(value))
 						continue;
-					}
 					tags.put(key, getTag(value));
 				}
 			} else if (getNMSClass("NBTTagList").isInstance(tag)) {
 				List<Object> tagList = (List<Object>) NBTListData.get(tag);
 				for (int index = 0; index < tagList.size(); index++) {
 					Object value = tagList.get(index);
-					if (getNMSClass("NBTTagEnd").isInstance(value)) {
+					if (getNMSClass("NBTTagEnd").isInstance(value))
 						continue;
-					}
 					tags.put(index, getTag(value));
 				}
-			} else {
+			} else
 				return getNBTVar(tag);
-			}
 			return tags;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -363,16 +347,14 @@ public class NBTEditor {
 		profileField.setAccessible(true);
 		try {
 			GameProfile profile = (GameProfile) profileField.get(meta);
-			if (profile == null) {
+			if (profile == null)
 				return null;
-			}
 
-			for (Property prop : profile.getProperties().values()) {
+			for (Property prop : profile.getProperties().values())
 				if (prop.getName().equals("textures")) {
 					String texture = new String(Base64.decodeBase64(prop.getValue()));
 					return getMatch(texture, "\\{\"url\":\"(.*?)\"\\}");
 				}
-			}
 			return null;
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			e.printStackTrace();
@@ -451,11 +433,10 @@ public class NBTEditor {
 
 			Object tag = null;
 
-			if (getMethod("hasTag").invoke(stack).equals(true)) {
+			if (getMethod("hasTag").invoke(stack).equals(true))
 				tag = getMethod("getTag").invoke(stack);
-			} else {
+			else
 				tag = getNMSClass("NBTTagCompound").newInstance();
-			}
 
 			setTag(tag, value, keys);
 			getMethod("setTag").invoke(stack, tag);
@@ -492,32 +473,28 @@ public class NBTEditor {
 		for (int index = 0; index < keys.length; index++) {
 			Object key = keys[index];
 			if (index + 1 == keys.length) {
-				if (key == null) {
+				if (key == null)
 					getMethod("add").invoke(compound, notCompound);
-				} else if (key instanceof Integer) {
+				else if (key instanceof Integer)
 					getMethod("setIndex").invoke(compound, (int) key, notCompound);
-				} else {
+				else
 					getMethod("set").invoke(compound, key, notCompound);
-				}
 				break;
 			}
 			Object oldCompound = compound;
-			if (key instanceof Integer) {
+			if (key instanceof Integer)
 				compound = ((List<?>) NBTListData.get(compound)).get((int) key);
-			} else if (key != null) {
+			else if (key != null)
 				compound = getMethod("get").invoke(compound, (String) key);
-			}
 			if (compound == null || key == null) {
-				if (keys[index + 1] == null || keys[index + 1] instanceof Integer) {
+				if (keys[index + 1] == null || keys[index + 1] instanceof Integer)
 					compound = getNMSClass("NBTTagList").newInstance();
-				} else {
+				else
 					compound = getNMSClass("NBTTagCompound").newInstance();
-				}
-				if (oldCompound.getClass().getSimpleName().equals("NBTTagList")) {
+				if (oldCompound.getClass().getSimpleName().equals("NBTTagList"))
 					getMethod("add").invoke(oldCompound, compound);
-				} else {
+				else
 					getMethod("set").invoke(oldCompound, key, compound);
-				}
 			}
 		}
 	}

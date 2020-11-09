@@ -1,5 +1,6 @@
 package fr.tristiisch.verifplayer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import fr.tristiisch.verifplayer.core.alert.AlertCpsCommand;
@@ -20,8 +21,10 @@ import fr.tristiisch.verifplayer.core.verifgui.listener.items.HeadListener;
 import fr.tristiisch.verifplayer.core.verifgui.listener.items.InventoryListener;
 import fr.tristiisch.verifplayer.core.verifgui.listener.items.InventoryListener1_11;
 import fr.tristiisch.verifplayer.core.verifgui.listener.items.InventoryListener1_12;
+import fr.tristiisch.verifplayer.core.verifspec.VerifSpec;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpecCommand;
 import fr.tristiisch.verifplayer.core.verifspec.listeners.VerifSpecConfigListener;
+import fr.tristiisch.verifplayer.core.verifspec.listeners.VerifSpecGuiListener;
 import fr.tristiisch.verifplayer.core.verifspec.listeners.VerifSpecRestrictListener;
 import fr.tristiisch.verifplayer.core.verifspec.listeners.VerifSpecToolsListener;
 import fr.tristiisch.verifplayer.gui.listener.GuiListener;
@@ -38,14 +41,16 @@ public class VerifPlayer extends VerifPlayerPlugin {
 
 	@Override
 	public void onDisable() {
-		this.getVerifGuiHandler().closeAll();
-		this.sendMessage("§4" + this.getDescription().getName() + "§c by Tristiisch (" + this.getDescription().getVersion() + ") is disabled.");
+
+		VerifSpec.getPlayersInVerif().stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(p -> p != null && p.isOnline()).forEach(p -> VerifSpec.disable(p));
+		getVerifGuiHandler().closeAll();
+		sendMessage("§4" + getDescription().getName() + "§c by Tristiisch (" + getDescription().getVersion() + ") is disabled.");
 	}
 
 	@Override
 	public void onEnable() {
-		this.getVerifGuiHandler().closeAll();
-		PluginManager pluginManager = this.getServer().getPluginManager();
+		getVerifGuiHandler().closeAll();
+		PluginManager pluginManager = getServer().getPluginManager();
 
 		pluginManager.registerEvents(new VerifSpecConfigListener(), this);
 
@@ -54,13 +59,13 @@ public class VerifPlayer extends VerifPlayerPlugin {
 		new VersionUtils(this);
 		new HookHandler(this);
 
-		this.getCommand("verifplayer").setExecutor(new VerifPlayerCommand());
-		this.getCommand("verif").setExecutor(new VerifCommand());
-		this.getCommand("alertcps").setExecutor(new AlertCpsCommand());
+		getCommand("verifplayer").setExecutor(new VerifPlayerCommand());
+		getCommand("verif").setExecutor(new VerifCommand());
+		getCommand("alertcps").setExecutor(new AlertCpsCommand());
 
-		this.getCommand("verifspec").setExecutor(new VerifSpecCommand());
-		this.getCommand("freeze").setExecutor(new FreezeCommand());
-		this.getCommand("verifvanish").setExecutor(new VanishCommand());
+		getCommand("verifspec").setExecutor(new VerifSpecCommand());
+		getCommand("freeze").setExecutor(new FreezeCommand());
+		getCommand("verifvanish").setExecutor(new VanishCommand());
 
 		pluginManager.registerEvents(new VanishListener(), this);
 
@@ -75,22 +80,21 @@ public class VerifPlayer extends VerifPlayerPlugin {
 		pluginManager.registerEvents(new FreezeListener(), this);
 		pluginManager.registerEvents(new VerifSpecToolsListener(), this);
 		pluginManager.registerEvents(new VerifSpecRestrictListener(), this);
+		pluginManager.registerEvents(new VerifSpecGuiListener(), this);
 
 		VanishHook vanishHook = VanishHook.getInstance();
 		if (ServerVersion.V1_12.isEqualOrOlder()) {
 			pluginManager.registerEvents(new FreezeListener1_12(), this);
-			if (!vanishHook.isEnabled()) {
+			if (!vanishHook.isEnabled())
 				pluginManager.registerEvents(new VanishListener1_12(), this);
-			}
 			pluginManager.registerEvents(new InventoryListener1_12(), this);
 		} else {
 			pluginManager.registerEvents(new FreezeListener1_11(), this);
-			if (!vanishHook.isEnabled()) {
+			if (!vanishHook.isEnabled())
 				pluginManager.registerEvents(new VanishListener1_11(), this);
-			}
 			pluginManager.registerEvents(new InventoryListener1_11(), this);
 		}
 		new Metrics(this);
-		this.sendMessage("§2" + this.getDescription().getName() + "§a by Tristiisch (" + this.getDescription().getVersion() + ") is activated.");
+		sendMessage("§2" + getDescription().getName() + "§a by Tristiisch (" + getDescription().getVersion() + ") is activated.");
 	}
 }

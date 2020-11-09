@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiHandler;
-import fr.tristiisch.verifplayer.core.verifgui.VerifGuiPage;
+import fr.tristiisch.verifplayer.gui.VerifPlayerGui;
 import fr.tristiisch.verifplayer.gui.customevents.GuiCloseEvent;
 import fr.tristiisch.verifplayer.utils.PlayerContents;
 import fr.tristiisch.verifplayer.utils.config.ConfigGet;
@@ -21,13 +21,12 @@ public class VerifGuiListener implements Listener {
 	@EventHandler
 	public void onGuiClose(GuiCloseEvent event) {
 		Player player = event.getPlayer();
-		if (event.getGui().getGuiPage().isSamePage(VerifGuiPage.HOME)) {
+		if (event.getGui().getGuiPage().isSamePage(VerifPlayerGui.VERIFGUI_HOME)) {
 			VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
 			verifGuiHandler.remove(player);
 			PlayerContents playerContents = verifGuiHandler.removePlayersChecksInventoryContents(player.getUniqueId());
-			if (playerContents != null) {
+			if (playerContents != null)
 				playerContents.returnHisInventory();
-			}
 		}
 	}
 
@@ -36,13 +35,12 @@ public class VerifGuiListener implements Listener {
 		Player player = event.getPlayer();
 		VerifGuiHandler verifGuiHandler = VerifPlayerPlugin.getInstance().getVerifGuiHandler();
 		Set<UUID> playerViewers = verifGuiHandler.getViewers(player);
-		if (playerViewers != null) {
+		if (playerViewers != null)
 			for (UUID viewerUuid : playerViewers) {
 				Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
-				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
+				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replace("%player%", player.getName()));
 			}
-		}
 		verifGuiHandler.remove(player);
 	}
 }

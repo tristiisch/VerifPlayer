@@ -61,6 +61,8 @@ public enum ConfigGet {
 	MESSAGES_FREEZE_TITLE,
 	MESSAGES_FREEZE_SUBTITLE,
 	MESSAGES_FREEZE_SUBTITLEREASON,
+	MESSAGES_FREEZE_LEAVESUCCES,
+	MESSAGES_FREEZE_LEAVEWRONG,
 	MESSAGES_FREEZE_PLAYERNOTCONNECTED,
 	MESSAGES_FREEZE_PLAYERUNFREEZE,
 	MESSAGES_FREEZE_PLAYERFREEZE,
@@ -79,24 +81,24 @@ public enum ConfigGet {
 	MESSAGES_VERIFSPEC_SHOULDBEONGROUND,
 	MESSAGES_VERIFSPEC_DISTANCETOOFAR,
 	MESSAGES_VERIFSPEC_TOOLSPEED,
-	MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL,;
+	MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL,
+	MESSAGES_VERIFSPEC_TOOLSNIGHTVISION_ENABLE,
+	MESSAGES_VERIFSPEC_TOOLSNIGHTVISION_DISABLE,;
 
 	CustomConfig customConfig;
 
 	static {
 		for (ConfigGet configGet : ConfigGet.values()) {
 
-			if (configGet.toString().startsWith("MESSAGES")) {
+			if (configGet.toString().startsWith("MESSAGES"))
 				configGet.setCustomConfig(CustomConfig.MESSAGES);
-			} else {
+			else
 				configGet.setCustomConfig(CustomConfig.DEFAULT);
-			}
 
 			YamlConfiguration config = configGet.getConfig();
 
-			if (config.get(configGet.getPath(), null) == null) {
+			if (config.get(configGet.getPath(), null) == null)
 				VerifPlayerPlugin.getInstance().sendMessage("The value in config '" + configGet.getCustomConfig().getFileName() + "' '" + configGet.getPath() + "' is null.");
-			}
 		}
 	}
 
@@ -111,34 +113,34 @@ public enum ConfigGet {
 		// }
 		// customConfig = CustomConfig.DEFAULT;
 		// return CustomConfig.DEFAULT;
-		return this.customConfig;
+		return customConfig;
 	}
 
 	public YamlConfiguration getConfig() {
-		return this.getCustomConfig().getConfig();
+		return getCustomConfig().getConfig();
 	}
 
 	public double getDouble() {
-		return this.getConfig().getDouble(this.getPath());
+		return getConfig().getDouble(getPath());
 	}
 
 	public int getInt() {
-		return this.getConfig().getInt(this.getPath());
+		return getConfig().getInt(getPath());
 	}
 
 	private String getPath() {
-		return this.name().toLowerCase().toString().replaceAll("_", ".");
+		return name().toLowerCase().toString().replaceAll("_", ".");
 	}
 
 	public String getString() {
-		return SpigotUtils.color(this.getStringBrut());
+		return SpigotUtils.color(getStringBrut());
 	}
 
 	public String getStringBrut() {
-		return this.getConfig().getString(this.getPath());
+		return getConfig().getString(getPath());
 	}
 
 	public List<String> getStringList() {
-		return SpigotUtils.color(this.getConfig().getStringList(this.getPath()));
+		return SpigotUtils.color(getConfig().getStringList(getPath()));
 	}
 }

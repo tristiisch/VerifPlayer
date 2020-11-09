@@ -7,14 +7,16 @@ import org.bukkit.entity.Player;
 
 public class SortByDistance implements Comparator<Player> {
 
-	private Location spawn;
+	private Location playerPosition;
 
-	public SortByDistance(Location spawn) {
-		this.spawn = spawn;
+	public SortByDistance(Location playerPosition) {
+		this.playerPosition = playerPosition;
 	}
 
 	@Override
 	public int compare(Player player1, Player player2) {
-		return (int) Math.round(player1.getLocation().distance(this.spawn));
+		int player1Compared = (int) Math.round(player1.getLocation().distance(playerPosition));
+		int player2Compared = (int) Math.round(player2.getLocation().distance(playerPosition));
+		return player2Compared - player1Compared;
 	}
 }

@@ -24,28 +24,25 @@ public class PlayerContents {
 		CustomConfig customConfig = CustomConfig.INVENTORY;
 		YamlConfiguration config = customConfig.getConfig();
 
-		Object itemContents = config.get(uuid.toString() + ".contents");
+		Object itemContents = config.get(uuid + ".contents");
 		ItemStack[] inventoryItemContents = null;
-		if (itemContents != null) {
-			if (itemContents instanceof ItemStack[]) {
+		if (itemContents != null)
+			if (itemContents instanceof ItemStack[])
 				inventoryItemContents = (ItemStack[]) itemContents;
-			} else {
+			else {
 				VerifPlayerPlugin.getInstance().sendMessage("An error as occured with " + player.getName() + "'s inventory: his stuff is lost ...");
 				return new PlayerContents(player.getUniqueId(), null, null);
 			}
-		}
 
-		Object armorContents = config.get(uuid.toString() + ".armor");
+		Object armorContents = config.get(uuid + ".armor");
 		ItemStack[] inventoryArmorContents = null;
-		if (armorContents != null) {
-			if (armorContents instanceof ItemStack[]) {
+		if (armorContents != null)
+			if (armorContents instanceof ItemStack[])
 				inventoryArmorContents = (ItemStack[]) armorContents;
-			}
-		}
 
 		if (inventoryItemContents != null || inventoryArmorContents != null) {
-			config.set(uuid.toString() + ".contents", null);
-			config.set(uuid.toString() + ".armor", null);
+			config.set(uuid + ".contents", null);
+			config.set(uuid + ".armor", null);
 			customConfig.save();
 		}
 
@@ -57,65 +54,68 @@ public class PlayerContents {
 	private ItemStack[] inventoryArmorContents = null;
 
 	public PlayerContents(Player player) {
-		this.uuid = player.getUniqueId();
-		this.inventoryItemContents = player.getInventory().getContents();
-
-		if (ServerVersion.V1_9.isYounger()) {
-			this.inventoryArmorContents = player.getInventory().getArmorContents();
-		}
+		uuid = player.getUniqueId();
+		inventoryItemContents = player.getInventory().getContents();
+		if (ServerVersion.V1_9.isYounger())
+			inventoryArmorContents = player.getInventory().getArmorContents();
 	}
 
 	private PlayerContents(UUID uuid, ItemStack[] inventoryItemContents, ItemStack[] inventoryArmorContents) {
 		this.uuid = uuid;
 		this.inventoryItemContents = inventoryItemContents;
-		if (ServerVersion.V1_9.isYounger()) {
+		if (ServerVersion.V1_9.isYounger())
 			this.inventoryArmorContents = inventoryArmorContents;
-		}
 	}
 
 	public void clearInventory() {
-		Player player = this.getPlayer();
+		Player player = getPlayer();
 		PlayerContents.clearInventory(player.getInventory());
 	}
 
 	public ItemStack[] getInventoryArmorContents() {
-		return this.inventoryArmorContents;
+		return inventoryArmorContents;
 	}
 
 	public ItemStack[] getInventoryItemContents() {
-		return this.inventoryItemContents;
+		return inventoryItemContents;
 	}
 
 	private Player getPlayer() {
-		return Bukkit.getPlayer(this.uuid);
+		return Bukkit.getPlayer(uuid);
 	}
 
 	public UUID getUniqueId() {
-		return this.uuid;
+		return uuid;
 	}
 
 	public boolean hasData() {
-		return this.inventoryItemContents != null && this.inventoryArmorContents != null;
+		return inventoryItemContents != null && inventoryItemContents.length != 0 && inventoryArmorContents != null && inventoryArmorContents.length != 0;
 	}
 
 	public void returnHisInventory() {
-		PlayerInventory inventory = this.getPlayer().getInventory();
+		PlayerInventory inventory = getPlayer().getInventory();
 		clearInventory(inventory);
-		if (this.inventoryItemContents != null) {
-			inventory.setContents(this.inventoryItemContents);
-		}
-		if (this.inventoryArmorContents != null) {
-			inventory.setArmorContents(this.inventoryArmorContents);
-		}
+		if (inventoryItemContents != null)
+			inventory.setContents(inventoryItemContents);
+		if (inventoryArmorContents != null)
+			inventory.setArmorContents(inventoryArmorContents);
+		clearData();
+	}
+
+	public void clearData() {
+		inventoryItemContents = null;
+		inventoryArmorContents = null;
+		saveToDisk();
 	}
 
 	public void saveToDisk() {
 		CustomConfig customConfig = CustomConfig.INVENTORY;
 		YamlConfiguration config = customConfig.getConfig();
-		config.set(this.uuid.toString() + ".contents", this.inventoryItemContents);
-		if (this.inventoryArmorContents != null) {
-			config.set(this.uuid.toString() + ".armor", this.inventoryArmorContents);
-		}
+		config.set(uuid.toString() + ".contents", inventoryItemContents);
+		if (inventoryArmorContents != null)
+			config.set(uuid.toString() + ".armor", inventoryArmorContents);
+		if (inventoryItemContents == null && inventoryArmorContents == null)
+			config.set(uuid.toString(), null);
 		customConfig.save();
 	}
 }

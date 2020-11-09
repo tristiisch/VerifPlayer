@@ -16,10 +16,12 @@ public enum VerifSpecTool {
 	KNOCKBACK(2, new ItemCreator(Material.STICK).enchantement(new ItemEnchant(Enchantment.KNOCKBACK, 2))),
 	VERIF(3, new ItemCreator(Material.CHEST)),
 	SHUTTLE(4, new ItemCreator(Material.MINECART)),
-	SPEED(5, new ItemCreator(Material.FIREWORK_CHARGE)),
+	SPEED(5, new ItemCreator(Material.FIREWORK_ROCKET)),
+	NIGHT_VISION(6, new ItemCreator(Material.GOLDEN_CARROT)),
 	QUIT(35, new ItemCreator(Material.BARRIER)),;
 
 	public static VerifSpecTool getTool(ItemStack itemStack) {
+
 		return Arrays.stream(VerifSpecTool.values()).filter(verifSpecItem -> verifSpecItem.getItemStack().isSimilar(itemStack)).findFirst().orElse(null);
 	}
 
@@ -37,23 +39,23 @@ public enum VerifSpecTool {
 	}
 
 	public ItemCreator getItemCreator() {
-		return this.itemCreator;
+		return itemCreator;
 	}
 
 	public ItemStack getItemStack() {
-		return this.itemCreator.getItemStack();
+		return itemCreator.getItemStack();
 	}
 
 	public String getName() {
-		return this.toString().toLowerCase();
+		return toString().toLowerCase();
 	}
 
 	public int getSlot() {
-		return this.slot;
+		return slot;
 	}
 
 	public boolean isEnable() {
-		return this.enable;
+		return enable;
 	}
 
 	public void setEnable(boolean enable) {

@@ -1,3 +1,6 @@
 - ajouter traduction effects
 - ajouter message + invisibilité pour quand on est freeze
 - ajouter vanish no packet
+- ajouter cooldown tp, améliorer par monde
+- freeze player fix chat fix freeze positon & events
+- cps change event byentity, can have mutiple event for one cps

@@ -27,29 +27,27 @@ public class CustomConfigs {
 		}
 
 		private void createFolderIfNotExist() {
-			File folder = this.getFolder();
-			if (!folder.exists()) {
+			File folder = getFolder();
+			if (!folder.exists())
 				folder.mkdir();
-			}
 		}
 
 		public YamlConfiguration getConfig() {
-			return this.config;
+			return config;
 		}
 
 		public File getFile() {
-			return this.getFile(this.getFileName());
+			return this.getFile(getFileName());
 		}
 
 		public File getFile(String fileName) {
-			return new File(this.getFolder(), fileName);
+			return new File(getFolder(), fileName);
 		}
 
 		public String getFileName() {
-			if (this.equals(CustomConfig.MESSAGES)) {
-				return this.fileName.replace("%lang%", langague);
-			}
-			return this.fileName;
+			if (equals(CustomConfig.MESSAGES))
+				return fileName.replace("%lang%", langague);
+			return fileName;
 		}
 
 		private File getFolder() {
@@ -61,20 +59,19 @@ public class CustomConfigs {
 		}
 
 		public boolean isSameConfig(CustomConfig customConfig) {
-			return this.toString().equals(customConfig.toString());
+			return toString().equals(customConfig.toString());
 		}
 
 		public void load() {
-			this.createFolderIfNotExist();
-			String fileName = this.getFileName();
+			createFolderIfNotExist();
+			String fileName = getFileName();
 			try {
 				File configFile = this.getFile(fileName);
-				InputStream resource = this.getResource(fileName);
+				InputStream resource = getResource(fileName);
 				if (!configFile.exists()) {
 					configFile.createNewFile();
-					if (resource != null) {
+					if (resource != null)
 						ByteStreams.copy(resource, new FileOutputStream(configFile));
-					}
 				} else if (resource != null) {
 
 					YamlConfiguration configInFolder = YamlConfiguration.loadConfiguration(configFile);
@@ -82,21 +79,20 @@ public class CustomConfigs {
 					if (jarConfig.getDouble("version") > configInFolder.getDouble("version")) {
 						String newName = fileName + " V" + configInFolder.getDouble("version");
 						plugin.sendMessage("Your file '" + fileName + "' has been updated, I use now DEFAULT CONFIG. Your old configuration is now called '" + newName + ".");
-						configFile.renameTo(new File(this.getFolder(), newName));
-						configFile = new File(this.getFolder(), fileName);
+						configFile.renameTo(new File(getFolder(), newName));
+						configFile = new File(getFolder(), fileName);
 						configFile.createNewFile();
-						ByteStreams.copy(this.getResource(fileName), new FileOutputStream(configFile));
+						ByteStreams.copy(getResource(fileName), new FileOutputStream(configFile));
 					}
 				}
 
-				this.config = YamlConfiguration.loadConfiguration(configFile);
-				if (this.equals(CustomConfig.DEFAULT)) {
-					String lang = this.config.getString("settings.language");
-					if (lang != null && lang.isEmpty()) {
+				config = YamlConfiguration.loadConfiguration(configFile);
+				if (equals(CustomConfig.DEFAULT)) {
+					String lang = config.getString("settings.language");
+					if (lang != null && lang.isEmpty())
 						plugin.sendMessage("Language in config.yml where empty, so we load English messages. ");
-					} else {
+					else
 						langague = lang;
-					}
 				}
 				plugin.getServer().getPluginManager().callEvent(new CustomConfigLoadEvent(this));
 			} catch (IOException e) {
@@ -106,10 +102,10 @@ public class CustomConfigs {
 		}
 
 		public void save() {
-			String fileName = this.getFileName();
+			String fileName = getFileName();
 			File configFile = this.getFile(fileName);
 			try {
-				this.config.save(configFile);
+				config.save(configFile);
 			} catch (IOException e) {
 				plugin.sendMessage("Unable to save config: " + fileName);
 				e.printStackTrace();
@@ -118,7 +114,6 @@ public class CustomConfigs {
 	}
 
 	private static String langague = "en";
-
 	private static VerifPlayerPlugin plugin;
 
 	public static String getLangague() {
@@ -127,17 +122,15 @@ public class CustomConfigs {
 
 	public static double loadConfigs() {
 		long time = System.nanoTime();
-		for (CustomConfig config : CustomConfig.values()) {
+		for (CustomConfig config : CustomConfig.values())
 			config.load();
-		}
 		return (System.nanoTime() - time) / 1000000000d;
 	}
 
 	public static double saveConfigs() {
 		long time = System.nanoTime();
-		for (CustomConfig config : CustomConfig.values()) {
+		for (CustomConfig config : CustomConfig.values())
 			config.save();
-		}
 		return (System.nanoTime() - time) / 1000000000d;
 	}
 

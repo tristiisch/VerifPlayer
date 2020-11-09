@@ -34,32 +34,24 @@ public class InventoryListener implements Listener {
 
 	public static void updateInventory(Player player) {
 		Set<UUID> viewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
-		if (viewers == null) {
+		if (viewers == null)
 			return;
-		}
-
 		VerifPlayerPlugin.getInstance().getTaskHandler().runTask(() -> {
-
 			ConcurrentHashMap<Integer, ItemStack> items = VerifGuiItem.getInventory(player.getInventory());
-
 			Iterator<Entry<Integer, ItemStack>> iterator = items.entrySet().iterator();
-
 			for (UUID viewersUuid : viewers) {
 				Player viewer = Bukkit.getPlayer(viewersUuid);
 				InventoryView inventory = viewer.getOpenInventory();
-
 				while (iterator.hasNext()) {
 					Entry<Integer, ItemStack> entry = iterator.next();
-
 					int itemSlot = entry.getKey();
 					ItemStack newItem = entry.getValue();
 					ItemStack actuelItem = inventory.getItem(itemSlot);
 
-					if (actuelItem != null && newItem != null && actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount()) {
+					if (actuelItem != null && newItem != null && actuelItem.isSimilar(newItem) && actuelItem.getAmount() == newItem.getAmount())
 						items.remove(itemSlot);
-					} else {
+					else
 						inventory.setItem(itemSlot, newItem);
-					}
 				}
 			}
 		});
@@ -70,9 +62,8 @@ public class InventoryListener implements Listener {
 		Player player = event.getPlayer();
 
 		ItemStack item = event.getPlayer().getItemInHand();
-		if (item == null || !(item.getItemMeta() instanceof Repairable)) {
+		if (item == null || !(item.getItemMeta() instanceof Repairable))
 			return;
-		}
 		updateInventory(player);
 	}
 
@@ -84,18 +75,16 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player))
 			return;
-		}
 		Player player = (Player) event.getEntity();
 		updateInventory(player);
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityShootBow(EntityShootBowEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player))
 			return;
-		}
 
 		Player player = (Player) event.getEntity();
 		updateInventory(player);
@@ -103,9 +92,8 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakByEntityEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player))
 			return;
-		}
 
 		Player player = (Player) event.getEntity();
 		updateInventory(player);
@@ -147,9 +135,8 @@ public class InventoryListener implements Listener {
 		ItemStack item;
 		item = event.getPlayer().getItemInHand();
 
-		if (item == null || !(item.getItemMeta() instanceof Repairable)) {
+		if (item == null || !(item.getItemMeta() instanceof Repairable))
 			return;
-		}
 		updateInventory(player);
 	}
 

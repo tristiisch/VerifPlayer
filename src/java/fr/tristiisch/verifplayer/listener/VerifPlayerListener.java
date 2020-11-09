@@ -19,9 +19,8 @@ import fr.tristiisch.verifplayer.utils.permission.Permission;
 public class VerifPlayerListener implements Listener {
 
 	public VerifPlayerListener() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers())
 			VerifPlayerPlugin.getInstance().getPlayerInfoHandler().addNew(player);
-		}
 	}
 
 	@EventHandler
@@ -39,13 +38,12 @@ public class VerifPlayerListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		Set<UUID> playerViewers = VerifPlayerPlugin.getInstance().getVerifGuiHandler().getViewers(player);
-		if (playerViewers != null) {
+		if (playerViewers != null)
 			for (UUID viewerUuid : playerViewers) {
 				Player viewer = Bukkit.getPlayer(viewerUuid);
 				viewer.closeInventory();
-				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replaceAll("%player%", player.getName()));
+				viewer.sendMessage(ConfigGet.MESSAGES_VERIF_PLAYERDISCONNECT.getString().replace("%player%", player.getName()));
 			}
-		}
 		VerifPlayerPlugin.getInstance().getPlayerInfoHandler().remove(player);
 	}
 }

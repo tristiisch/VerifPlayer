@@ -28,61 +28,60 @@ public class SpigotUpdater {
 		SpigotUpdater.INSTANCE = this;
 		this.plugin = plugin;
 		this.projectId = projectId;
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.checkForUpdates());
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> checkForUpdates());
 	}
 
 	public void checkForUpdates() {
 		try {
-			String pluginVersion = this.plugin.getDescription().getVersion();
-			if (this.checkNeedUpdate()) {
+			String pluginVersion = plugin.getDescription().getVersion();
+			if (checkNeedUpdate()) {
 
-				if (!this.compatibleServerVersion) {
-					this.plugin.sendMessage("§cYour version (" + pluginVersion + ") is NOT compatible with the server version, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
-				} else {
-					this.plugin.sendMessage("§6Your version (" + pluginVersion + ") is deprecated, download last version " + this.getLatestVersion() + " here: " + this.getResourceURL());
-				}
+				if (!compatibleServerVersion)
+					plugin.sendMessage("§cYour version (" + pluginVersion + ") is NOT compatible with the server version, download good version (last is " + getLatestVersion() + ", your is " + plugin.getDescription().getVersion()
+							+ ") here: " + getResourceURL());
+				else
+					plugin.sendMessage("§6Your version (" + pluginVersion + ") is deprecated, download last version " + getLatestVersion() + " here: " + getResourceURL());
 
-			} else {
-				this.plugin.sendMessage("§aYour version is up to date");
-			}
+			} else
+				plugin.sendMessage("§aYour version is up to date");
 		} catch (UnknownHostException e) {
-			this.plugin.sendMessage("§6You are not connected to internet, update messages are ignored");
+			plugin.sendMessage("§6You are not connected to internet, update messages are ignored");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private boolean checkNeedUpdate() throws IOException {
-		URLConnection con = this.getCheckURL().openConnection();
-		this.latestVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-		float pluginVersion = Float.parseFloat(this.plugin.getDescription().getVersion());
-		float lastVersion = Float.parseFloat(this.latestVersion);
-		this.needUpdate = pluginVersion < lastVersion;
-		return this.needUpdate;
+		URLConnection con = getCheckURL().openConnection();
+		latestVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+		float pluginVersion = Float.parseFloat(plugin.getDescription().getVersion());
+		float lastVersion = Float.parseFloat(latestVersion);
+		needUpdate = pluginVersion < lastVersion;
+		return needUpdate;
 	}
 
 	public String getActualVersion() {
-		return this.plugin.getDescription().getVersion();
+		return plugin.getDescription().getVersion();
 	}
 
 	private URL getCheckURL() throws MalformedURLException {
-		return new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.projectId);
+		return new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectId);
 	}
 
 	public String getLatestVersion() {
-		return this.latestVersion;
+		return latestVersion;
 	}
 
 	private String getResourceURL() {
-		return "https://www.spigotmc.org/resources/" + this.projectId;
+		return "https://www.spigotmc.org/resources/" + projectId;
 	}
 
 	public boolean isCompatibleServerVersion() {
-		return this.compatibleServerVersion;
+		return compatibleServerVersion;
 	}
 
 	public boolean isNeededUpdate() {
-		return this.needUpdate;
+		return needUpdate;
 	}
 
 	public void setCompatibleServerVersion(boolean compatibleServerVersion) {

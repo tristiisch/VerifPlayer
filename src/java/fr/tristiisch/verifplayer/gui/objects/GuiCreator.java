@@ -30,35 +30,41 @@ public class GuiCreator {
 	}
 
 	public void addItem(int slot, ItemStack item) {
-		this.items.put(slot, item);
+		items.put(slot, item);
+	}
+
+	public void addItem(ItemStack item) {
+		int i = 0;
+		while (items.get(i) != null)
+			i++;
+		items.put(i, item);
 	}
 
 	public String getData() {
-		return this.data;
+		return data;
 	}
 
 	public GuiPage getGuiPage() {
-		return this.guiPage;
+		return guiPage;
 	}
 
 	private Inventory getInventory() {
-		Inventory inventory = Bukkit.createInventory(null, this.guiPage.getSize(), SpigotUtils.color(this.guiPage.getTitle()));
-		if (!this.items.isEmpty()) {
-			this.items.entrySet().forEach(entry -> inventory.setItem(entry.getKey(), entry.getValue()));
-		}
+		Inventory inventory = Bukkit.createInventory(null, guiPage.getSize(), SpigotUtils.color(guiPage.getTitle()));
+		if (!items.isEmpty())
+			items.entrySet().forEach(entry -> inventory.setItem(entry.getKey(), entry.getValue()));
 		return inventory;
 	}
 
 	public boolean isClickOnItems() {
-		return this.clickOnItems;
+		return clickOnItems;
 	}
 
 	public boolean isMissClickClosing() {
-		return this.missClickClosing;
+		return missClickClosing;
 	}
 
 	public void openGui(Player player) {
-		player.openInventory(this.getInventory());
+		player.openInventory(getInventory());
 	}
 
 	public void setClickOnItems(boolean clickOnItems) {

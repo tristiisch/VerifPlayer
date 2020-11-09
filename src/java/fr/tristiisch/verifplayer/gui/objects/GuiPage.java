@@ -103,7 +103,7 @@ public /* abstract */ class GuiPage implements Cloneable {
 	public void setVariable(GuiPageVariable variable, PlayerInfo playerInfo) {
 		// if(!this.variables.containsKey(variable)) {
 		// new Exception("There is no GuiPageVariable." + variable.toString() + " set in
-		// the GuiPage " + this.title).printStackTrace();
+		// the VerifPlayerGui " + this.title).printStackTrace();
 		// }
 		this.variables.put(variable, playerInfo);
 	}

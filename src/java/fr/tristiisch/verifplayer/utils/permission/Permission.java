@@ -14,6 +14,7 @@ public enum Permission {
 
 	MODERATOR_COMMAND_VERIF("Use /verif <player>"),
 	MODERATOR_COMMAND_ALERTCPS("Toggle CPS alert with /alertcps"),
+	ADMIN_RECEIVEALERT("Receive CPS alerts from itself"),
 	MODERATOR_RECEIVEALERT("Receive CPS alerts"),
 	MODERATOR_COMMAND_VERIFSPEC,
 	MODERATOR_COMMAND_VERIFVANISH,
@@ -36,8 +37,8 @@ public enum Permission {
 		StringBuilder sb = new StringBuilder();
 		sb.append(VerifPlayerPlugin.getInstance().getDescription().getName());
 		sb.append(".");
-		sb.append(this.toString().replaceAll("_", "."));
-		this.id = sb.toString().toLowerCase();
+		sb.append(toString().replace("_", "."));
+		id = sb.toString().toLowerCase();
 	}
 
 	private Permission(String description) {
@@ -46,31 +47,31 @@ public enum Permission {
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
 	public String getId() {
-		return this.id;
+		return id;
 	}
 
 	public Set<Player> getOnlinePlayers() {
-		return this.getOnlinePlayersStream().collect(Collectors.toSet());
+		return getOnlinePlayersStream().collect(Collectors.toSet());
 	}
 
 	public Stream<? extends Player> getOnlinePlayersOpositeStream() {
-		return Bukkit.getOnlinePlayers().stream().filter(player -> !this.hasPermission(player));
+		return Bukkit.getOnlinePlayers().stream().filter(player -> !hasPermission(player));
 	}
 
 	public Stream<? extends Player> getOnlinePlayersStream() {
-		return Bukkit.getOnlinePlayers().stream().filter(player -> this.hasPermission(player));
+		return Bukkit.getOnlinePlayers().stream().filter(player -> hasPermission(player));
 	}
 
 	public boolean hasPermission(CommandSender sender) {
-		return sender.hasPermission(this.getId());
+		return sender.hasPermission(getId());
 	}
 
 	public void sendMessageToOnlinePlayers(String message) {
-		this.getOnlinePlayersStream().forEach(p -> p.sendMessage(message));
+		getOnlinePlayersStream().forEach(p -> p.sendMessage(message));
 		VerifPlayerPlugin.getInstance().sendMessage(message);
 	}
 }

@@ -13,9 +13,9 @@ public class VersionUtils {
 		V1_19(20),
 		V1_18(19),
 		V1_17(18),
+
 		V1_16(17),
 		V1_15(16),
-
 		V1_14(15),
 		V1_13(14),
 		V1_12_2(13),
@@ -36,27 +36,27 @@ public class VersionUtils {
 		}
 
 		public float getFloat() {
-			return this.number;
+			return number;
 		}
 
 		public String getName() {
-			return this.toString().replace("V", "").replace("_", ".");
+			return toString().replace("V", "").replace("_", ".");
 		}
 
 		public boolean isEqualOrOlder() {
-			return VersionUtils.INSTANCE.version.getFloat() >= this.getFloat();
+			return VersionUtils.INSTANCE.version.getFloat() >= getFloat();
 		}
 
 		public boolean isOlder() {
-			return VersionUtils.INSTANCE.version.getFloat() > this.getFloat();
+			return VersionUtils.INSTANCE.version.getFloat() > getFloat();
 		}
 
 		public boolean isTheSame() {
-			return this.getFloat() == VersionUtils.INSTANCE.version.getFloat();
+			return getFloat() == VersionUtils.INSTANCE.version.getFloat();
 		}
 
 		public boolean isYounger() {
-			return VersionUtils.INSTANCE.version.getFloat() < this.getFloat();
+			return VersionUtils.INSTANCE.version.getFloat() < getFloat();
 		}
 	}
 
@@ -66,29 +66,30 @@ public class VersionUtils {
 		return INSTANCE;
 	}
 
-	public ServerVersion version = this.getVersion();
-	private ServerVersion maxVersion = ServerVersion.V1_13;
+	public ServerVersion version = getVersion();
+	private ServerVersion maxVersion = ServerVersion.V1_16;
+	private ServerVersion minStableVersion = ServerVersion.V1_13;
 	private ServerVersion minVersion = ServerVersion.V1_8;
 
 	public VersionUtils(VerifPlayer plugin) {
 		VersionUtils.INSTANCE = this;
-		if (this.version == null) {
-
-			plugin.sendMessage("§cUnable to detect the server version, some features will generate errors. Server Package Version: " + this.getServerPackageVersion());
-
-		} else if (this.maxVersion.isOlder()) {
-
+		if (version == null)
+			plugin.sendMessage("§cUnable to detect the server version, some features will generate errors. Server Package Version: " + getServerPackageVersion());
+		else if (maxVersion.isOlder()) {
 			SpigotUpdater spigotUpdater = SpigotUpdater.getInstance();
 			spigotUpdater.setCompatibleServerVersion(false);
+			plugin.sendMessage("§cThe maximum server version planned is " + maxVersion.getName() + ", so some features may not work. Maximum server version: " + maxVersion.getName());
 
-			plugin.sendMessage("§cThe maximum server version planned is " + this.maxVersion.getName() + ", so some features may not work. Maximum server version: " + this.maxVersion.getName());
-
-		} else if (this.minVersion.isYounger()) {
-
+		} else if (minStableVersion.isYounger()) {
 			SpigotUpdater spigotUpdater = SpigotUpdater.getInstance();
 			spigotUpdater.setCompatibleServerVersion(false);
+			plugin.sendMessage("§6The plugin version is NOT §nstable§6 with this server version. Minimum stable version : " + minStableVersion.getName());
 
-			plugin.sendMessage("§cThe plugin version is NOT compatible with this server version. The plugin has been disabled. Minimum server version: " + this.minVersion.getName());
+		} else if (minVersion.isYounger()) {
+			SpigotUpdater spigotUpdater = SpigotUpdater.getInstance();
+			spigotUpdater.setCompatibleServerVersion(false);
+			plugin.sendMessage(
+					"§cThe plugin version is NOT compatible with this server version. The plugin has been disabled. Minimum STABLE server version : " + minStableVersion.getName() + " Minimum server version : " + minVersion.getName());
 			plugin.getPluginLoader().disablePlugin(plugin);
 		}
 	}
@@ -98,7 +99,7 @@ public class VersionUtils {
 	}
 
 	private ServerVersion getVersion() {
-		String serverPackageVersion = this.getServerPackageVersion();
+		String serverPackageVersion = getServerPackageVersion();
 		return Arrays.stream(ServerVersion.values()).filter(version -> serverPackageVersion.startsWith(version.getName())).findFirst().orElse(null);
 	}
 

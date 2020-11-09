@@ -1,23 +1,23 @@
 version: 1.9
 messages:
-    cantconsole: "&cImpossible d'utilisé cette commande avec la console"
-    noperm: "&cVous n'avez pas la permission"
+    cantconsole: "&cImpossible d'utiliser cette commande avec la console"
+    noperm: "&cTu n'as pas la permission"
 
     alertcps:
         usage: "&cUsage &7» &c/alertcps <on|off>"
-        disabled: "&2VerifPlayer &7» &aVous ne recevrez plus les alertes CPS."
-        enabled: "&2VerifPlayer &7» &aVous recevrez désormais les alertes CPS."
-        alreadydisabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà désactivé."
-        alreadyenabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà activé."
-        nopermtoreceivealerts: "&2VerifPlayer &7» &cYou can't receive alert because you didn't have permission."
+        disabled: "&2VerifPlayer &7» &aTu ne recevras plus les alertes CPS."
+        enabled: "&2VerifPlayer &7» &aTu recevras désormais les alertes CPS."
+        alreadydisabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà désactivés."
+        alreadyenabled: "&2VerifPlayer &7» &cLes alertes CPS sont déjà activés."
+        nopermtoreceivealerts: "&2VerifPlayer &7» &cTu n'as pas la permission."
     
     verif:
         usage: "&cUsage &7» &c/verif <player>"
         isnotconnected: "&2VerifPlayer &7» &4%player% &cn'est pas connecté."
         sendalert: "&2VerifPlayer &7» &4%player% &c%cps% cps, %ping% ms, %tps% tps."
         playerdisconnect: "&2VerifPlayer &7» &4%player% &cs'est déconnecté."
-        cantverifyourself: "&2VerifPlayer &7» &4Vous ne pouvez pas vous vérifier vous-même."
-        cantverifadmin: "&2VerifPlayer &7» &4Vous ne pouvez pas vérifier un admin."
+        cantverifyourself: "&2VerifPlayer &7» &4Tu peux pas te vérifier toi-même."
+        cantverifadmin: "&2VerifPlayer &7» &4Tu peux pas vérifier un admin."
     
     verifgui:
         name: "&2VerifPlayer ➤ &a%player%"
@@ -36,7 +36,7 @@ messages:
           - "&7Gui: &e%gui%"
       
         effect: "&6Effet"
-        noeffect: "&cPas d'effet"
+        noeffect: "&cPas d'effets"
         noparticle: " &c(&l✖&c particules)&7 "
     
         cpsitemname: "&6CPS"
@@ -53,15 +53,15 @@ messages:
         tpsformat: "&7%time%min: %color%%tps%"
     
     verifspec:
-      enable: "&2VerifPlayer &7» &aVerifSpec activer." 
-      disable: "&2VerifPlayer &7» &cVerifSpec désactiver."
+      enable: "&2VerifPlayer &7» &aVerifSpec activé." 
+      disable: "&2VerifPlayer &7» &cVerifSpec désactivé."
       shouldbeonground: "&2VerifPlayer &7» &cTu dois être au sol pour activer cette commande."
       distancetoofar: "&2VerifPlayer &7» &cLa distance est trop loin"
       toolspeed: "&2VerifPlayer &7» %color%Ta vitesse est à %speed%."
       toolspeednormal: "&2VerifPlayer &7» &aTa vitesse est remise à 0."
       teleportermsg:
         noplayers: "&2VerifPlayer &7» &cIl n'y a pas de joueurs."
-        succes: "&2VerifPlayer &7» &aTu as été téléporter à &2%player%&a."
+        succes: "&2VerifPlayer &7» &aTu as été téléporté à &2%player%&a."
       teleporter:
          enable: true
          # item list: https://helpch.at/docs/1.12.2/index.html?org/bukkit/class-use/Material.html
@@ -99,7 +99,7 @@ messages:
          name: "&2Verificateur"
          lore:
            - ""
-           - "&7Ouvre l'interface VerifPlayer du joueur que tu vise"
+           - "&7Ouvre l'interface VerifPlayer du joueur que tu vises"
       shuttle:
          enable: true
          item: MINECART
@@ -108,7 +108,7 @@ messages:
          name: "&2Navette"
          lore:
            - ""
-           - "&7Téléporte là où tu vise"
+           - "&7Téléporte là où tu vises"
       speed:
          enable: true
          item: LEATHER_BOOTS
@@ -146,8 +146,8 @@ messages:
       playerisfreeze: "&cNe l'attaque pas, il est freeze !"
       
     vanish:
-      enable: "&2VerifPlayer &7» &aVanish activer."
-      disable: "&2VerifPlayer &7» &cVanish désactiver."
+      enable: "&2VerifPlayer &7» &aVanish activé."
+      disable: "&2VerifPlayer &7» &cVanish désactivé."
     
     time:
        year: "an"

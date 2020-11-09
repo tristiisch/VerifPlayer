@@ -30,7 +30,7 @@ messages:
           - "&7Food: &e%food%"
           - "&7XP Level: &e%xp_level%"
           - "&7First played: &e%first_played%"
-          - "&7Connected for: &e%last_played%"
+          - "&7Last played: &e%last_played%"
           - ""
           - "&7In vehicule: &e%vehicule%"
           - "&7Gui: &e%gui%"
@@ -59,6 +59,9 @@ messages:
       distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
       toolspeed: "&2VerifPlayer &7» %color%Your speed is now set to %speed%."
       toolspeednormal: "&2VerifPlayer &7» &aYour speed is now normal."
+      toolsnightvision:
+        enable: "&2VerifPlayer &7» &aNight vision is &2activated&a."
+        disable: "&2VerifPlayer &7» &cNight vision is &4deactivated&c."
       teleportermsg:
         noplayers: "&2VerifPlayer &7» &cThere are no players."
         succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
@@ -111,7 +114,7 @@ messages:
            - "&7Teleport where you aim"
       speed:
          enable: true
-         item: LEATHER_BOOTS
+         item: FIREWORK_ROCKET
          slot: 5
          attributehide: true
          name: "&2Speed"
@@ -120,6 +123,16 @@ messages:
            - "&a[&7Right Click&a] &7Speed &a+"
            - "&c[&7Left Click&c] &7Speed &c-"
            - "&6[&7Drop Click&6] &7Speed &6Normal"
+      night_vision:
+         enable: true
+         item: GOLDEN_CARROT
+         slot: 6
+         attributehide: true
+         name: "&2Night Vision"
+         lore:
+           - ""
+           - "&a[&7Right Click&a] Activate night vision"
+           - "&c[&7Left Click&c] Desactivate night vision"
       fast:
       # Exit gui item
       quit:
@@ -136,6 +149,8 @@ messages:
       playerfreezereason: "&2VerifPlayer &7» &aYou have frozen &2%player%&a for &2%reason%."
       playerunfreeze: "&2VerifPlayer &7» &cYou have unfrozen &4%player%&c."
       title: "&cYou have been frozen"
+      leavesucces: "&2VerifPlayer &7» &aYou left all your chat freezing."
+      leavewrong: "&2VerifPlayer &7» &cYou have no frozen chat."
       subtitle: "&4Follow the instructions of moderator"
       subtitlereason: "&4Reason : &c"
       nolongerfreezetitle: "&aYou are no longer frozen"

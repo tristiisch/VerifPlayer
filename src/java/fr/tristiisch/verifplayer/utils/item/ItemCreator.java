@@ -46,7 +46,7 @@ public class ItemCreator {
 	}
 
 	public ItemCreator enchantement(ItemEnchant enchantement) {
-		return this.enchantements(Arrays.asList(enchantement));
+		return enchantements(Arrays.asList(enchantement));
 	}
 
 	public ItemCreator enchantements(List<ItemEnchant> enchantements) {
@@ -65,27 +65,18 @@ public class ItemCreator {
 	}
 
 	public ItemStack getItemStack() {
-		ItemStack itemStack = new ItemStack(this.material, this.size, this.dataValue);
+		ItemStack itemStack = new ItemStack(material, size, dataValue);
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		if (this.customName != null) {
-			itemMeta.setDisplayName(SpigotUtils.color(this.customName));
-		}
-
-		if (this.lore != null) {
-			itemMeta.setLore(SpigotUtils.color(this.lore));
-		}
-
-		if (this.enchantements != null) {
-			for (ItemEnchant enchantement : this.enchantements) {
+		if (customName != null)
+			itemMeta.setDisplayName(SpigotUtils.color(customName));
+		if (lore != null)
+			itemMeta.setLore(SpigotUtils.color(lore));
+		if (enchantements != null)
+			for (ItemEnchant enchantement : enchantements)
 				enchantement.setEnchantToItemMeta(itemMeta);
-			}
-		}
-
-		if (this.flags != null) {
-			for (ItemFlag flag : this.flags) {
+		if (flags != null)
+			for (ItemFlag flag : flags)
 				itemMeta.addItemFlags(flag);
-			}
-		}
 
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
@@ -93,15 +84,14 @@ public class ItemCreator {
 
 	@SuppressWarnings("deprecation")
 	public ItemStack getPlayerHead(Player player) {
-		this.material = Material.SKULL_ITEM;
-		this.dataValue = 3;
-		ItemStack itemStack = this.getItemStack();
+		material = Material.PLAYER_HEAD;
+		dataValue = 3;
+		ItemStack itemStack = getItemStack();
 		SkullMeta skullmeta = (SkullMeta) itemStack.getItemMeta();
-		if (ServerVersion.V1_12.isEqualOrOlder()) {
+		if (ServerVersion.V1_12.isEqualOrOlder())
 			skullmeta.setOwningPlayer(player);
-		} else {
+		else
 			skullmeta.setOwner(player.getName());
-		}
 		itemStack.setItemMeta(skullmeta);
 		return itemStack;
 	}

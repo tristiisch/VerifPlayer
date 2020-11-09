@@ -3,7 +3,6 @@ package fr.tristiisch.verifplayer.core.verifspec.listeners;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.freeze.Freeze;
+import fr.tristiisch.verifplayer.core.verifspec.PlayerListGuiHandler;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpec;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpecTool;
 import fr.tristiisch.verifplayer.core.verifspec.teleport.Teleporter;
@@ -32,49 +32,36 @@ import fr.tristiisch.verifplayer.utils.config.ConfigGet;
 public class VerifSpecToolsListener implements Listener {
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if (!(event.getDamager() instanceof Player)) {
+		if (!(event.getDamager() instanceof Player))
 			return;
-		}
-
 		Player attacker = (Player) event.getDamager();
-		if (attacker.getItemInHand() == null) {
+		if (attacker.getItemInHand() == null)
 			return;
-		}
-
-		if (!VerifSpec.isIn(attacker)) {
+		if (!VerifSpec.isIn(attacker))
 			return;
-		}
 		event.setDamage(0);
-
 		VerifSpecTool verifSpecItem = VerifSpecTool.getTool(attacker.getItemInHand());
-		if (verifSpecItem == null || verifSpecItem != VerifSpecTool.KNOCKBACK) {
+		if (verifSpecItem == null || verifSpecItem != VerifSpecTool.KNOCKBACK)
 			event.setCancelled(true);
-		}
+		else
+			event.setCancelled(false);
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-
-		if (!VerifSpec.isIn(player)) {
+		if (!VerifSpec.isIn(player))
 			return;
-		}
-
 		VerifSpecTool verifSpecItem = VerifSpecTool.getTool(event.getItemDrop().getItemStack());
-		if (verifSpecItem == null) {
+		if (verifSpecItem == null)
 			return;
-		}
-
 		if (verifSpecItem == VerifSpecTool.SPEED) {
 			event.setCancelled(true);
-
 			PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SPEED);
-			if (potionEffect == null) {
+			if (potionEffect == null)
 				potionEffect = player.getPotionEffect(PotionEffectType.SLOW);
-			}
-
 			if (potionEffect != null) {
 				player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL.getString());
 				player.removePotionEffect(potionEffect.getType());
@@ -84,43 +71,32 @@ public class VerifSpecToolsListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (ServerVersion.V1_9.isEqualOrOlder()) {
 			EquipmentSlot equipementSlot = event.getHand();
-			if (equipementSlot == null || !equipementSlot.equals(EquipmentSlot.HAND)) {
+			if (equipementSlot == null || !equipementSlot.equals(EquipmentSlot.HAND))
 				return;
-			}
 		}
 		Player player = event.getPlayer();
-
-		if (!VerifSpec.isIn(player)) {
+		if (!VerifSpec.isIn(player))
 			return;
-		}
-
 		VerifSpecTool verifSpecItem = VerifSpecTool.getTool(player.getItemInHand());
-
-		if (verifSpecItem == null) {
+		if (verifSpecItem == null)
 			return;
-		}
-
 		event.setCancelled(true);
 		switch (verifSpecItem) {
 
 		case TELEPORTER:
-			/*
-			 * for(Player target : Bukkit.getOnlinePlayers().stream().filter(playerOnline ->
-			 * !playerOnline.getUniqueId().equals(player.getUniqueId())).collect(Utils.
-			 * toShuffledList())) { if(!VerifSpec.isIn(target) && !Vanish.isVanish(target))
-			 * { player.teleport(target);
-			 * player.sendMessage(SpigotUtils.color("Vous avez été téléporté à " +
-			 * target.getName() + "&a.")); return; } }
-			 */
-			Bukkit.getScheduler().runTaskAsynchronously(VerifPlayerPlugin.getInstance(), () -> {
+			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+				PlayerListGuiHandler.openPlayerList(player);
+			else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 				Teleporter.tp(player);
-			});
 			break;
-
+		case VERIF:
+			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+				PlayerListGuiHandler.openPlayerListCPS(player);
+			break;
 		case SHUTTLE:
 			Block block = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 1000);
 			if (block == null) {
@@ -139,35 +115,38 @@ public class VerifSpecToolsListener implements Listener {
 			Block bzp2 = location.add(0.0, 0.0, 0.5).getBlock();
 			Block by = location.getBlock();
 			Block by2 = location.add(0.0, 0.5, 0.0).getBlock();
-			if (!by2.getType().equals(Material.AIR)) {
+			if (!by2.getType().equals(Material.AIR))
 				for (boolean isOnLand = false; !isOnLand; isOnLand = true) {
 					player.teleport(location.add(location.getDirection().multiply(-1.0)));
-					if (by2.getType() != Material.AIR) {
+					if (by2.getType() != Material.AIR)
 						player.teleport(location.add(location.getDirection().multiply(-1.0)));
-					}
 				}
-			}
-			if (!by.getType().equals(Material.AIR)) {
+			if (!by.getType().equals(Material.AIR))
 				player.teleport(location.add(0.0, 0.5, 0.0));
-			}
-			if (!bxn.getType().equals(Material.AIR) || !bxn2.getType().equals(Material.AIR)) {
+			if (!bxn.getType().equals(Material.AIR) || !bxn2.getType().equals(Material.AIR))
 				player.teleport(location.add(0.5, 0.0, 0.0));
-			}
-			if (!bxp.getType().equals(Material.AIR) || !bxp2.getType().equals(Material.AIR)) {
+			if (!bxp.getType().equals(Material.AIR) || !bxp2.getType().equals(Material.AIR))
 				player.teleport(location.add(-0.5, 0.0, 0.0));
-			}
-			if (!bzn.getType().equals(Material.AIR) || !bzn2.getType().equals(Material.AIR)) {
+			if (!bzn.getType().equals(Material.AIR) || !bzn2.getType().equals(Material.AIR))
 				player.teleport(location.add(0.0, 0.0, 0.5));
-			}
-			if (!bzp.getType().equals(Material.AIR) || !bzp2.getType().equals(Material.AIR)) {
+			if (!bzp.getType().equals(Material.AIR) || !bzp2.getType().equals(Material.AIR))
 				player.teleport(location.add(0.0, 0.0, -0.5));
+			break;
+		case NIGHT_VISION:
+			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.NIGHT_VISION);
+				if (potionEffect == null)
+					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false), true);
+				player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSNIGHTVISION_ENABLE.getString());
+			} else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.NIGHT_VISION);
+				if (potionEffect != null)
+					player.removePotionEffect(potionEffect.getType());
+				player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSNIGHTVISION_DISABLE.getString());
 			}
 			break;
-
 		case SPEED:
-
 			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
 				boolean positif = true;
 				int amplifier = 0;
 				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SPEED);
@@ -175,13 +154,12 @@ public class VerifSpecToolsListener implements Listener {
 					potionEffect = player.getPotionEffect(PotionEffectType.SLOW);
 					if (potionEffect != null) {
 						amplifier = potionEffect.getAmplifier();
-						if (amplifier >= 39) {
+						if (amplifier >= 39)
 							amplifier -= 20;
-						} else if (amplifier >= 9) {
+						else if (amplifier >= 9)
 							amplifier -= 10;
-						} else {
+						else
 							amplifier--;
-						}
 						player.removePotionEffect(potionEffect.getType());
 						if (amplifier >= 0) {
 							positif = false;
@@ -190,26 +168,22 @@ public class VerifSpecToolsListener implements Listener {
 							player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL.getString());
 							break;
 						}
-					} else {
+					} else
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, amplifier, false, false), true);
-					}
-
 				} else {
 					amplifier = potionEffect.getAmplifier();
-					if (amplifier >= 39) {
+					if (amplifier >= 39)
 						amplifier += 20;
-					} else if (amplifier >= 9) {
+					else if (amplifier >= 9)
 						amplifier += 10;
-					} else {
+					else
 						amplifier++;
-					}
 					player.removePotionEffect(potionEffect.getType());
 					player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, amplifier, false, false), true);
 				}
-
 				player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSPEED.getString().replace("%speed%", (positif ? "" : "-") + String.valueOf(amplifier + 1)).replace("%color%", String.valueOf(ChatColor.GREEN)));
 
-			} else {
+			} else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 				boolean positif = false;
 				int amplifier = 0;
 				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SLOW);
@@ -217,13 +191,12 @@ public class VerifSpecToolsListener implements Listener {
 					potionEffect = player.getPotionEffect(PotionEffectType.SPEED);
 					if (potionEffect != null) {
 						amplifier = potionEffect.getAmplifier();
-						if (amplifier >= 39) {
+						if (amplifier >= 39)
 							amplifier -= 20;
-						} else if (amplifier >= 19) {
+						else if (amplifier >= 19)
 							amplifier -= 10;
-						} else {
+						else
 							amplifier--;
-						}
 						player.removePotionEffect(potionEffect.getType());
 						if (amplifier >= 0) {
 							positif = true;
@@ -232,19 +205,17 @@ public class VerifSpecToolsListener implements Listener {
 							player.sendMessage(ConfigGet.MESSAGES_VERIFSPEC_TOOLSPEEDNORMAL.getString());
 							break;
 						}
-					} else {
+					} else
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, amplifier, false, false), true);
-					}
 
 				} else {
 					amplifier = potionEffect.getAmplifier();
-					if (amplifier >= 39) {
+					if (amplifier >= 39)
 						amplifier += 20;
-					} else if (amplifier >= 19) {
+					else if (amplifier >= 19)
 						amplifier += 10;
-					} else {
+					else
 						amplifier++;
-					}
 					player.removePotionEffect(potionEffect.getType());
 					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, amplifier, false, false), true);
 				}
@@ -259,31 +230,27 @@ public class VerifSpecToolsListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
 		if (ServerVersion.V1_9.isEqualOrOlder()) {
 			EquipmentSlot equipementSlot = event.getHand();
-			if (!equipementSlot.equals(EquipmentSlot.HAND)) {
+			if (!equipementSlot.equals(EquipmentSlot.HAND))
 				return;
-			}
 		}
-
 		Player attacker = event.getPlayer();
-		if (!(VerifSpec.isIn(attacker) && event.getRightClicked() instanceof Player)) {
+		if (!(VerifSpec.isIn(attacker) && event.getRightClicked() instanceof Player))
 			return;
-		}
 		Player target = (Player) event.getRightClicked();
 
 		VerifSpecTool verifSpecItem = VerifSpecTool.getTool(attacker.getItemInHand());
 		switch (verifSpecItem) {
-
 		case FREEZE:
 			event.setCancelled(true);
 			if (Freeze.isFreeze(target)) {
 				Freeze.unfreeze(target);
 				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERUNFREEZE.getString().replace("%player%", target.getName()));
 			} else {
-				Freeze.freeze(target);
+				Freeze.freeze(target, attacker);
 				attacker.sendMessage(ConfigGet.MESSAGES_FREEZE_PLAYERFREEZE.getString().replace("%player%", target.getName()));
 			}
 			break;
@@ -293,7 +260,6 @@ public class VerifSpecToolsListener implements Listener {
 			break;
 		default:
 			break;
-
 		}
 	}
 

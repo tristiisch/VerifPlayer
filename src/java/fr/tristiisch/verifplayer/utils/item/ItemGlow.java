@@ -12,9 +12,8 @@ public class ItemGlow extends EnchantmentWrapper {
 	private static Enchantment glow;
 
 	public static Enchantment getGlowEnchant() {
-		if (glow != null) {
+		if (glow != null)
 			return glow;
-		}
 
 		try {
 			Field f = Enchantment.class.getDeclaredField("acceptingNew");
@@ -24,7 +23,7 @@ public class ItemGlow extends EnchantmentWrapper {
 			e.printStackTrace();
 		}
 
-		glow = new ItemGlow(255);
+		glow = new ItemGlow("255");
 		try {
 			Enchantment.registerEnchantment(glow);
 		} catch (IllegalArgumentException iae) {
@@ -41,7 +40,7 @@ public class ItemGlow extends EnchantmentWrapper {
 	}
 
 	// TODO 1.13 comptatiblity
-	public ItemGlow(int id) {
+	public ItemGlow(String id) {
 		super(id);
 	}
 

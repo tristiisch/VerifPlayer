@@ -1,10 +1,11 @@
 name: VerifPlayer
 main: fr.tristiisch.verifplayer.VerifPlayer
 author: Tristiisch
-version: 2.5
+version: 2.51
 description: "The best plugin to destroy autoclick and macro inventory"
 website: "https://goo.gl/nKwUuo"
 soft-depend: [Essentials, GroupManager, PermissionsEx, LuckPerms, PlaceholderAPI, SuperVanish, PremiumVanish]
+api-version: 1.15
 
 commands:
     verifplayer:

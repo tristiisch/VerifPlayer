@@ -3,6 +3,8 @@ package fr.tristiisch.verifplayer.core.verifspec.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,51 +25,57 @@ public class VerifSpecRestrictListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player))
 			return;
-		}
 		Player player = (Player) event.getEntity();
-		if (VerifSpec.isIn(player)) {
+		if (VerifSpec.isIn(player))
 			event.setCancelled(true);
-		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		if (VerifSpec.isIn(player))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event) {
+		Player player = event.getPlayer();
+		if (VerifSpec.isIn(player))
+			event.setCancelled(true);
 	}
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (!(event.getWhoClicked() instanceof Player)) {
+		if (!(event.getWhoClicked() instanceof Player))
 			return;
-		}
 		Player player = (Player) event.getWhoClicked();
 		if (VerifSpec.isIn(player)) {
 
 			event.setCancelled(true);
 			ItemStack item = event.getCurrentItem();
-			if (item == null) {
+			if (item == null)
 				return;
-			}
 			VerifSpecTool tool = VerifSpecTool.getTool(item);
-			if (tool != null && tool == VerifSpecTool.QUIT) {
+			if (tool != null && tool == VerifSpecTool.QUIT)
 				VerifSpec.disable(player);
-			}
 		}
 	}
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		if (VerifSpec.isIn(player)) {
+		if (VerifSpec.isIn(player))
 			VerifSpec.disable(player);
-		}
 	}
 
 	@EventHandler
-	public void PlayerJoinEvent(PlayerJoinEvent event) {
+	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		PlayerContents playerContents = PlayerContents.fromDisk(player);
-		if (!playerContents.hasData()) {
+		if (!playerContents.hasData())
 			return;
-		}
-
 		playerContents.returnHisInventory();
 	}
 }

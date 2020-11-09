@@ -11,22 +11,22 @@ public enum ItemArmor {
 
 	DIAMOND(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS),
 	IRON(Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS),
-	GOLD(Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS),
+	GOLD(Material.GOLDEN_HELMET, Material.GOLDEN_CHESTPLATE, Material.GOLDEN_LEGGINGS, Material.GOLDEN_BOOTS),
 	CHAINMAIL(Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS),
 	LEATHER(Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
 
 	private Material[] material;
 
 	private ItemArmor(Material... armor) {
-		this.material = armor;
+		material = armor;
 	}
 
 	public Material[] getMaterial() {
-		return this.material;
+		return material;
 	}
 
 	public List<ItemStack> getItemsStack() {
-		return Arrays.stream(this.material).map(material -> new ItemStack(material)).collect(Collectors.toList());
+		return Arrays.stream(material).map(material -> new ItemStack(material)).collect(Collectors.toList());
 	}
 
 }

@@ -1,6 +1,8 @@
 package fr.tristiisch.verifplayer.core.verifgui.runnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem.VerifGuiSlot;
+import fr.tristiisch.verifplayer.core.verifspec.PlayerListGuiHandler;
 
 public class VerifGuiRunnable {
 
@@ -22,9 +25,8 @@ public class VerifGuiRunnable {
 			UUID uuid = entry.getKey();
 			Set<UUID> viewers = entry.getValue();
 			Player player = Bukkit.getPlayer(uuid);
-			if (player == null) {
+			if (player == null)
 				return;
-			}
 			Map<Integer, ItemStack> items = new HashMap<>();
 
 			// Effects
@@ -43,20 +45,22 @@ public class VerifGuiRunnable {
 					ItemStack entryItem = entryItems.getValue();
 					Integer entrySlot = entryItems.getKey();
 					ItemStack actuelItem = inventory.getItem(entrySlot);
-					if (entryItem == null) {
-
+					if (entryItem == null)
 						inventory.setItem(entrySlot, null);
-					} else if (!entryItem.isSimilar(actuelItem)) {
-
-						/*
-						 * if(actuelItem.hasItemMeta() && entrySlot == VerifGuiSlot.SKULL.getSlot() &&
-						 * entryItem.getItemMeta().getLore().equals(actuelItem.getItemMeta().getLore()))
-						 * { continue; }
-						 */
-
+					else if (!entryItem.isSimilar(actuelItem))
 						inventory.setItem(entrySlot, entryItem);
-					}
 				}
+			}
+			List<Player> allCPSPlayersViewer = PlayerListGuiHandler.guiCPS;
+			if (!allCPSPlayersViewer.isEmpty()) {
+				List<ItemStack> its = new ArrayList<>();
+				for (Player p : Bukkit.getOnlinePlayers())
+					its.add(VerifGuiItem.getCps(p));
+				allCPSPlayersViewer.forEach(p -> {
+					int i = 0;
+					for (ItemStack it : its)
+						p.getOpenInventory().setItem(i++, it);
+				});
 			}
 		}
 	}

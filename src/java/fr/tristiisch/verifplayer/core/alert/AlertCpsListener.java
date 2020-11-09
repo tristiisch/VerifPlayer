@@ -10,7 +10,6 @@ public class AlertCpsListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-
 		Alert.disableAlerts(player);
 	}
 }
