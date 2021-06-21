@@ -1,4 +1,4 @@
-version: 1.9
+version: 1.91
 messages:
     cantconsole: "&cCan not use this command with the console"
     noperm: "&cYou haven't got the permission"
@@ -55,6 +55,7 @@ messages:
     verifspec:
       enable: "&2VerifPlayer &7» &aVerifSpec enabled." 
       disable: "&2VerifPlayer &7» &cVerifSpec disabled."
+      playerisoffline: "&2VerifPlayer &7» &cPlayer &4%player&c is offline."
       shouldbeonground: "&2VerifPlayer &7» &cYou should be on the ground to use this command."
       distancetoofar: "&2VerifPlayer &7» &cThe distance is too far away."
       toolspeed: "&2VerifPlayer &7» %color%Your speed is now set to %speed%."
@@ -64,6 +65,8 @@ messages:
         disable: "&2VerifPlayer &7» &cNight vision is &4deactivated&c."
       teleportermsg:
         noplayers: "&2VerifPlayer &7» &cThere are no players."
+        wait: "&2VerifPlayer &7» &cYou need to wait %time before another teleportation."
+        newloop: "&2VerifPlayer &7» &eYou have already been teleported to all the players, new loop."
         succes: "&2VerifPlayer &7» &aYou were teleported to &2%player%&a."
       teleporter:
          enable: true

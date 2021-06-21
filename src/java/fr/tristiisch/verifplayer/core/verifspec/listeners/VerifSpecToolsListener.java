@@ -22,7 +22,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.freeze.Freeze;
-import fr.tristiisch.verifplayer.core.verifspec.PlayerListGuiHandler;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpec;
 import fr.tristiisch.verifplayer.core.verifspec.VerifSpecTool;
 import fr.tristiisch.verifplayer.core.verifspec.teleport.Teleporter;
@@ -88,14 +87,14 @@ public class VerifSpecToolsListener implements Listener {
 		switch (verifSpecItem) {
 
 		case TELEPORTER:
+			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+				VerifPlayerPlugin.getInstance().getPlayerListGuiHandler().openPlayerList(player);
 			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-				PlayerListGuiHandler.openPlayerList(player);
-			else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 				Teleporter.tp(player);
 			break;
 		case VERIF:
-			if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-				PlayerListGuiHandler.openPlayerListCPS(player);
+			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+				VerifPlayerPlugin.getInstance().getPlayerListGuiHandler().openPlayerListCPS(player);
 			break;
 		case SHUTTLE:
 			Block block = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 1000);

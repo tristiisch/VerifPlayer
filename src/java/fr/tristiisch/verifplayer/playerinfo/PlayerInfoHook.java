@@ -15,18 +15,22 @@ public abstract class PlayerInfoHook {
 	}
 
 	public String getName() {
-		return this.player.getName();
+		return player.getName();
 	}
 
 	public Player getPlayer() {
-		return this.player;
+		return player;
+	}
+
+	public String getPrefix() {
+		return getRank() + getName();
 	}
 
 	public String getRank() {
-		return HookHandler.getInstance().getGroup(this.player);
+		return HookHandler.getInstance().getGroupPrefix(player);
 	}
 
 	public UUID getUniqueId() {
-		return this.player.getUniqueId();
+		return player.getUniqueId();
 	}
 }

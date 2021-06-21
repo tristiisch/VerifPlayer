@@ -27,24 +27,28 @@ public class HookHandler {
 
 	public String getGroup(Player player) {
 		LuckPermsHook luckPermsHook = LuckPermsHook.getInstance();
-		if (luckPermsHook.isEnabled()) {
+		if (luckPermsHook.isEnabled())
 			return LuckPerms.getApi().getUser(player.getUniqueId()).getPrimaryGroup();
-		}
 
 		PermissionsExHook pexHook = PermissionsExHook.getInstance();
 		if (pexHook.isEnabled()) {
 			@SuppressWarnings("deprecation")
 			PermissionGroup pexGroup = PermissionsEx.getUser(player).getGroups()[0];
-			if (pexGroup != null) {
+			if (pexGroup != null)
 				return pexGroup.getName();
-			}
 		}
 
 		GroupManagerHook gpHook = GroupManagerHook.getInstance();
-		if (gpHook.isGMEnabled()) {
+		if (gpHook.isGMEnabled())
 			return gpHook.getGroupManager().getWorldsHolder().getWorldPermissions(player).getGroup(player.getName());
-		}
 
 		return null;
+	}
+
+	public String getGroupPrefix(Player player) {
+		String prefix = getGroup(player);
+		if (prefix == null || prefix.isBlank())
+			return "";
+		return prefix + " ";
 	}
 }

@@ -31,9 +31,10 @@ public class PlayerClicksListener implements Listener {
 			return;
 		Player attacker = (Player) event.getDamager();
 		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(attacker);
+		if (playerInfo == null)
+			return;
 		playerInfo.addEntityClick();
 		Block blockTarget = attacker.getTargetBlock((Set<Material>) null, 6);
-
 		if (blockTarget.getType() == Material.AIR)
 			playerInfo.removeAirClick();
 		if (playerInfo.getClickEntity() > ConfigGet.SETTINGS_MAXCPS.getInt())
@@ -45,9 +46,9 @@ public class PlayerClicksListener implements Listener {
 		Player player = event.getPlayer();
 		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
 		Set<Material> list = new HashSet<>(Arrays.asList(Material.AIR, Material.WATER, Material.LAVA));
-		Block block = player.getTargetBlock(list, 5);
+		//		Block block = player.getTargetBlock(list, 5);
 		Block block2 = getTargetBlock(player, 5, list);
-		System.out.println("block1 " + (block == null ? "null" : block.getType()) + " block2 " + (block2 == null ? "null" : block2.getType()));
+		//		System.out.println("block1 " + (block == null ? "null" : block.getType()) + " block2 " + (block2 == null ? "null" : block2.getType()));
 		if (block2 == null)
 			playerInfo.removeAirClick();
 	}

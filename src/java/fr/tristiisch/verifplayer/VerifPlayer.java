@@ -1,6 +1,9 @@
 package fr.tristiisch.verifplayer;
 
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 import fr.tristiisch.verifplayer.core.alert.AlertCpsCommand;
@@ -42,7 +45,8 @@ public class VerifPlayer extends VerifPlayerPlugin {
 	@Override
 	public void onDisable() {
 
-		VerifSpec.getPlayersInVerif().stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(p -> p != null && p.isOnline()).forEach(p -> VerifSpec.disable(p));
+		for (Player p : VerifSpec.getPlayersInVerif().stream().map(uuid -> Bukkit.getPlayer(uuid)).filter(p -> p != null && p.isOnline()).collect(Collectors.toList()))
+			VerifSpec.disable(p);
 		getVerifGuiHandler().closeAll();
 		sendMessage("§4" + getDescription().getName() + "§c by Tristiisch (" + getDescription().getVersion() + ") is disabled.");
 	}

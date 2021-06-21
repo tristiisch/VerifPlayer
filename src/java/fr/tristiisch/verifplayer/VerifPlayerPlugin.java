@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.tristiisch.verifplayer.core.vanish.VanishHandler;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiHandler;
+import fr.tristiisch.verifplayer.core.verifspec.PlayerListGuiHandler;
 import fr.tristiisch.verifplayer.playerinfo.PlayerInfoHandler;
 import fr.tristiisch.verifplayer.task.TaskHandler;
 import fr.tristiisch.verifplayer.tps.TpsGetter;
@@ -21,21 +22,22 @@ public abstract class VerifPlayerPlugin extends JavaPlugin {
 	private TaskHandler taskHandler = new TaskHandler(this);
 	private VerifGuiHandler verifGuiHandler = new VerifGuiHandler();
 	private VanishHandler vanishHandler = new VanishHandler();
+	private PlayerListGuiHandler playerListGuiHandler = new PlayerListGuiHandler();
 
 	public VerifPlayerPlugin() {
 		instance = this;
 	}
 
 	public PlayerInfoHandler getPlayerInfoHandler() {
-		return this.playerInfoHandler;
+		return playerInfoHandler;
 	}
 
 	public String getPrefix() {
-		return "&b[&3" + this.getDescription().getName() + "&b] &c";
+		return "&b[&3" + getDescription().getName() + "&b] &c";
 	}
 
 	public TaskHandler getTaskHandler() {
-		return this.taskHandler;
+		return taskHandler;
 	}
 
 	public TpsGetter getTpsGetter() {
@@ -43,14 +45,18 @@ public abstract class VerifPlayerPlugin extends JavaPlugin {
 	}
 
 	public VanishHandler getVanishHandler() {
-		return this.vanishHandler;
+		return vanishHandler;
 	}
 
 	public VerifGuiHandler getVerifGuiHandler() {
-		return this.verifGuiHandler;
+		return verifGuiHandler;
+	}
+
+	public PlayerListGuiHandler getPlayerListGuiHandler() {
+		return playerListGuiHandler;
 	}
 
 	public void sendMessage(String message) {
-		this.getServer().getConsoleSender().sendMessage(SpigotUtils.color(this.getPrefix() + message));
+		getServer().getConsoleSender().sendMessage(SpigotUtils.color(getPrefix() + message));
 	}
 }

@@ -275,10 +275,11 @@ public class VerifGuiItem {
 	}
 
 	public static ItemStack getSkull(Player player) {
-		ItemCreator itemCreator = new ItemCreator().customName("§6" + player.getName());
+		PlayerInfo playerInfo = VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get(player);
+		ItemCreator itemCreator = new ItemCreator().customName("§6" + playerInfo.getPrefix());
 		ConcurrentHashMap<String, String> replace = new ConcurrentHashMap<>();
 		if (player.isDead())
-			replace.put("%heal%", SpigotUtils.color("&4Dead"));
+			replace.put("%heal%", SpigotUtils.color("&4Dead "));
 		else {
 			StringBuilder heal = new StringBuilder();
 			heal.append(String.valueOf(Math.round(player.getHealth()) / 2.0f).replaceFirst("\\.0*$", ""));

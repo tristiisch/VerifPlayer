@@ -52,7 +52,6 @@ public class VerifSpecRestrictListener implements Listener {
 			return;
 		Player player = (Player) event.getWhoClicked();
 		if (VerifSpec.isIn(player)) {
-
 			event.setCancelled(true);
 			ItemStack item = event.getCurrentItem();
 			if (item == null)

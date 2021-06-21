@@ -67,6 +67,7 @@ public class Freeze {
 	public static void unfreeze(Player player) {
 		player.removePotionEffect(PotionEffectType.JUMP);
 		player.removePotionEffect(PotionEffectType.SLOW);
+		player.removePotionEffect(PotionEffectType.BLINDNESS);
 		player.setWalkSpeed(0.2f);
 		players.remove(player.getUniqueId());
 		Title.sendTitle(player, ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZETITLE.getString(), ConfigGet.MESSAGES_FREEZE_NOLONGERFREEZESUBTITLE.getString());

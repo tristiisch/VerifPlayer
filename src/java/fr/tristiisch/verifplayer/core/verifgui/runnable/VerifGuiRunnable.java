@@ -12,11 +12,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.tristiisch.verifplayer.VerifPlayerPlugin;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem;
 import fr.tristiisch.verifplayer.core.verifgui.VerifGuiItem.VerifGuiSlot;
-import fr.tristiisch.verifplayer.core.verifspec.PlayerListGuiHandler;
 
 public class VerifGuiRunnable {
 
@@ -51,11 +51,16 @@ public class VerifGuiRunnable {
 						inventory.setItem(entrySlot, entryItem);
 				}
 			}
-			List<Player> allCPSPlayersViewer = PlayerListGuiHandler.guiCPS;
+			List<Player> allCPSPlayersViewer = VerifPlayerPlugin.getInstance().getPlayerListGuiHandler().guiCPS;
 			if (!allCPSPlayersViewer.isEmpty()) {
 				List<ItemStack> its = new ArrayList<>();
-				for (Player p : Bukkit.getOnlinePlayers())
-					its.add(VerifGuiItem.getCps(p));
+				VerifPlayerPlugin.getInstance().getPlayerInfoHandler().get().stream().limit(54).forEach(pi -> {
+					ItemStack itemStack = VerifGuiItem.getCps(pi.getPlayer());
+					ItemMeta itemMeta = itemStack.getItemMeta();
+					itemMeta.setDisplayName("§7" + pi.getRank() + pi.getName());
+					itemStack.setItemMeta(itemMeta);
+					its.add(itemStack);
+				});
 				allCPSPlayersViewer.forEach(p -> {
 					int i = 0;
 					for (ItemStack it : its)

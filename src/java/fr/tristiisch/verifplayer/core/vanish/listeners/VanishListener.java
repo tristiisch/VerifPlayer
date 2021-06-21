@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -85,24 +87,21 @@ public class VanishListener implements Listener {
 		Player player = event.getPlayer();
 		if (!VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player))
 			return;
-
 		if (event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.FARMLAND)
 			event.setCancelled(true);
-		else if (!player.isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
 			Inventory inventory = null;
 			BlockState blockState = block.getState();
 			switch (block.getType()) {
 			case TRAPPED_CHEST:
-			case CHEST: {
+			case CHEST:
 				Chest chest = (Chest) blockState;
 				inventory = chest.getInventory();
 				break;
-			}
-			case ENDER_CHEST: {
+			case ENDER_CHEST:
 				inventory = player.getEnderChest();
 				break;
-			}
 			default:
 				return;
 			}
@@ -120,6 +119,18 @@ public class VanishListener implements Listener {
 			if (VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player))
 				event.setIntensity(player, 0);
 		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onPotionSplash(FoodLevelChangeEvent event) {
+		Player player;
+		HumanEntity entity = event.getEntity();
+		if (!(entity instanceof Player))
+			return;
+		player = (Player) entity;
+		if (!VerifPlayerPlugin.getInstance().getVanishHandler().isVanished(player))
+			return;
+		event.setCancelled(true);
 	}
 
 }
